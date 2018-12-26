@@ -1,0 +1,20 @@
+### Starting build.
+# Target: Main/Main.ml.depends, tags: { extension:ml, file:Main/Main.ml, ocaml, ocamldep, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamldep.opt -modules Main/Main.ml > Main/Main.ml.depends # cached
+# Target: Utils/Location.mli.depends, tags: { extension:mli, file:Utils/Location.mli, ocaml, ocamldep, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamldep.opt -modules Utils/Location.mli > Utils/Location.mli.depends # cached
+# Target: Utils/Location.cmi, tags: { byte, compile, extension:mli, file:Utils/Location.mli, interf, ocaml, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamlc.opt -c -w a -I Utils -I Main -I Compiling -I Parsing -I Typing -I Evaluator -o Utils/Location.cmi Utils/Location.mli # cached
+# Target: Main/Test2.ml.depends, tags: { extension:ml, file:Main/Test2.ml, ocaml, ocamldep, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamldep.opt -modules Main/Test2.ml > Main/Test2.ml.depends # cached
+# Target: Main/Test2.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:Main/Test2.cmo, file:Main/Test2.ml, implem, ocaml, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamlc.opt -c -w a -I Main -I Compiling -I Utils -I Parsing -I Typing -I Evaluator -o Main/Test2.cmo Main/Test2.ml # cached
+# Target: Main/Main.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:Main/Main.cmo, file:Main/Main.ml, implem, ocaml, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamlc.opt -c -w a -I Main -I Compiling -I Utils -I Parsing -I Typing -I Evaluator -o Main/Main.cmo Main/Main.ml # cached
+# Target: Utils/Location.ml.depends, tags: { extension:ml, file:Utils/Location.ml, ocaml, ocamldep, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamldep.opt -modules Utils/Location.ml > Utils/Location.ml.depends # cached
+# Target: Utils/Location.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:Utils/Location.cmo, file:Utils/Location.ml, implem, ocaml, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamlc.opt -c -w a -I Utils -I Main -I Compiling -I Parsing -I Typing -I Evaluator -o Utils/Location.cmo Utils/Location.ml # cached
+# Target: Main/Main.byte, tags: { byte, dont_link_with, extension:byte, file:Main/Main.byte, link, ocaml, program, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamlc.opt -I Main -I Utils Main/Test2.cmo Utils/Location.cmo Main/Main.cmo -o Main/Main.byte # cached
+# Compilation successful.
