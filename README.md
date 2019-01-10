@@ -51,4 +51,5 @@ true: package(ANSITerminal)
 ## Branch
 
 - master: branch to deliver
-- expr:   expr group's work
+- expr:   expr group's work  (please merge to this branch only when it works)
+- expr-dev : expr dev branch (do whatever you like in this branch)

@@ -1,0 +1,3 @@
+this is a test /* comment */
+another test // comment
+end
