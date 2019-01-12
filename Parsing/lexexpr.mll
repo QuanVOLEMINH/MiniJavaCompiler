@@ -8,10 +8,15 @@
 let letter = ['a'-'z' 'A'-'Z']
 let digit = ['0'-'9']
 let ident = letter (letter | digit | '_')*
-let space = [' ' '\t' '\n']
+let newline = ('\010' | '\013' | "\013\010")
+let blank = [' ' '\009']
 
 rule nexttoken = parse
-  | space+        { nexttoken lexbuf }
+  | newline       { Lexing.new_line lexbuf; nexttoken lexbuf }
+  | blank+        { nexttoken lexbuf }
+  | "/*"          { traditioncommnet lexbuf }
+  | "//"          { eolcomment lexbuf }
+  | ";"           { SEMICOLON}
   | "+"           { PLUS } 
   | "-"           { MINUS } 
   | "/"           { DIV } 
@@ -21,3 +26,9 @@ rule nexttoken = parse
   | ident         { IDENT (Lexing.lexeme lexbuf) }
   | _             { raise (SyntaxError)}
   | eof           { EOF }
+and traditioncommnet = parse (* traditional comment *)
+  | "*/"          { nexttoken lexbuf}
+  | _             { traditioncommnet lexbuf}
+and eolcomment = parse (* end-of-line comment *)
+  | newline       { Lexing.new_line lexbuf; nexttoken lexbuf }
+  | _             { eolcomment lexbuf }

@@ -2,7 +2,7 @@
   open Expr
 %}
 
-%token EOF PLUS MINUS TIMES DIV MOD LPAR RPAR
+%token EOF PLUS MINUS TIMES DIV MOD LPAR RPAR SEMICOLON
 %token <int> INT
 %token <string> IDENT
 
@@ -18,7 +18,8 @@
 
 expression:
   | EOF                { None }
-  | e = expr EOF       { Some e }
+  | e = expr SEMICOLON { Some e }
+
 
 expr:
   | LPAR e=expr RPAR
