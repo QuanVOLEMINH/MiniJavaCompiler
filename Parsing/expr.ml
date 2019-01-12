@@ -12,18 +12,6 @@ type expression =
 
 exception Unbound_variable of string
 
-let get_op_u = function
-  | Uplus -> fun x -> x
-  | Uminus -> fun x -> -x
-
-let get_op_b op x y =
-  match op with
-  | Badd -> x + y
-  | Bsub -> x - y
-  | Bmul -> x * y
-  | Bdiv -> x / y
-  | Bmod -> x mod y
-
 let string_of_op_u = function
   | Uplus -> "+"
   | Uminus -> "-"
@@ -34,13 +22,6 @@ let string_of_op_b = function
   | Bmul -> "*"
   | Bdiv -> "/"
   | Bmod -> "%"
-
-let rec eval env exp =
-  match exp with
-  | Const c -> c
-  | Var v -> (try List.assoc v env with Not_found -> raise(Unbound_variable v))
-  | Binop(op,e1,e2) -> (get_op_b op) (eval env e1) (eval env e2)
-  | Unop(op,e) -> (get_op_u op) (eval env e)
 
 let rec string_of_expr exp =
   match exp with

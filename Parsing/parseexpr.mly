@@ -7,7 +7,7 @@
 %token <string> IDENT
 
 %start expression
-%type < Expr.expression > expression
+%type < Expr.expression option> expression
 
 
 %left PLUS MINUS
@@ -17,7 +17,8 @@
 %%
 
 expression:
- | e=expr EOF            { e }
+  | EOF                { None }
+  | e = expr EOF       { Some e }
 
 expr:
   | LPAR e=expr RPAR
