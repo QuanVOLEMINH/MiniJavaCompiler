@@ -1,5 +1,7 @@
 {
   open Parseexpr
+
+  exception SyntaxError 
 }
 
 
@@ -10,7 +12,6 @@ let space = [' ' '\t' '\n']
 
 rule nexttoken = parse
   | space+        { nexttoken lexbuf }
-  | eof           { EOF }
   | "+"           { PLUS } 
   | "-"           { MINUS } 
   | "/"           { DIV } 
@@ -18,3 +19,5 @@ rule nexttoken = parse
   | "%"           { MOD } 
   | digit+ as nb  { INT (int_of_string nb) }
   | ident         { IDENT (Lexing.lexeme lexbuf) }
+  | _             { raise (SyntaxError)}
+  | eof           { EOF }

@@ -1,10 +1,15 @@
 open Parseexpr
 open Lexexpr
 open Expr
+open Location
 
 
 let parse_with_error lexbuf =
-  expression nexttoken lexbuf 
+  try expression nexttoken lexbuf with 
+    | SyntaxError ->
+      print_endline "Error in lexical analyse step";
+      print (curr lexbuf);
+      None
 
 let rec parse_and_print lexbuf = 
     match parse_with_error lexbuf with
