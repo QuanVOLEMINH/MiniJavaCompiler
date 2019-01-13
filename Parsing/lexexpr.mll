@@ -1,6 +1,5 @@
 {
   open Parseexpr
-
   exception SyntaxError 
 }
 
@@ -17,12 +16,8 @@ rule nexttoken = parse
   | "/*"          { traditioncommnet lexbuf }
   | "//"          { eolcomment lexbuf }
   | ";"           { SEMICOLON}
-  | "+"           { PLUS } 
-  | "-"           { MINUS } 
-  | "/"           { DIV } 
-  | "*"           { TIMES } 
-  | "%"           { MOD } 
-  | digit+ as nb  { INT (int_of_string nb) }
+  | "package"     { PACKAGE }
+  | "import"      { IMPORT }
   | ident         { IDENT (Lexing.lexeme lexbuf) }
   | _             { raise (SyntaxError)}
   | eof           { EOF }

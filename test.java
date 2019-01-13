@@ -1,3 +1,2 @@
-6 + 76; //TEST
-7 + 12;
-
+package util; //TEST
+import something;

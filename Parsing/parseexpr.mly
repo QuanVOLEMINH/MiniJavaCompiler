@@ -2,44 +2,23 @@
   open Expr
 %}
 
-%token EOF PLUS MINUS TIMES DIV MOD LPAR RPAR SEMICOLON
-%token <int> INT
+%token EOF SEMICOLON PACKAGE IMPORT 
 %token <string> IDENT
 
-%start expression
-%type < Expr.expression option> expression
+%start compilationunit
+%type < Expr.compilationunit option> compilationunit
 
-
-%left PLUS MINUS
-%left TIMES DIV MOD
-%right UMINUS UPLUS
 
 %%
 
-expression:
-  | EOF                { None }
-  | e = expr SEMICOLON { Some e }
+compilationunit:
+  | EOF                       { None }
+  | pu= packageunit SEMICOLON { Some (PackageUnit("package", pu)) }  
+  | iu= importUnit SEMICOLON  { Some (ImportUnit("import", iu)) } 
 
+packageunit:
+  | PACKAGE id=IDENT { id }
+importUnit:
+  | IMPORT id=IDENT { id }
 
-expr:
-  | LPAR e=expr RPAR
-      { e }
-  | MINUS e=expr %prec UMINUS
-      { Unop(Uminus,e)}
-  | PLUS e=expr %prec UPLUS
-      { Unop(Uplus,e)}
-  | e1=expr o=bop e2=expr
-      { Binop(o,e1,e2)}
-  | id=IDENT
-      { Var id }
-  | i=INT
-      { Const i }
-
-%inline bop:
-  | MINUS     { Bsub }
-  | PLUS      { Badd }
-  | TIMES     { Bmul }
-  | DIV       { Bdiv }
-  | MOD       { Bmod }
-  
 %%

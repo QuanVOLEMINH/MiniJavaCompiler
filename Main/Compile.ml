@@ -5,7 +5,7 @@ open Location
 
 
 let parse_with_error lexbuf =
-  try expression nexttoken lexbuf with 
+  try compilationunit nexttoken lexbuf with 
     | SyntaxError ->
       print_endline "Error in lexical analyse step";
       print (curr lexbuf);
@@ -13,8 +13,8 @@ let parse_with_error lexbuf =
 
 let rec parse_and_print lexbuf = 
     match parse_with_error lexbuf with
-    | Some expr ->
-      print_string (string_of_expr expr) ;
+    | Some compileunit ->
+      print_string (string_of_compilationunit compileunit) ;
       parse_and_print lexbuf
     | None -> ()
 
