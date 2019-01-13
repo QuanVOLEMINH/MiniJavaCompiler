@@ -2,7 +2,9 @@
   open Expr
 %}
 
-%token EOF SEMICOLON PACKAGE IMPORT 
+%token EOF  
+%token PACKAGE IMPORT
+%token SEMICOLON DOT TIMES
 %token <string> IDENT
 
 %start compilationunit
@@ -12,13 +14,26 @@
 %%
 
 compilationunit:
-  | EOF                       { None }
-  | pu= packageunit SEMICOLON { Some (PackageUnit("package", pu)) }  
-  | iu= importUnit SEMICOLON  { Some (ImportUnit("import", iu)) } 
+  | EOF                                 { None }
+  | package     = packageunit SEMICOLON { Some (PackageDeclaration(package)) }  
+  | importtype  = importUnit SEMICOLON  { Some (ImportDeclaration(importtype)) } 
 
+(* PackageDeclaration *)
 packageunit:
-  | PACKAGE id=IDENT { id }
+  | PACKAGE pkg=packagename                 { pkg }
+packagename:
+  | name  = IDENT                           { name }
+  | name1 = IDENT DOT name2 = packagename   { name1^"."^name2 }
+
+(* ImportDeclaration *)
 importUnit:
-  | IMPORT id=IDENT { id }
+  | IMPORT tname = typename                 { tname }
+typename:
+  | name = IDENT                            { name }
+  | name1 = IDENT DOT name2 = suffixname    { name1^"."^name2 }
+suffixname:
+  | name = IDENT                            { name }
+  | name = TIMES                            { "*" }
+  | name1 = IDENT DOT name2 = suffixname    { name1^"."^name2 }
 
 %%

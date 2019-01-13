@@ -16,6 +16,8 @@ rule nexttoken = parse
   | "/*"          { traditioncommnet lexbuf }
   | "//"          { eolcomment lexbuf }
   | ";"           { SEMICOLON}
+  | "."           { DOT }
+  | "*"           { TIMES }
   | "package"     { PACKAGE }
   | "import"      { IMPORT }
   | ident         { IDENT (Lexing.lexeme lexbuf) }

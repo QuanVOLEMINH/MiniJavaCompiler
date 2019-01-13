@@ -7,11 +7,11 @@ type classheader =
   }
 
 type compilationunit = 
-  | PackageUnit of string * string 
-  | ImportUnit of string * string
-(*   | ClassUnit of classheader * expression *)
+  | PackageDeclaration of string 
+  | ImportDeclaration of string
+
 
 let string_of_compilationunit compileunit=
   match compileunit with
-    | PackageUnit(keyword, pkg)  -> keyword ^ " " ^ pkg ^ "\n"
-    | ImportUnit(keyword, pkg)  -> keyword ^ " " ^ pkg ^ "\n"
+    | PackageDeclaration(pkg)  -> "package name: " ^ pkg ^ "\n"
+    | ImportDeclaration(pkg)  -> "import type: " ^ pkg ^ "\n"
