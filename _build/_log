@@ -3,20 +3,94 @@
 /usr/bin/ocamldep.opt -modules Main/Main.ml > Main/Main.ml.depends # cached
 # Target: Main/Compile.ml.depends, tags: { extension:ml, file:Main/Compile.ml, ocaml, ocamldep, quiet, traverse, use_menhir, warn_a }
 /usr/bin/ocamldep.opt -modules Main/Compile.ml > Main/Compile.ml.depends # cached
-# Target: Parsing/lexexpr.mll, tags: { extension:mll, file:Parsing/lexexpr.mll, lexer, ocaml, ocamllex, quiet, traverse, use_menhir, warn_a }
-/usr/bin/ocamllex.opt -q Parsing/lexexpr.mll # cached
-# Target: Parsing/lexexpr.ml.depends, tags: { extension:ml, file:Parsing/lexexpr.ml, ocaml, ocamldep, quiet, traverse, use_menhir, warn_a }
-/usr/bin/ocamldep.opt -modules Parsing/lexexpr.ml > Parsing/lexexpr.ml.depends # cached
-# Target: Parsing/parseexpr.mly.depends, tags: { extension:mly, file:Parsing/parseexpr.mly, infer, menhir_ocamldep, ocaml, ocamldep, quiet, traverse, use_menhir, warn_a }
-menhir --raw-depend --ocamldep '/usr/bin/ocamldep.opt -modules' Parsing/parseexpr.mly > Parsing/parseexpr.mly.depends # cached
-# Target: Parsing/parseexpr.mly, tags: { byte, compile, extension:ml, extension:mly, file:Parsing/parseexpr.ml, file:Parsing/parseexpr.mly, infer, menhir, ocaml, parser, quiet, traverse, use_menhir, warn_a }
-menhir --ocamlc '/usr/bin/ocamlc.opt -w a -I Parsing -I Main -I Compiling -I Utils -I Typing -I Evaluator' --infer Parsing/parseexpr.mly # cached
-# Target: Parsing/parseexpr.mli.depends, tags: { extension:mli, file:Parsing/parseexpr.mli, ocaml, ocamldep, quiet, traverse, use_menhir, warn_a }
-/usr/bin/ocamldep.opt -modules Parsing/parseexpr.mli > Parsing/parseexpr.mli.depends # cached
-# Target: Parsing/parseexpr.cmi, tags: { byte, compile, extension:mli, file:Parsing/parseexpr.mli, interf, ocaml, quiet, traverse, use_menhir, warn_a }
-/usr/bin/ocamlc.opt -c -w a -I Parsing -I Main -I Compiling -I Utils -I Typing -I Evaluator -o Parsing/parseexpr.cmi Parsing/parseexpr.mli # cached
-# Target: Parsing/lexexpr.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:Parsing/lexexpr.cmo, file:Parsing/lexexpr.ml, implem, ocaml, quiet, traverse, use_menhir, warn_a }
-/usr/bin/ocamlc.opt -c -w a -I Parsing -I Main -I Compiling -I Utils -I Typing -I Evaluator -o Parsing/lexexpr.cmo Parsing/lexexpr.ml # cached
+# Target: Parsing/lexer.mll, tags: { extension:mll, file:Parsing/lexer.mll, lexer, ocaml, ocamllex, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamllex.opt -q Parsing/lexer.mll # cached
+# Target: Parsing/lexer.ml.depends, tags: { extension:ml, file:Parsing/lexer.ml, ocaml, ocamldep, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamldep.opt -modules Parsing/lexer.ml > Parsing/lexer.ml.depends # cached
+# Target: Parsing/parser.mly.depends, tags: { extension:mly, file:Parsing/parser.mly, infer, menhir_ocamldep, ocaml, ocamldep, quiet, traverse, use_menhir, warn_a }
+menhir --raw-depend --ocamldep '/usr/bin/ocamldep.opt -modules' Parsing/parser.mly > Parsing/parser.mly.depends
++ menhir --raw-depend --ocamldep '/usr/bin/ocamldep.opt -modules' Parsing/parser.mly > Parsing/parser.mly.depends
+File "Parsing/parser.mly", line 18, characters 7-9:
+Warning: the token AT is unused.
+File "Parsing/parser.mly", line 11, characters 24-27:
+Warning: the token DIV is unused.
+File "Parsing/parser.mly", line 27, characters 13-16:
+Warning: the token INT is unused.
+File "Parsing/parser.mly", line 11, characters 12-17:
+Warning: the token MINUS is unused.
+File "Parsing/parser.mly", line 11, characters 28-31:
+Warning: the token MOD is unused.
+File "Parsing/parser.mly", line 11, characters 7-11:
+Warning: the token PLUS is unused.
+File "Parsing/parser.mly", line 11, characters 18-23:
+Warning: the token TIMES is unused.
+File "Parsing/parser.mly", line 96, characters 0-10:
+Warning: symbol assignment is unreachable from any of the start symbol(s).
+File "Parsing/parser.mly", line 93, characters 0-20:
+Warning: symbol assignmentExpression is unreachable from any of the start symbol(s).
+File "Parsing/parser.mly", line 115, characters 0-18:
+Warning: symbol assignmentOperator is unreachable from any of the start symbol(s).
+File "Parsing/parser.mly", line 88, characters 0-10:
+Warning: symbol expression is unreachable from any of the start symbol(s).
+File "Parsing/parser.mly", line 105, characters 0-11:
+Warning: symbol expression1 is unreachable from any of the start symbol(s).
+File "Parsing/parser.mly", line 108, characters 0-11:
+Warning: symbol expression2 is unreachable from any of the start symbol(s).
+File "Parsing/parser.mly", line 111, characters 0-11:
+Warning: symbol expression3 is unreachable from any of the start symbol(s).
+File "Parsing/parser.mly", line 102, characters 0-14:
+Warning: symbol expressionName is unreachable from any of the start symbol(s).
+File "Parsing/parser.mly", line 99, characters 0-12:
+Warning: symbol leftHandSide is unreachable from any of the start symbol(s).
+File "Parsing/parser.mly", line 118, characters 0-14:
+Warning: symbol prefixOperator is unreachable from any of the start symbol(s).
+# Target: Parsing/expr.ml.depends, tags: { extension:ml, file:Parsing/expr.ml, ocaml, ocamldep, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamldep.opt -modules Parsing/expr.ml > Parsing/expr.ml.depends # cached
+# Target: Parsing/expr.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:Parsing/expr.cmo, file:Parsing/expr.ml, implem, ocaml, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamlc.opt -c -w a -I Parsing -I Main -I Compiling -I Utils -I Typing -I Evaluator -o Parsing/expr.cmo Parsing/expr.ml # cached
+# Target: Parsing/parser.mly, tags: { byte, compile, extension:ml, extension:mly, file:Parsing/parser.ml, file:Parsing/parser.mly, infer, menhir, ocaml, parser, quiet, traverse, use_menhir, warn_a }
+menhir --ocamlc '/usr/bin/ocamlc.opt -w a -I Parsing -I Main -I Compiling -I Utils -I Typing -I Evaluator' --infer Parsing/parser.mly
++ menhir --ocamlc '/usr/bin/ocamlc.opt -w a -I Parsing -I Main -I Compiling -I Utils -I Typing -I Evaluator' --infer Parsing/parser.mly
+File "Parsing/parser.mly", line 18, characters 7-9:
+Warning: the token AT is unused.
+File "Parsing/parser.mly", line 11, characters 24-27:
+Warning: the token DIV is unused.
+File "Parsing/parser.mly", line 27, characters 13-16:
+Warning: the token INT is unused.
+File "Parsing/parser.mly", line 11, characters 12-17:
+Warning: the token MINUS is unused.
+File "Parsing/parser.mly", line 11, characters 28-31:
+Warning: the token MOD is unused.
+File "Parsing/parser.mly", line 11, characters 7-11:
+Warning: the token PLUS is unused.
+File "Parsing/parser.mly", line 11, characters 18-23:
+Warning: the token TIMES is unused.
+File "Parsing/parser.mly", line 96, characters 0-10:
+Warning: symbol assignment is unreachable from any of the start symbol(s).
+File "Parsing/parser.mly", line 93, characters 0-20:
+Warning: symbol assignmentExpression is unreachable from any of the start symbol(s).
+File "Parsing/parser.mly", line 115, characters 0-18:
+Warning: symbol assignmentOperator is unreachable from any of the start symbol(s).
+File "Parsing/parser.mly", line 88, characters 0-10:
+Warning: symbol expression is unreachable from any of the start symbol(s).
+File "Parsing/parser.mly", line 105, characters 0-11:
+Warning: symbol expression1 is unreachable from any of the start symbol(s).
+File "Parsing/parser.mly", line 108, characters 0-11:
+Warning: symbol expression2 is unreachable from any of the start symbol(s).
+File "Parsing/parser.mly", line 111, characters 0-11:
+Warning: symbol expression3 is unreachable from any of the start symbol(s).
+File "Parsing/parser.mly", line 102, characters 0-14:
+Warning: symbol expressionName is unreachable from any of the start symbol(s).
+File "Parsing/parser.mly", line 99, characters 0-12:
+Warning: symbol leftHandSide is unreachable from any of the start symbol(s).
+File "Parsing/parser.mly", line 118, characters 0-14:
+Warning: symbol prefixOperator is unreachable from any of the start symbol(s).
+# Target: Parsing/parser.mli.depends, tags: { extension:mli, file:Parsing/parser.mli, ocaml, ocamldep, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamldep.opt -modules Parsing/parser.mli > Parsing/parser.mli.depends # cached
+# Target: Parsing/parser.cmi, tags: { byte, compile, extension:mli, file:Parsing/parser.mli, interf, ocaml, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamlc.opt -c -w a -I Parsing -I Main -I Compiling -I Utils -I Typing -I Evaluator -o Parsing/parser.cmi Parsing/parser.mli # cached
+# Target: Parsing/lexer.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:Parsing/lexer.cmo, file:Parsing/lexer.ml, implem, ocaml, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamlc.opt -c -w a -I Parsing -I Main -I Compiling -I Utils -I Typing -I Evaluator -o Parsing/lexer.cmo Parsing/lexer.ml # cached
 # Target: Main/Compile.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:Main/Compile.cmo, file:Main/Compile.ml, implem, ocaml, quiet, traverse, use_menhir, warn_a }
 /usr/bin/ocamlc.opt -c -w a -I Main -I Compiling -I Utils -I Parsing -I Typing -I Evaluator -o Main/Compile.cmo Main/Compile.ml # cached
 # Target: Utils/Location.mli.depends, tags: { extension:mli, file:Utils/Location.mli, ocaml, ocamldep, quiet, traverse, use_menhir, warn_a }
@@ -29,10 +103,10 @@ menhir --ocamlc '/usr/bin/ocamlc.opt -w a -I Parsing -I Main -I Compiling -I Uti
 /usr/bin/ocamldep.opt -modules Utils/Location.ml > Utils/Location.ml.depends # cached
 # Target: Utils/Location.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:Utils/Location.cmo, file:Utils/Location.ml, implem, ocaml, quiet, traverse, use_menhir, warn_a }
 /usr/bin/ocamlc.opt -c -w a -I Utils -I Main -I Compiling -I Parsing -I Typing -I Evaluator -o Utils/Location.cmo Utils/Location.ml # cached
-# Target: Parsing/parseexpr.ml.depends, tags: { extension:ml, file:Parsing/parseexpr.ml, ocaml, ocamldep, quiet, traverse, use_menhir, warn_a }
-/usr/bin/ocamldep.opt -modules Parsing/parseexpr.ml > Parsing/parseexpr.ml.depends # cached
-# Target: Parsing/parseexpr.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:Parsing/parseexpr.cmo, file:Parsing/parseexpr.ml, implem, ocaml, quiet, traverse, use_menhir, warn_a }
-/usr/bin/ocamlc.opt -c -w a -I Parsing -I Main -I Compiling -I Utils -I Typing -I Evaluator -o Parsing/parseexpr.cmo Parsing/parseexpr.ml # cached
+# Target: Parsing/parser.ml.depends, tags: { extension:ml, file:Parsing/parser.ml, ocaml, ocamldep, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamldep.opt -modules Parsing/parser.ml > Parsing/parser.ml.depends
+# Target: Parsing/parser.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:Parsing/parser.cmo, file:Parsing/parser.ml, implem, ocaml, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamlc.opt -c -w a -I Parsing -I Main -I Compiling -I Utils -I Typing -I Evaluator -o Parsing/parser.cmo Parsing/parser.ml
 # Target: Main/Main.byte, tags: { byte, dont_link_with, extension:byte, file:Main/Main.byte, link, ocaml, program, quiet, traverse, use_menhir, warn_a }
-/usr/bin/ocamlc.opt -I Parsing -I Main -I Utils Parsing/parseexpr.cmo Parsing/lexexpr.cmo Main/Compile.cmo Utils/Location.cmo Main/Main.cmo -o Main/Main.byte # cached
+/usr/bin/ocamlc.opt -I Parsing -I Main -I Utils Parsing/expr.cmo Parsing/parser.cmo Parsing/lexer.cmo Main/Compile.cmo Utils/Location.cmo Main/Main.cmo -o Main/Main.byte
 # Compilation successful.
