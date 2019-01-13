@@ -1,20 +1,38 @@
 ### Starting build.
-# Target: Parsing/main.ml.depends, tags: { extension:ml, file:Parsing/main.ml, ocaml, ocamldep, quiet, traverse, use_menhir, warn_a }
-/usr/bin/ocamldep.opt -modules Parsing/main.ml > Parsing/main.ml.depends # cached
-# Target: Parsing/expr.ml.depends, tags: { extension:ml, file:Parsing/expr.ml, ocaml, ocamldep, quiet, traverse, use_menhir, warn_a }
-/usr/bin/ocamldep.opt -modules Parsing/expr.ml > Parsing/expr.ml.depends # cached
-# Target: Parsing/expr.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:Parsing/expr.cmo, file:Parsing/expr.ml, implem, ocaml, quiet, traverse, use_menhir, warn_a }
-/usr/bin/ocamlc.opt -c -w a -I Parsing -I Main -I Compiling -I Utils -I Typing -I Evaluator -o Parsing/expr.cmo Parsing/expr.ml # cached
+# Target: Main/Main.ml.depends, tags: { extension:ml, file:Main/Main.ml, ocaml, ocamldep, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamldep.opt -modules Main/Main.ml > Main/Main.ml.depends # cached
+# Target: Main/Compile.ml.depends, tags: { extension:ml, file:Main/Compile.ml, ocaml, ocamldep, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamldep.opt -modules Main/Compile.ml > Main/Compile.ml.depends # cached
+# Target: Parsing/lexexpr.mll, tags: { extension:mll, file:Parsing/lexexpr.mll, lexer, ocaml, ocamllex, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamllex.opt -q Parsing/lexexpr.mll # cached
 # Target: Parsing/lexexpr.ml.depends, tags: { extension:ml, file:Parsing/lexexpr.ml, ocaml, ocamldep, quiet, traverse, use_menhir, warn_a }
 /usr/bin/ocamldep.opt -modules Parsing/lexexpr.ml > Parsing/lexexpr.ml.depends # cached
-# Target: Parsing/parseexpr.ml.depends, tags: { extension:ml, file:Parsing/parseexpr.ml, ocaml, ocamldep, quiet, traverse, use_menhir, warn_a }
-/usr/bin/ocamldep.opt -modules Parsing/parseexpr.ml > Parsing/parseexpr.ml.depends
-# Target: Parsing/parseexpr.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:Parsing/parseexpr.cmo, file:Parsing/parseexpr.ml, implem, ocaml, quiet, traverse, use_menhir, warn_a }
-/usr/bin/ocamlc.opt -c -w a -I Parsing -I Main -I Compiling -I Utils -I Typing -I Evaluator -o Parsing/parseexpr.cmo Parsing/parseexpr.ml
+# Target: Parsing/parseexpr.mly.depends, tags: { extension:mly, file:Parsing/parseexpr.mly, infer, menhir_ocamldep, ocaml, ocamldep, quiet, traverse, use_menhir, warn_a }
+menhir --raw-depend --ocamldep '/usr/bin/ocamldep.opt -modules' Parsing/parseexpr.mly > Parsing/parseexpr.mly.depends # cached
+# Target: Parsing/parseexpr.mly, tags: { byte, compile, extension:ml, extension:mly, file:Parsing/parseexpr.ml, file:Parsing/parseexpr.mly, infer, menhir, ocaml, parser, quiet, traverse, use_menhir, warn_a }
+menhir --ocamlc '/usr/bin/ocamlc.opt -w a -I Parsing -I Main -I Compiling -I Utils -I Typing -I Evaluator' --infer Parsing/parseexpr.mly # cached
+# Target: Parsing/parseexpr.mli.depends, tags: { extension:mli, file:Parsing/parseexpr.mli, ocaml, ocamldep, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamldep.opt -modules Parsing/parseexpr.mli > Parsing/parseexpr.mli.depends # cached
+# Target: Parsing/parseexpr.cmi, tags: { byte, compile, extension:mli, file:Parsing/parseexpr.mli, interf, ocaml, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamlc.opt -c -w a -I Parsing -I Main -I Compiling -I Utils -I Typing -I Evaluator -o Parsing/parseexpr.cmi Parsing/parseexpr.mli # cached
 # Target: Parsing/lexexpr.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:Parsing/lexexpr.cmo, file:Parsing/lexexpr.ml, implem, ocaml, quiet, traverse, use_menhir, warn_a }
-/usr/bin/ocamlc.opt -c -w a -I Parsing -I Main -I Compiling -I Utils -I Typing -I Evaluator -o Parsing/lexexpr.cmo Parsing/lexexpr.ml
-# Target: Parsing/main.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:Parsing/main.cmo, file:Parsing/main.ml, implem, ocaml, quiet, traverse, use_menhir, warn_a }
-/usr/bin/ocamlc.opt -c -w a -I Parsing -I Main -I Compiling -I Utils -I Typing -I Evaluator -o Parsing/main.cmo Parsing/main.ml
-# Target: Parsing/main.byte, tags: { byte, dont_link_with, extension:byte, file:Parsing/main.byte, link, ocaml, program, quiet, traverse, use_menhir, warn_a }
-/usr/bin/ocamlc.opt -I Parsing Parsing/expr.cmo Parsing/parseexpr.cmo Parsing/lexexpr.cmo Parsing/main.cmo -o Parsing/main.byte
+/usr/bin/ocamlc.opt -c -w a -I Parsing -I Main -I Compiling -I Utils -I Typing -I Evaluator -o Parsing/lexexpr.cmo Parsing/lexexpr.ml # cached
+# Target: Main/Compile.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:Main/Compile.cmo, file:Main/Compile.ml, implem, ocaml, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamlc.opt -c -w a -I Main -I Compiling -I Utils -I Parsing -I Typing -I Evaluator -o Main/Compile.cmo Main/Compile.ml # cached
+# Target: Utils/Location.mli.depends, tags: { extension:mli, file:Utils/Location.mli, ocaml, ocamldep, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamldep.opt -modules Utils/Location.mli > Utils/Location.mli.depends # cached
+# Target: Utils/Location.cmi, tags: { byte, compile, extension:mli, file:Utils/Location.mli, interf, ocaml, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamlc.opt -c -w a -I Utils -I Main -I Compiling -I Parsing -I Typing -I Evaluator -o Utils/Location.cmi Utils/Location.mli # cached
+# Target: Main/Main.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:Main/Main.cmo, file:Main/Main.ml, implem, ocaml, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamlc.opt -c -w a -I Main -I Compiling -I Utils -I Parsing -I Typing -I Evaluator -o Main/Main.cmo Main/Main.ml # cached
+# Target: Utils/Location.ml.depends, tags: { extension:ml, file:Utils/Location.ml, ocaml, ocamldep, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamldep.opt -modules Utils/Location.ml > Utils/Location.ml.depends # cached
+# Target: Utils/Location.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:Utils/Location.cmo, file:Utils/Location.ml, implem, ocaml, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamlc.opt -c -w a -I Utils -I Main -I Compiling -I Parsing -I Typing -I Evaluator -o Utils/Location.cmo Utils/Location.ml # cached
+# Target: Parsing/parseexpr.ml.depends, tags: { extension:ml, file:Parsing/parseexpr.ml, ocaml, ocamldep, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamldep.opt -modules Parsing/parseexpr.ml > Parsing/parseexpr.ml.depends # cached
+# Target: Parsing/parseexpr.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:Parsing/parseexpr.cmo, file:Parsing/parseexpr.ml, implem, ocaml, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamlc.opt -c -w a -I Parsing -I Main -I Compiling -I Utils -I Typing -I Evaluator -o Parsing/parseexpr.cmo Parsing/parseexpr.ml # cached
+# Target: Main/Main.byte, tags: { byte, dont_link_with, extension:byte, file:Main/Main.byte, link, ocaml, program, quiet, traverse, use_menhir, warn_a }
+/usr/bin/ocamlc.opt -I Parsing -I Main -I Utils Parsing/parseexpr.cmo Parsing/lexexpr.cmo Main/Compile.cmo Utils/Location.cmo Main/Main.cmo -o Main/Main.byte # cached
 # Compilation successful.

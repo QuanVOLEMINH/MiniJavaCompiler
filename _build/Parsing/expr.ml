@@ -4,17 +4,24 @@ type binop =
 type unop =
   | Uplus | Uminus
 
+type semicolon = 
+  | Semicolon
+
 type expression =
   | Const of int
   | Var of string
   | Binop of binop * expression * expression
   | Unop of unop * expression
+  | S of semicolon * expression
 
 exception Unbound_variable of string
 
 let get_op_u = function
   | Uplus -> fun x -> x
   | Uminus -> fun x -> -x
+
+let get_op_semicolon = function
+  | Semicolon -> fun x -> x
 
 let get_op_b op x y =
   match op with
@@ -27,6 +34,9 @@ let get_op_b op x y =
 let string_of_op_u = function
   | Uplus -> "+"
   | Uminus -> "-"
+
+let string_of_op_semicolon = function
+  | Semicolon -> ";"
 
 let string_of_op_b = function
   | Badd -> "+"
@@ -41,6 +51,7 @@ let rec eval env exp =
   | Var v -> (try List.assoc v env with Not_found -> raise(Unbound_variable v))
   | Binop(op,e1,e2) -> (get_op_b op) (eval env e1) (eval env e2)
   | Unop(op,e) -> (get_op_u op) (eval env e)
+  | S(op, e) -> (get_op_semicolon op) (eval env e)
 
 let rec string_of_expr exp =
   match exp with
@@ -49,3 +60,5 @@ let rec string_of_expr exp =
   | Binop(op, e1, e2) -> 
       "(" ^(string_of_expr e1)^ (string_of_op_b op) ^(string_of_expr e2)^ ")"
   | Unop(op, e) -> "(" ^ (string_of_op_u op) ^(string_of_expr e)^ ")"
+  | S(op, e) -> "(" ^ (string_of_op_semicolon op) ^(string_of_expr e)^ ")"
+
