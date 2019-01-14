@@ -14,26 +14,33 @@ let newline = ('\010' | '\013' | "\013\010")
 let onelinecomment = "//" ([^'\010' '\013'])* newline
 
 rule nexttoken = parse
-  | onelinecomment { Lexing.new_line lexbuf; nexttoken lexbuf }
-  | newline { Lexing.new_line lexbuf; nexttoken lexbuf }
-  | blank+ { nexttoken lexbuf }
-  | eof { EOF }
-  | "+" { PLUS } 
-  | "-" { MINUS } 
-  | "*" { TIMES }
-  | "/" { DIV } 
-  | ";" { SEMICOLON }
-  | "{" { LPAR }
-  | "}" { RPAR }
-  | "(" { LBRAC }
-  | ")" { RBRAC }
-  | "=" { EQUAL }
-  | "++" { INCR }
-  | "public" { PUBLIC } 
-  | "class" { CLASS }
-  | "int"  { INTEGER }
-  | integer as i { INT (int_of_string i) }
-  | ident as str  { IDENT str }
+  | newline         { print_endline "newline"; Lexing.new_line lexbuf; nexttoken lexbuf }
+  | blank+          { nexttoken lexbuf }
+  | "/*"            { print_endline "traditioncommnet"; traditioncommnet lexbuf }
+  | "//"            { print_endline "eolcomment"; eolcomment lexbuf }
+  | eof             { print_endline "EOF"; EOF }
+  | "+"             { print_endline "PLUS"; PLUS } 
+  | "-"             { print_endline "MINUS"; MINUS } 
+  | "*"             { print_endline "TIMES"; TIMES }
+  | "/"             { print_endline "DIV"; DIV } 
+  | ";"             { print_endline "SEMICOLON"; SEMICOLON }
+  | "{"             { print_endline "LPAR"; LPAR }
+  | "}"             { print_endline "RPAR"; RPAR }
+  | "("             { print_endline "LBRAC"; LBRAC }
+  | ")"             { print_endline "RBRAC"; RBRAC }
+  | "="             { print_endline "EQUAL"; EQUAL }
+  | "++"            { print_endline "INCR"; INCR }
+  | "public"        { print_endline "PUBLIC"; PUBLIC } 
+  | "class"         { print_endline "CLASS"; CLASS }
+  | "int"           { print_endline "INTEGER"; INTEGER }
+  | integer as i    { INT (int_of_string i) }
+  | ident as str    { IDENT str }
+and traditioncommnet = parse (* traditional comment *)
+  | "*/"            { nexttoken lexbuf}
+  | _               { traditioncommnet lexbuf}
+and eolcomment = parse (* end-of-line comment *)
+  | newline         { Lexing.new_line lexbuf; nexttoken lexbuf }
+  | _               { eolcomment lexbuf }
 
 {
 let print_lexeme = function
