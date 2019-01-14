@@ -31,6 +31,9 @@ rule nexttoken = parse
   | ":"             { print_endline "COLON"; COLON }
   | ","             { print_endline ","; COMMA }
   | "."             { print_endline "."; POINT }
+  | "~"             { print_endline "~"; TILDE }
+  | "!"             { print_endline "!"; EP }  
+  | "?"             { print_endline "?"; QM }    
   | "{"             { print_endline "LPAR"; LPAR }
   | "}"             { print_endline "RPAR"; RPAR }
   | "("             { print_endline "LBRAC"; LBRAC }
@@ -64,6 +67,8 @@ rule nexttoken = parse
     (* keywords *)
   | "this"          { print_endline "THIS"; THIS }
   | "super"          { print_endline "SUPER"; SUPER }
+  | "extends"          { print_endline "EXTENDS"; EXTENDS }
+
 
     (* literal *)
   | non_zero_digit as nzd { NONZERODIGIT(nzd) }

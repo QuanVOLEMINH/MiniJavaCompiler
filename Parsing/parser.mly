@@ -11,7 +11,7 @@
 %token VOID
 
 (* keywords *)
-%token THIS SUPER
+%token THIS SUPER EXTENDS
 
 (* Special *)
 %token EOF
@@ -20,7 +20,7 @@
 %token BOOLEAN
 
 (* Separators *)
-%token SEMICOLON COMMA COLON POINT LPAR RPAR LBRAC RBRAC LSBRAC RSBRAC 
+%token SEMICOLON COMMA COLON POINT TILDE EP QM LPAR RPAR LBRAC RBRAC LSBRAC RSBRAC 
 
 %token <string> IDENT
 %token <int> INTEGER
@@ -301,7 +301,6 @@ continueStatement:
 doStatement: (* TODO: expression *)
   | DO blks=statement WHILE LPAR expr=expression RPAR SEMICOLON {("do " ^ blks^" while "^expr^"\n")}
 
-
 returnStatement:
   | RETURN SEMICOLON { "return \n"}
   | RETURN expr= expression SEMICOLON { ("return \n"^expr)}
@@ -332,23 +331,28 @@ postIncrementExpression:
 postDecrementExpression:
   | pfe=postfixExpression DECR { pfe^"--" }
 
-unaryExpression:
+unaryExpression: (* ok *)
   | pie=preIncrementExpression { pie }
   | pde=preDecrementExpression { pde }
   | PLUS ue=unaryExpression { "+"^ue }
   | MINUS ue=unaryExpression { "-"^ue }
   | uenpm=unaryExpressionNotPlusMinus { uenpm }
 
-unaryExpressionNotPlusMinus:
+unaryExpressionNotPlusMinus: (* ok *)
   | pe=postfixExpression { pe }
+  | TILDE ue=unaryExpression { "~"^ue }
+  | EP ue=unaryExpression { "!"^ue }
   | ce=castExpression { ce }
 
-postfixExpression:
-  | en = expressionName { en }
+postfixExpression: (* ok *)
+  | p=primary { p }
+  | en=expressionName { en }
+  | pie=postIncrementExpression { pie }
+  | pde=postDecrementExpression { pde }
 
 castExpression: 
   | LBRAC pt=primitiveType RBRAC ue=unaryExpression { "("^pt^")"^ue }
-  (*( ReferenceType ) UnaryExpressionNotPlusMinus*)
+  | LBRAC rt=referenceType RBRAC uenpm=unaryExpressionNotPlusMinus { "("^rt^")"^uenpm }
 
 expression:
   | ae=assignmentExpression { ae }
@@ -461,7 +465,7 @@ classOrInterfaceType:
 
 classType:
   | tds=typeDeclSpecifier { tds }
-  (* | tds=typeDeclSpecifier tas=typeArguments { tds^" "^tas } *)
+  | tds=typeDeclSpecifier tas=typeArguments { tds^" "^tas }
 
 typeDeclSpecifier:
   | tn=typeName { tn }
@@ -476,6 +480,26 @@ typeVariable:
 
 arrayType: 
   | mt=myType LSBRAC RSBRAC { mt^"[]" }
+
+typeArguments: (* ok *)
+  | LT atal=actualTypeArgumentList GT { "<"^atal^">" }
+
+actualTypeArgumentList: (* ok *)
+  | ata=actualTypeArgument { ata }
+  | atal=actualTypeArgumentList COMMA ata=actualTypeArgument { atal^","^ata }
+
+actualTypeArgument: (* ok *)
+  | rt=referenceType { rt }
+  | wc=wildcard { wc }
+
+wildcard: (* ok *)
+  | QM { "?" }
+  | QM wcbs=wildcardBounds { "?"^wcbs }
+
+wildcardBounds: (* ok *)
+  | EXTENDS rt=referenceType { "extends "^rt }
+  | SUPER rt=referenceType { "super "^rt }
+
 
 numericType:
   | it=integralType { it }
