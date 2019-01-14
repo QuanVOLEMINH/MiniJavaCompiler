@@ -15,7 +15,6 @@
 %token SEMICOLON LPAR RPAR LBRAC RBRAC
 
 %token <string> IDENT
-%token <int> INT
 
 %token CLASS
 
@@ -23,19 +22,10 @@
 
 %type <string> compilationUnit
 
-(* PrefixOp *)
-%token INCR
-
-%token EQUAL
-
-%token INTEGER
-
-(* InfixOp *)
-%token PLUS MINUS TIMES DIV MOD
-
 %%
 
 (* Identifier *)
+%public
 identifier:
   | id=IDENT { id }
 
@@ -71,6 +61,7 @@ classMemberDeclaration:
 fieldDeclaration:
   | mt=myType vdl=variableDeclarators SEMICOLON { mt^" "^vdl^";"}
   
+
 block:
 	  LPAR bss=blockStatements RPAR { " {\n"^bss^"\n}" }
 	| LPAR RPAR { " {} "}
@@ -89,34 +80,8 @@ variableDeclarators:
 
 variableDeclarator:
   | vdi=variableDeclaratorId { vdi }
-  | vdi=variableDeclaratorId EQUAL vi=variableInitializer { vdi^" = "^vi }
 
 variableDeclaratorId:
   | id=identifier { id }
 
-variableInitializer:
-  | e=expression {e}
-
-myType:
-  | b=basicType { b }
-
-basicType:
-  | INTEGER {"int"}
   
-expression:
-  | ae=assignmentExpression { ae }
-
-assignmentExpression:
-  | a=assignment { a }
-
-assignment:
-  | lhs=leftHandSide ao=assignmentOperator ae=expression { lhs^" "^ao^" "^ae }
-
-leftHandSide:
-  | en=expressionName { en }
-
-expressionName:
-  | id=identifier { id }
-
-assignmentOperator:
-  | EQUAL { "=" }
