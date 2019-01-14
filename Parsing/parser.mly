@@ -20,12 +20,12 @@
 %token BOOLEAN
 
 (* Separators *)
-%token SEMICOLON COMMA COLON POINT LPAR RPAR LBRAC RBRAC LSBRAC RSBRAC
+%token SEMICOLON COMMA COLON POINT LPAR RPAR LBRAC RBRAC LSBRAC RSBRAC 
 
 %token <string> IDENT
 %token <int> INTEGER
 
-%token CLASS
+%token CLASS BREAK RETURN DO CONTINUE WHILE
 
 (* Op *)
 %token INCR DECR 
@@ -229,7 +229,7 @@ constructorBody:
   (*| LPAR ExplicitConstructorInvocation opt BlockStatements opt RPAR*)
 
 methodDeclaration:
-  | mh=methodHeader mb=methodBody { mh^" "^mb }
+  | mh=methodHeader mb=methodBody { print_endline "methodDeclaration----------------";mh^" "^mb }
 
 methodHeader:
   | rt=resultType md=methodDeclarator { rt^" "^md }
@@ -246,13 +246,11 @@ methodBody:
 
 (* Blocks *)
 block:
-	| LPAR RPAR { "{}\n"}
-  | LPAR bss=blockStatements RPAR { "{\n  "^bss^"\n }\n" }
+	| LPAR bss=blockStatements RPAR { " {\n"^bss^"\n}" }
 
 blockStatements:
   | bs=blockStatement { bs }
   | bss=blockStatements bs=blockStatement { bss^" "^bs }
-
 
 blockStatement:
   | lvds=localVariableDeclarationStatement { lvds }
@@ -278,14 +276,39 @@ statementWithoutTrailingSubstatement:
   | b=block { b }
   | es=emptyStatement { es }
   | es=expressionStatement { es }
+  | brk= breakStatement { brk }
+  | rtn= returnStatement { rtn }
+  | cs = continueStatement { cs }
+  (* AssertStatement *)
+  (* SwitchStatement *)
+  (* SynchronizedStatement *)
+  (* ThrowStatement *)
+  (* TryStatement *)
 
 labeledStatement:
 | id=identifier COLON s=statement { id^":"^s }
 
 emptyStatement:
   | SEMICOLON { ";" }
+
 expressionStatement:
   | se=statementExpression SEMICOLON { se^";" }
+
+continueStatement:
+  | CONTINUE SEMICOLON { "continue \n" }
+  | CONTINUE id=identifier SEMICOLON { ("continue "^id)}
+
+doStatement: (* TODO: expression *)
+  | DO blks=statement WHILE LPAR expr=expression RPAR SEMICOLON {("do " ^ blks^" while "^expr^"\n")}
+
+
+returnStatement:
+  | RETURN SEMICOLON { "return \n"}
+  | RETURN expr= expression SEMICOLON { ("return \n"^expr)}
+
+breakStatement:
+  | BREAK SEMICOLON { "break \n"}
+  | BREAK id= identifier SEMICOLON { ("break "^id)}
 
 statementExpression:
   | a=assignment { a }
