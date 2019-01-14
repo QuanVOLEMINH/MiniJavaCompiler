@@ -6,12 +6,27 @@
 public class Point{
     public int a, b;
     int c,d,e;
+    
     public Point(){
+
     }
     public Point(final int x, int z){
     }
 
-    void myMethod(int a){}
+    void myMethod(int a){
+        int f;
+        ++f;
+    }
 
-    void anotherMethod(int c);
+    void anotherMethod(double d, float f);
+}
+
+
+class Animal {
+    Animal(int age){
+
+    }
+    Animal(){
+
+    }
 }

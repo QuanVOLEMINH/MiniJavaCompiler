@@ -25,8 +25,11 @@ rule nexttoken = parse
   | "/"             { print_endline "DIV"; DIV }
   | "<"             { print_endline "<"; LT }
   | ">"             { print_endline ">"; GT }
+    (* separators *)
   | ";"             { print_endline "SEMICOLON"; SEMICOLON }
+  | ":"             { print_endline "COLON"; COLON }
   | ","             { print_endline ","; COMMA }
+  | "."             { print_endline "."; POINT }
   | "{"             { print_endline "LPAR"; LPAR }
   | "}"             { print_endline "RPAR"; RPAR }
   | "("             { print_endline "LBRAC"; LBRAC }
@@ -35,12 +38,24 @@ rule nexttoken = parse
   | "]"             { print_endline "]"; RSBRAC }
   | "="             { print_endline "EQUAL"; EQUAL }
   | "++"            { print_endline "INCR"; INCR }
+  | "--"            { print_endline "DECR"; DECR }
   | "public"        { print_endline "PUBLIC"; PUBLIC }
   | "final"         { print_endline "FINAL"; FINAL } 
   | "void"          { print_endline "VOID"; VOID } 
   | "class"         { print_endline "CLASS"; CLASS }
-  | "int"           { print_endline "INTEGER"; INTEGER }
-  | integer as i    { INT (int_of_string i) }
+    
+    (* integral type *)
+  | "byte"          { print_endline "BYTE"; BYTE }
+  | "short"         { print_endline "SHORT"; SHORT }
+  | "int"           { print_endline "INT"; INT }
+  | "long"          { print_endline "LONG"; LONG }
+  | "char"          { print_endline "CHAR"; CHAR }
+    
+    (* floating point type *)
+  | "float"         { print_endline "FLOAT"; FLOAT }
+  | "double"        { print_endline "DOUBLE"; DOUBLE }
+  | "boolean"       { print_endline "BOOLEAN"; BOOLEAN }
+  | integer as i    { INTEGER (int_of_string i) }
   | ident as str    { IDENT str }
 and traditioncommnet = parse (* traditional comment *)
   | "*/"            { nexttoken lexbuf}
@@ -68,11 +83,11 @@ let print_lexeme = function
     | RSBRAC -> print_string "]"
     | EQUAL -> print_string "="
     | INCR -> print_string "++"
-    | INT i -> print_string "INT("; print_string (string_of_int i); print_string ")"
+    | INTEGER i -> print_string "INTEGER("; print_string (string_of_int i); print_string ")"
     | IDENT s -> print_string "IDENT("; print_string s; print_string ")"
     | PUBLIC -> print_string "public"
     | FINAL -> print_string "final"
-    | INTEGER -> print_string "int"
+    | INT -> print_string "int"
     | CLASS -> print_string "class"
 
 let rec printtoken buf = 

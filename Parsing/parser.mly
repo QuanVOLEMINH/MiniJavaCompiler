@@ -14,27 +14,33 @@
 %token EOF
 %token AT
 
+%token BOOLEAN
+
 (* Separators *)
-%token SEMICOLON LPAR RPAR LBRAC RBRAC LSBRAC RSBRAC COMMA
+%token SEMICOLON COMMA COLON POINT LPAR RPAR LBRAC RBRAC LSBRAC RSBRAC
 
 %token <string> IDENT
-%token <int> INT
+%token <int> INTEGER
 
 %token CLASS
 
-%start compilationUnit
-
-%type <string> compilationUnit
-
-(* PrefixOp *)
-%token INCR
+(* Op *)
+%token INCR DECR 
 
 %token EQUAL
 
-%token INTEGER
+(* integralType *)
+%token BYTE SHORT INT LONG CHAR
+
+(* floatingPointType *)
+%token FLOAT DOUBLE
 
 (* InfixOp *)
 %token PLUS MINUS TIMES DIV MOD LT GT
+
+
+%start compilationUnit
+%type <string> compilationUnit
 
 %%
 
@@ -157,10 +163,11 @@ classDeclaration:
   (*|ed=EnumDeclaration { ed }*)
 
 normalClassDeclaration:
+  | CLASS id=identifier cb=classBody { "class "^id^" "^cb }
   | m=modifier CLASS id=identifier (*[TypeParameters] [extends Type] [implements TypeList]*) cb=classBody { m^" class "^id^" "^cb }
 
 classBody:
-  | LPAR cbds=classBodyDeclarations RPAR { "{\n "^cbds^" \n}" }
+  | LPAR cbds=classBodyDeclarations RPAR { "{\n "^cbds^" \n}\n" }
 
 classBodyDeclarations:
   | cbd=classBodyDeclaration { cbd }
@@ -168,11 +175,17 @@ classBodyDeclarations:
 
 classBodyDeclaration:
   | cmd=classMemberDeclaration { cmd }
+  (* InstanceInitializer  
+StaticInitializer
+  *)
   | cd=constructorDeclaration { cd }
 
 classMemberDeclaration:
   | fd=fieldDeclaration { fd }
   | md=methodDeclaration { md }
+  | cd=classDeclaration { cd }
+  (*InterfaceDeclaration
+  *)
   | SEMICOLON { ";" }
     
 fieldDeclaration:
@@ -227,28 +240,121 @@ methodBody:
 
 (* Blocks *)
 block:
-	  LPAR bss=blockStatements RPAR { " {\n"^bss^"\n}" }
 	| LPAR RPAR { "{}\n"}
+  | LPAR bss=blockStatements RPAR { "{\n  "^bss^"\n }\n" }
 
 blockStatements:
-  | bs=blockstatement { bs }
+  | bs=blockStatement { bs }
+  | bss=blockStatements bs=blockStatement { bss^" "^bs }
 
-blockstatement:
+
+blockStatement:
   | lvds=localVariableDeclarationStatement { lvds }
+  | cd=classDeclaration { cd }
+  | st=statement { st }
 
 localVariableDeclarationStatement:
-  | (*[final]*) mt=myType vds=variableDeclarators { mt^" "^vds }
+  | lvd=localVariableDeclaration SEMICOLON { lvd^";" }
+
+localVariableDeclaration:
+  | mt=myType vds=variableDeclarators { mt^" "^vds }
+  | vms=variableModifiers mt=myType vds=variableDeclarators { vms^" "^mt^" "^vds }
+
+statement:
+  | b=block { b }
+  | id=identifier COLON s=statement { id^" : "^s }
+  | se=statementExpression SEMICOLON { se^";" }
+  | SEMICOLON { ";" }
+
+statementExpression:
+  | a=assignment { a }
+  | pie=preIncrementExpression { pie }
+  | pde=preDecrementExpression { pde }
+(*PostIncrementExpression
+PostDecrementExpression
+MethodInvocation
+ClassInstanceCreationExpression
+  *)
+
+preIncrementExpression:
+  | INCR ue=unaryExpression { "++"^ue }
+
+preDecrementExpression:
+  | DECR ue=unaryExpression { "--"^ue }
+
+unaryExpression:
+  | pie=preIncrementExpression { pie }
+  | pde=preDecrementExpression { pde }
+  | PLUS ue=unaryExpression { "+"^ue }
+  | MINUS ue=unaryExpression { "-"^ue }
+  | uenpm=unaryExpressionNotPlusMinus { uenpm }
+
+unaryExpressionNotPlusMinus:
+  | pe=postfixExpression { pe }
+  | ce=castExpression { ce }
+
+
+postfixExpression:
+  | en = expressionName { en }
+
+castExpression: 
+  | LBRAC pt=primitiveType RBRAC ue=unaryExpression { "("^pt^")"^ue }
+  (*( ReferenceType ) UnaryExpressionNotPlusMinus*)
+
+primitiveType:
+  | nt=numericType { nt }
+  | BOOLEAN { "boolean" }
+
+referenceType:
+  | coit=classOrInterfaceType { coit }
+  | tv=typeVariable { tv }
+  (*ArrayType*)
+
+classOrInterfaceType:
+  | ct=classType { ct }
+  (*| it=interfaceType { it }*)
+
+classType:
+  | tds=typeDeclSpecifier { tds }
+  (* | tds=typeDeclSpecifier tas=typeArguments { tds^" "^tas } *)
+
+typeDeclSpecifier:
+  | tn=typeName { tn }
+  | coit=classOrInterfaceType POINT id=identifier { coit^"."^id }
+
+typeName:
+  | id=identifier { id }
+  | tn=typeName POINT id=identifier {tn^"."^id}
+
+typeVariable:
+  | id=identifier { id }
+
+
+arrayType: 
+  | mt=myType LSBRAC RSBRAC { mt^"[]" }
+
+numericType:
+  | it=integralType { it }
+  | fpt=floatingPointType { fpt }
+
+integralType:
+  | BYTE { "byte" } | SHORT { "short" } | INT { "int" } | LONG { "long" } | CHAR { "char" }
+
+floatingPointType:
+  | FLOAT { "float" } | DOUBLE { "double" }
 
 resultType:
   | mt=myType { mt }
   | VOID { "void" }
 
 myType:
-  | b=basicType { b }
+  | pt = primitiveType { pt }
   (*| Identifier [TypeArguments]{ . Identifier [TypeArguments]} { [] } *)
 
 basicType:
-  | INTEGER {"int"}
+  | BYTE { "byte" } | SHORT { "short" } | INT { "int" } | LONG { "long" } | CHAR { "char" }
+  | FLOAT { "float" } | DOUBLE { "double" }
+  | BOOLEAN { "boolean" }
   
 expression:
   | ae=assignmentExpression { ae }
@@ -281,6 +387,11 @@ assignmentOperator:
 
 expressionName:
   | id=identifier { id }
-  (*| AmbiguousName . Identifier *)
+  | an=ambiguousName POINT id=identifier { an^"."^id }
+
+ambiguousName:
+  | id=identifier { id }
+  | an=ambiguousName POINT id=identifier { an^"."^id }
+
 
 
