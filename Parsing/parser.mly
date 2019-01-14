@@ -5,14 +5,14 @@
 (* Named by Java 1.6 Grammar Spec - Chapter 18 *)
 
 (* Modifier *)
-%token PUBLIC
+%token PUBLIC FINAL
 
 (* Special *)
 %token EOF
 %token AT
 
 (* Separators *)
-%token SEMICOLON LPAR RPAR LBRAC RBRAC
+%token SEMICOLON LPAR RPAR LBRAC RBRAC LSBRAC RSBRAC COMMA
 
 %token <string> IDENT
 %token <int> INT
@@ -31,7 +31,7 @@
 %token INTEGER
 
 (* InfixOp *)
-%token PLUS MINUS TIMES DIV MOD
+%token PLUS MINUS TIMES DIV MOD LT GT
 
 %%
 
@@ -39,38 +39,138 @@
 identifier:
   | id=IDENT { id }
 
+(* Modifiers *)
 modifier:
   (*| a=annotation {a}*)
   | PUBLIC { "public" }
 
+fieldModifiers:
+  | fm=fieldModifier { fm }
+  | fms=fieldModifiers fm=fieldModifier { fms^" "^fm }
+
+fieldModifier:
+  | PUBLIC { "public" }
+  (*Annotation public protected private
+  static
+  final
+  transient
+  volatile*)
+
+constructorModifiers:
+  | cm=constructorModifier { cm }
+  | cms=constructorModifiers cm=constructorModifier { cms^" "^cm }
+
+constructorModifier:
+  | PUBLIC {"public"}
+(*Annotation protected private*)
+
+variableModifiers:
+  | vm=variableModifier { vm }
+  | vms=variableModifiers vm=variableModifier { vms^" "^vm }
+
+variableModifier:
+  | FINAL { "final" }
+  (*|Annotation*)
+
+typeParameters:
+  | LT tp1=typeParameter LPAR COMMA tp2=typeParameter RPAR GT { "<"^tp1^"{,"^tp2^"}>" }
+
+typeParameter:
+  | id=identifier { id }
+
+simpleTypeName:
+  | id=identifier { id } (* must be class name => to do *)
+
+formalParameterList:
+ | lfp=lastFormalParameter { lfp }
+ | fps=formalParameters COMMA lfp=lastFormalParameter { fps^" , "^lfp }
+
+formalParameters:
+  | fp=formalParameter { fp }
+  | fps=formalParameters COMMA fp=formalParameter { fps^" , "^fp}
+
+formalParameter:
+  | vms=variableModifiers mt=myType vdi=variableDeclaratorId { vms^" "^mt^" "^vdi }
+
+lastFormalParameter:
+  | vms=variableModifiers (*Type... opt*) vdi=variableDeclaratorId fp=formalParameter { vms^" "^vdi^" "^fp }
+  | vms=variableModifiers mt=myType vdi=variableDeclaratorId fp=formalParameter { vms^" "^mt^" "^vdi^" "^fp }
+  | fp=formalParameter { fp }
+
+
+
+(* Starting point *)
 compilationUnit:
-  | (*id=importDeclaration*) td=typeDeclaration EOF { td }
+  | (*id=importDeclaration*) td=typeDeclarations EOF { td }
+
+
+
+typeDeclarations:
+  | td=typeDeclaration { td }
+  | tds=typeDeclarations td=typeDeclaration { tds^" "^td}
 
 typeDeclaration:
   | cd=classDeclaration {cd}
+  (*| id=intefaceDeclaration {id} *)
   | SEMICOLON { ";" }
 
 classDeclaration:
   | ncd=normalClassDeclaration { ncd }
-  (*|EnumDeclaration*)
+  (*|ed=EnumDeclaration { ed }*)
 
 normalClassDeclaration:
-  | m=modifier CLASS id=identifier (*[TypeParameters] [extends Type] [implements TypeList]*) cb=classBody { m^"class "^id^" "^cb }
+  | m=modifier CLASS id=identifier (*[TypeParameters] [extends Type] [implements TypeList]*) cb=classBody { m^" class "^id^" "^cb }
 
 classBody:
-  | LPAR cbd=classBodyDeclaration RPAR { "{ "^cbd^" }" }
+  | LPAR cbds=classBodyDeclarations RPAR { "{\n "^cbds^" \n}" }
+
+classBodyDeclarations:
+  | cbd=classBodyDeclaration { cbd }
+  | cbds=classBodyDeclarations cbd=classBodyDeclaration {cbds^" "^cbd}
 
 classBodyDeclaration:
-  | SEMICOLON { ";" }
-  | cmd=classMemberDeclaration {cmd}
+  | cmd=classMemberDeclaration { cmd }
+  | cd=constructorDeclaration { cd }
 
 classMemberDeclaration:
   | fd=fieldDeclaration { fd }
+  (*| md=MethodDeclaration { md }*)
+  | SEMICOLON { ";" }
     
-(* Field Declarations *)
 fieldDeclaration:
-  | mt=myType vdl=variableDeclarators SEMICOLON { mt^" "^vdl^";"}
-  
+  | mt=myType vdl=variableDeclarators SEMICOLON { mt^" "^vdl^";\n"}
+  | fds=fieldModifiers mt=myType vdl=variableDeclarators SEMICOLON { fds^" "^mt^" "^vdl^";\n"}
+
+variableDeclarators:
+  | vd=variableDeclarator { vd }
+  | vds=variableDeclarators COMMA vd=variableDeclarator { vds^" , "^vd }
+
+variableDeclarator:
+  | vdi=variableDeclaratorId { vdi }
+  | vdi=variableDeclaratorId EQUAL vi=variableInitializer { vdi^" = "^vi }
+
+variableDeclaratorId:
+  | id=identifier { id }
+  | vdi=variableDeclaratorId LSBRAC RSBRAC { vdi^"[]" }
+
+variableInitializer:
+  | e=expression {e}
+  (*|ArrayInitializer*)
+
+constructorDeclaration:
+  | cd=constructorDeclarator cb=constructorBody { cd^" "^cb }
+  | cms=constructorModifiers cd=constructorDeclarator cb=constructorBody { cms^" "^cd^" "^cb }
+
+constructorDeclarator:
+  | stn=simpleTypeName LBRAC RBRAC { stn^"()" }
+  | tps=typeParameters stn=simpleTypeName LBRAC RBRAC { tps^" "^stn^"()" }
+  | stn=simpleTypeName LBRAC fpl=formalParameterList RBRAC { stn^"("^fpl^")" }
+  | tps=typeParameters stn=simpleTypeName LBRAC fpl=formalParameterList RBRAC { tps^" "^stn^"("^fpl^")" }
+
+constructorBody:
+  | LPAR RPAR { "{}\n" }
+  (*| LPAR ExplicitConstructorInvocation opt BlockStatements opt RPAR*)
+
 block:
 	  LPAR bss=blockStatements RPAR { " {\n"^bss^"\n}" }
 	| LPAR RPAR { " {} "}
@@ -84,18 +184,6 @@ blockstatement:
 localVariableDeclarationStatement:
   | (*[final]*) mt=myType vds=variableDeclarators { mt^" "^vds }
 
-variableDeclarators:
-  | vd=variableDeclarator { vd }
-
-variableDeclarator:
-  | vdi=variableDeclaratorId { vdi }
-  | vdi=variableDeclaratorId EQUAL vi=variableInitializer { vdi^" = "^vi }
-
-variableDeclaratorId:
-  | id=identifier { id }
-
-variableInitializer:
-  | e=expression {e}
 
 myType:
   | b=basicType { b }
@@ -114,9 +202,26 @@ assignment:
 
 leftHandSide:
   | en=expressionName { en }
-
-expressionName:
-  | id=identifier { id }
+  (* fieldAccess
+  arrayAccess*)
 
 assignmentOperator:
   | EQUAL { "=" }
+    (*=
+  *=
+  /=
+  %=
+  +=
+  -=
+  <<=
+  >>=
+  >>>=
+  &=
+  ^=
+  |=*)
+
+expressionName:
+  | id=identifier { id }
+  (*| AmbiguousName . Identifier *)
+
+

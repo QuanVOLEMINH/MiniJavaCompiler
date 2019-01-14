@@ -21,15 +21,21 @@ rule nexttoken = parse
   | "+" { PLUS } 
   | "-" { MINUS } 
   | "*" { TIMES }
-  | "/" { DIV } 
+  | "/" { DIV }
+  | "<" { LT }
+  | ">" { GT }
   | ";" { SEMICOLON }
+  | "," { COMMA }
   | "{" { LPAR }
   | "}" { RPAR }
   | "(" { LBRAC }
   | ")" { RBRAC }
+  | "[" { LSBRAC }
+  | "]" { RSBRAC }
   | "=" { EQUAL }
   | "++" { INCR }
   | "public" { PUBLIC } 
+  | "final" { FINAL } 
   | "class" { CLASS }
   | "int"  { INTEGER }
   | integer as i { INT (int_of_string i) }
@@ -42,16 +48,22 @@ let print_lexeme = function
     | MINUS -> print_string "-"
     | TIMES -> print_string "*"
     | DIV -> print_string "/"
+    | LT -> print_string "<"
+    | GT -> print_string ">"
     | SEMICOLON -> print_string ";"
+    | COMMA -> print_string ","
     | LPAR -> print_string "{"
     | RPAR -> print_string "}"
     | LBRAC -> print_string "("
     | RBRAC -> print_string ")"
+    | LSBRAC -> print_string "["
+    | RSBRAC -> print_string "]"
     | EQUAL -> print_string "="
     | INCR -> print_string "++"
     | INT i -> print_string "INT("; print_string (string_of_int i); print_string ")"
     | IDENT s -> print_string "IDENT("; print_string s; print_string ")"
     | PUBLIC -> print_string "public"
+    | FINAL -> print_string "final"
     | INTEGER -> print_string "int"
     | CLASS -> print_string "class"
 

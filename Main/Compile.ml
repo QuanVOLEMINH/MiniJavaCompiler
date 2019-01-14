@@ -3,8 +3,8 @@
 let execute lexbuf verbose =
   try
     let token = Parser.compilationUnit Lexer.printtoken lexbuf in
-      print_string "Parser print=====\n";
+      print_string "\n====== Parser print =====\n\n";
       print_string token;
-      print_string "\n=====\n"
+      print_string "\n\n=====\n"
   with
     | Parser.Error -> print_string "Parser error\n";
