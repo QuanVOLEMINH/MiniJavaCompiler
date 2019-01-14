@@ -36,7 +36,8 @@ rule nexttoken = parse
   | "="             { print_endline "EQUAL"; EQUAL }
   | "++"            { print_endline "INCR"; INCR }
   | "public"        { print_endline "PUBLIC"; PUBLIC }
-  | "final"        { print_endline "FINAL"; FINAL } 
+  | "final"         { print_endline "FINAL"; FINAL } 
+  | "void"          { print_endline "VOID"; VOID } 
   | "class"         { print_endline "CLASS"; CLASS }
   | "int"           { print_endline "INTEGER"; INTEGER }
   | integer as i    { INT (int_of_string i) }

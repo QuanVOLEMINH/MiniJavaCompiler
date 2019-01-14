@@ -7,6 +7,9 @@
 (* Modifier *)
 %token PUBLIC FINAL
 
+(* Type *)
+%token VOID
+
 (* Special *)
 %token EOF
 %token AT
@@ -98,6 +101,40 @@ lastFormalParameter:
   | vms=variableModifiers mt=myType vdi=variableDeclaratorId { vms^" "^mt^" "^vdi}
   | fp=formalParameter { fp }
 
+(* Comment *)
+(*comment:
+  | tc=traditionalComment { tc }
+  | ec=endOfLineComment { ec }
+
+traditionalComment:
+  | DIV TIMES ct=commentTail { "/*"^ct }
+
+endOfLineComment:
+  | DIV DIV { "//" }
+  | DIV DIV cil=charactersInLine { "//"^cil}
+
+commentTail:
+  | TIMES cts=commentTailStar { "*"^cts }
+  | ns=notStar ct=commentTail { ns^" "^ct }
+
+commentTailStar:
+  | DIV { "/" }
+  | TIMES cts=commentTailStar { "*"^cts }
+  | nsns=notStarNotSlash ct=commentTail { nsns^" "^ct }
+
+notStar:
+  | ic=inputCharacter but not *
+  | lt=lineTerminator { lt }
+
+notStarNotSlash:
+  | ic=inputCharacter but not * or /
+  | lt=lineTerminator { lt }
+
+charactersInLine:
+  | ic=inputCharacter { ic }
+  | cil=charactersInLine ic=inputCharacter { cil^" "^ic }
+*)
+
 
 
 (* Starting point *)
@@ -135,7 +172,7 @@ classBodyDeclaration:
 
 classMemberDeclaration:
   | fd=fieldDeclaration { fd }
-  (*| md=MethodDeclaration { md }*)
+  | md=methodDeclaration { md }
   | SEMICOLON { ";" }
     
 fieldDeclaration:
@@ -172,9 +209,26 @@ constructorBody:
   | LPAR RPAR { "{}\n" }
   (*| LPAR ExplicitConstructorInvocation opt BlockStatements opt RPAR*)
 
+methodDeclaration:
+  | mh=methodHeader mb=methodBody { mh^" "^mb }
+
+methodHeader:
+  | rt=resultType md=methodDeclarator { rt^" "^md }
+  (*| TypeParameters ResultType MethodDeclarator*)
+
+methodDeclarator:
+  | id=identifier LBRAC RBRAC { id^"()" }
+  | id=identifier LBRAC fpl=formalParameterList RBRAC { id^"("^fpl^")" }
+
+methodBody:
+  | b=block { b }
+  | SEMICOLON { ";\n" }
+
+
+(* Blocks *)
 block:
 	  LPAR bss=blockStatements RPAR { " {\n"^bss^"\n}" }
-	| LPAR RPAR { " {} "}
+	| LPAR RPAR { "{}\n"}
 
 blockStatements:
   | bs=blockstatement { bs }
@@ -185,9 +239,13 @@ blockstatement:
 localVariableDeclarationStatement:
   | (*[final]*) mt=myType vds=variableDeclarators { mt^" "^vds }
 
+resultType:
+  | mt=myType { mt }
+  | VOID { "void" }
 
 myType:
   | b=basicType { b }
+  (*| Identifier [TypeArguments]{ . Identifier [TypeArguments]} { [] } *)
 
 basicType:
   | INTEGER {"int"}
