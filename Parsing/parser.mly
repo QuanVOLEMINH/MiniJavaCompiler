@@ -20,7 +20,7 @@
 %token <string> IDENT
 %token <int> INT
 
-%token CLASS
+%token CLASS BREAK RETURN DO
 
 %start compilationUnit
 
@@ -210,7 +210,7 @@ constructorBody:
   (*| LPAR ExplicitConstructorInvocation opt BlockStatements opt RPAR*)
 
 methodDeclaration:
-  | mh=methodHeader mb=methodBody { mh^" "^mb }
+  | mh=methodHeader mb=methodBody { print_endline "methodDeclaration----------------";mh^" "^mb }
 
 methodHeader:
   | rt=resultType md=methodDeclarator { rt^" "^md }
@@ -227,17 +227,50 @@ methodBody:
 
 (* Blocks *)
 block:
-	  LPAR bss=blockStatements RPAR { " {\n"^bss^"\n}" }
+	| LPAR bss=blockStatements RPAR { " {\n"^bss^"\n}" }
 	| LPAR RPAR { "{}\n"}
 
 blockStatements:
   | bs=blockstatement { bs }
+  | blockStatements bs=blockstatement { bs }
 
 blockstatement:
   | lvds=localVariableDeclarationStatement { lvds }
+  | swts=statementWithoutTrailingSubstatement { swts }
+
+statementWithoutTrailingSubstatement:
+  | b=block                       {b}
+  | SEMICOLON                     {";\n"}
+  | brk= breakStatement           { brk }
+  | rtn= returnStatement          { rtn }
+  | expr= expression SEMICOLON    { expr } (* TODO: expression*)
+  | ds = doStatement              { ds }
+  | cs = continueStatement        { cs }
+  (* AssertStatement *)
+  (* SwitchStatement *)
+  (* SynchronizedStatement *)
+  (* ThrowStatement *)
+  (* TryStatement *)
+
+continueStatement:
+  | continue SEMICOLON { "continue \n" }
+  | continue id=identifier SEMICOLON { ("continue "^id)}
+
+doStatement: (* TODO: expression *)
+  | DO blks = blockstatement WHILE LPAR expr=expression RPAR SEMICOLON {("do " ^ blks^" while "^expr^"\n")}
+
+
+returnStatement:
+  | RETURN SEMICOLON { "return \n"}
+  | RETURN expr= expression SEMICOLON { ("return \n"^expr)}
+
+breakStatement:
+  | BREAK SEMICOLON { "break \n"}
+  | BREAK id= identifier SEMICOLON { ("break "^id)}
+
 
 localVariableDeclarationStatement:
-  | (*[final]*) mt=myType vds=variableDeclarators { mt^" "^vds }
+  | (*[final]*) mt=myType vds=variableDeclarators SEMICOLON{ mt^" "^vds }
 
 resultType:
   | mt=myType { mt }
@@ -248,7 +281,7 @@ myType:
   (*| Identifier [TypeArguments]{ . Identifier [TypeArguments]} { [] } *)
 
 basicType:
-  | INTEGER {"int"}
+  | INTEGER {print_endline "int -----------------";"int"}
   
 expression:
   | ae=assignmentExpression { ae }

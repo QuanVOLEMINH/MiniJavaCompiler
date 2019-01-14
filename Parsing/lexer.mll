@@ -14,7 +14,7 @@ let newline = ('\010' | '\013' | "\013\010")
 let onelinecomment = "//" ([^'\010' '\013'])* newline
 
 rule nexttoken = parse
-  | newline         { print_endline "newline"; Lexing.new_line lexbuf; nexttoken lexbuf }
+  | newline         { Lexing.new_line lexbuf; nexttoken lexbuf }
   | blank+          { nexttoken lexbuf }
   | "/*"            { print_endline "traditioncommnet"; traditioncommnet lexbuf }
   | "//"            { print_endline "eolcomment"; eolcomment lexbuf }
@@ -39,9 +39,12 @@ rule nexttoken = parse
   | "final"         { print_endline "FINAL"; FINAL } 
   | "void"          { print_endline "VOID"; VOID } 
   | "class"         { print_endline "CLASS"; CLASS }
+  | "return"        { print_endline "RETURN"; RETURN}
+  | "break"         { print_endline "BREAK"; BREAK}
   | "int"           { print_endline "INTEGER"; INTEGER }
-  | integer as i    { INT (int_of_string i) }
-  | ident as str    { IDENT str }
+  | "do"            { print_endline "DO"; DO }
+  | integer as i    { print_endline ("INT: " ^ i ); INT (int_of_string i) }
+  | ident as str    { print_endline ("IDENT: " ^ str );IDENT str }
 and traditioncommnet = parse (* traditional comment *)
   | "*/"            { nexttoken lexbuf}
   | _               { traditioncommnet lexbuf}
