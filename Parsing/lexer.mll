@@ -58,9 +58,11 @@ rule nexttoken = parse
   | "boolean"       { print_endline "BOOLEAN"; BOOLEAN }
     (* keywords *)
   | "this"          { print_endline "THIS"; THIS }
+  | "super"          { print_endline "SUPER"; SUPER }
+
     (* literal *)
-  | non_zero_digit as nzd { print_string (String.make 1 nzd); NONZERODIGIT }
-  | zero_digit as zd { print_string (String.make 1 zd); ZERODIGIT }
+  | non_zero_digit as nzd { NONZERODIGIT(nzd) }
+  | zero_digit { print_endline "0" ; ZERODIGIT }
 
   | integer as i    { INTEGER (int_of_string i) }
   | ident as str    { IDENT str }
@@ -96,6 +98,7 @@ let print_lexeme = function
     | FINAL -> print_string "final"
     | INT -> print_string "int"
     | CLASS -> print_string "class"
+    | NONZERODIGIT nzd -> print_string (String.make 1 nzd) 
 
 let rec printtoken buf = 
   let token = nexttoken buf in

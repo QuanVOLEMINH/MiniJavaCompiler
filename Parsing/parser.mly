@@ -11,7 +11,7 @@
 %token VOID
 
 (* keywords *)
-%token THIS
+%token THIS SUPER
 
 (* Special *)
 %token EOF
@@ -42,7 +42,8 @@
 %token PLUS MINUS TIMES DIV MOD LT GT
 
 (* digits *)
-%token ZERODIGIT NONZERODIGIT
+%token ZERODIGIT
+%token <char> NONZERODIGIT
 
 %start compilationUnit
 %type <string> compilationUnit
@@ -266,10 +267,25 @@ localVariableDeclaration:
   | vms=variableModifiers mt=myType vds=variableDeclarators { vms^" "^mt^" "^vds }
 
 statement:
+  | swtbs=statementWithoutTrailingSubstatement { swtbs }
+  | ls=labeledStatement { ls }
+(*IfThenStatement
+IfThenElseStatement
+WhileStatement
+ForStatement*)
+
+statementWithoutTrailingSubstatement:
   | b=block { b }
-  | id=identifier COLON s=statement { id^" : "^s }
-  | se=statementExpression SEMICOLON { se^";" }
+  | es=emptyStatement { es }
+  | es=expressionStatement { es }
+
+labeledStatement:
+| id=identifier COLON s=statement { id^":"^s }
+
+emptyStatement:
   | SEMICOLON { ";" }
+expressionStatement:
+  | se=statementExpression SEMICOLON { se^";" }
 
 statementExpression:
   | a=assignment { a }
@@ -322,8 +338,8 @@ assignment:
 
 leftHandSide:
   | en=expressionName { en }
-  (* fieldAccess
-  arrayAccess*)
+  | fa=fieldAccess { fa }
+  (* arrayAccess*)
 
 assignmentOperator:
   | EQUAL { "=" }
@@ -359,10 +375,10 @@ primaryNoNewArray:
   | THIS { "this" }
   (*ClassName .this*)
   | LBRAC e=expression RBRAC { "("^e^")" }
-  (*ClassInstanceCreationExpression
-  FieldAccess
-  MethodInvocation
-  ArrayAccess*)
+  (*ClassInstanceCreationExpression*)
+  | fa=fieldAccess { fa }
+  (*MethodInvocation
+    ArrayAccess*)
 
 literal:
   | i=integerLiteral { i }
@@ -383,20 +399,29 @@ decimalIntegerLiteral:
 
 decimalNumeral:
   | ZERODIGIT { "0" }
-  | nzd=NONZERODIGIT { nzd }
-  | nzd=NONZERODIGIT ds=digits { nzd^" "^ds }
+  | nzd=NONZERODIGIT { String.make 1 nzd }
+  | nzd=NONZERODIGIT ds=digits { (String.make 1 nzd)^ds }
 
 digits:
   | d=digit { d }
-  | ds=digits d=digit { ds^" "^d }
+  | ds=digits d=digit { ds^d }
 
 digit:
   | ZERODIGIT { "0" }
-  | n=NONZERODIGIT { string_of_int n } 
+  | nzd=NONZERODIGIT { (String.make 1 nzd) } 
+
 
 (*integerTypeSuffix:*)
 
+fieldAccess:
+  | p=primary POINT id=identifier { p^"."^id }
+  | SUPER POINT id=identifier { "super."^id }
+  (*ClassName .super . Identifier*)
 
+arrayAccess:
+  | en=expressionName LSBRAC e=expression RSBRAC { en^"["^e^"]" }
+  | pnna=primaryNoNewArray LSBRAC e=expression RSBRAC { pnna^"["^e^"]" }
+ 
 (* Type *)
 primitiveType:
   | nt=numericType { nt }
