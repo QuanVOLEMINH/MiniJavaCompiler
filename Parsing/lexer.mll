@@ -23,8 +23,8 @@ rule nexttoken = parse
   | "-"             { print_endline "MINUS"; MINUS } 
   | "*"             { print_endline "TIMES"; TIMES }
   | "/"             { print_endline "DIV"; DIV }
-  | "<" { LT }      { print_endline "<"; LT }
-  | ">" { GT }      { print_endline ">"; GT }
+  | "<"             { print_endline "<"; LT }
+  | ">"             { print_endline ">"; GT }
   | ";"             { print_endline "SEMICOLON"; SEMICOLON }
   | ","             { print_endline ","; COMMA }
   | "{"             { print_endline "LPAR"; LPAR }
@@ -35,7 +35,8 @@ rule nexttoken = parse
   | "]"             { print_endline "]"; RSBRAC }
   | "="             { print_endline "EQUAL"; EQUAL }
   | "++"            { print_endline "INCR"; INCR }
-  | "public"        { print_endline "PUBLIC"; PUBLIC } 
+  | "public"        { print_endline "PUBLIC"; PUBLIC }
+  | "final"        { print_endline "FINAL"; FINAL } 
   | "class"         { print_endline "CLASS"; CLASS }
   | "int"           { print_endline "INTEGER"; INTEGER }
   | integer as i    { INT (int_of_string i) }

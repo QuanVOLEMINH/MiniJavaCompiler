@@ -8,6 +8,6 @@ public class Point{
     int c,d,e;
     public Point(){
     }
-    public Point(final int x){
+    public Point(final int x, int z){
     }
 }

@@ -5,7 +5,7 @@ open Expr
 let execute lexbuf verbose =
   try
     let token = Parser.compilationUnit nexttoken lexbuf in
-      print_string "Parser print=====\n";
+      print_string "\n===== Parser print =====\n\n";
       print_string token;
       print_string "\n\n=====\n"
   with

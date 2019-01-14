@@ -90,11 +90,12 @@ formalParameters:
   | fps=formalParameters COMMA fp=formalParameter { fps^" , "^fp}
 
 formalParameter:
+  | mt=myType vdi=variableDeclaratorId { mt^" "^vdi }
   | vms=variableModifiers mt=myType vdi=variableDeclaratorId { vms^" "^mt^" "^vdi }
 
 lastFormalParameter:
-  | vms=variableModifiers (*Type... opt*) vdi=variableDeclaratorId fp=formalParameter { vms^" "^vdi^" "^fp }
-  | vms=variableModifiers mt=myType vdi=variableDeclaratorId fp=formalParameter { vms^" "^mt^" "^vdi^" "^fp }
+  | vms=variableModifiers vdi=variableDeclaratorId { vms^" "^vdi}
+  | vms=variableModifiers mt=myType vdi=variableDeclaratorId { vms^" "^mt^" "^vdi}
   | fp=formalParameter { fp }
 
 
