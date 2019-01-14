@@ -4,6 +4,8 @@
 
 
 public class Point{
+    ;;
+    ;
     public int a, b;
     int c,d,e;
     

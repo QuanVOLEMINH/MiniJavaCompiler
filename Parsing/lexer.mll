@@ -15,7 +15,7 @@ let newline = ('\010' | '\013' | "\013\010")
 let onelinecomment = "//" ([^'\010' '\013'])* newline
 
 rule nexttoken = parse
-  | newline         { print_endline "newline"; Lexing.new_line lexbuf; nexttoken lexbuf }
+  | newline         { Lexing.new_line lexbuf; nexttoken lexbuf }
   | blank+          { nexttoken lexbuf }
   | "/*"            { print_endline "traditioncommnet"; traditioncommnet lexbuf }
   | "//"            { print_endline "eolcomment"; eolcomment lexbuf }
@@ -44,6 +44,11 @@ rule nexttoken = parse
   | "final"         { print_endline "FINAL"; FINAL } 
   | "void"          { print_endline "VOID"; VOID } 
   | "class"         { print_endline "CLASS"; CLASS }
+  | "return"        { print_endline "RETURN"; RETURN}
+  | "break"         { print_endline "BREAK"; BREAK}
+  | "do"            { print_endline "DO"; DO }
+  | "continue"      { print_endline "CONTINUE"; CONTINUE}
+  | "while"         { print_endline "WHILE"; WHILE}
     
     (* integral type *)
   | "byte"          { print_endline "BYTE"; BYTE }
@@ -51,7 +56,7 @@ rule nexttoken = parse
   | "int"           { print_endline "INT"; INT }
   | "long"          { print_endline "LONG"; LONG }
   | "char"          { print_endline "CHAR"; CHAR }
-    
+  
     (* floating point type *)
   | "float"         { print_endline "FLOAT"; FLOAT }
   | "double"        { print_endline "DOUBLE"; DOUBLE }
@@ -61,9 +66,9 @@ rule nexttoken = parse
     (* literal *)
   | non_zero_digit as nzd { print_string (String.make 1 nzd); NONZERODIGIT }
   | zero_digit as zd { print_string (String.make 1 zd); ZERODIGIT }
+  | integer as i    { print_endline ("INT: " ^ i ); INTEGER (int_of_string i) }
+  | ident as str    { print_endline ("IDENT: " ^ str );IDENT str }
 
-  | integer as i    { INTEGER (int_of_string i) }
-  | ident as str    { IDENT str }
 and traditioncommnet = parse (* traditional comment *)
   | "*/"            { nexttoken lexbuf}
   | _               { traditioncommnet lexbuf}
