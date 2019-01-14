@@ -5,6 +5,7 @@
 
 let letter = ['a'-'z' 'A'-'Z']
 let non_zero_digit = ['1'-'9']
+let zero_digit = ['0']
 let digit = ('0' | non_zero_digit)
 let real = digit* ('.' digit*)?
 let ident = letter (letter | digit | '_')*
@@ -55,6 +56,12 @@ rule nexttoken = parse
   | "float"         { print_endline "FLOAT"; FLOAT }
   | "double"        { print_endline "DOUBLE"; DOUBLE }
   | "boolean"       { print_endline "BOOLEAN"; BOOLEAN }
+    (* keywords *)
+  | "this"          { print_endline "THIS"; THIS }
+    (* literal *)
+  | non_zero_digit as nzd { print_string (String.make 1 nzd); NONZERODIGIT }
+  | zero_digit as zd { print_string (String.make 1 zd); ZERODIGIT }
+
   | integer as i    { INTEGER (int_of_string i) }
   | ident as str    { IDENT str }
 and traditioncommnet = parse (* traditional comment *)

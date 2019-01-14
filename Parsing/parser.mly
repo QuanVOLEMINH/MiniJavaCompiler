@@ -10,6 +10,9 @@
 (* Type *)
 %token VOID
 
+(* keywords *)
+%token THIS
+
 (* Special *)
 %token EOF
 %token AT
@@ -38,6 +41,8 @@
 (* InfixOp *)
 %token PLUS MINUS TIMES DIV MOD LT GT
 
+(* digits *)
+%token ZERODIGIT NONZERODIGIT
 
 %start compilationUnit
 %type <string> compilationUnit
@@ -270,9 +275,9 @@ statementExpression:
   | a=assignment { a }
   | pie=preIncrementExpression { pie }
   | pde=preDecrementExpression { pde }
-(*PostIncrementExpression
-PostDecrementExpression
-MethodInvocation
+  | pie=postIncrementExpression { pie }
+  | pde=postDecrementExpression { pde }
+(*MethodInvocation
 ClassInstanceCreationExpression
   *)
 
@@ -281,6 +286,12 @@ preIncrementExpression:
 
 preDecrementExpression:
   | DECR ue=unaryExpression { "--"^ue }
+
+postIncrementExpression:
+  | pfe=postfixExpression INCR { pfe^"++" }
+
+postDecrementExpression:
+  | pfe=postfixExpression DECR { pfe^"--" }
 
 unaryExpression:
   | pie=preIncrementExpression { pie }
@@ -293,7 +304,6 @@ unaryExpressionNotPlusMinus:
   | pe=postfixExpression { pe }
   | ce=castExpression { ce }
 
-
 postfixExpression:
   | en = expressionName { en }
 
@@ -301,61 +311,6 @@ castExpression:
   | LBRAC pt=primitiveType RBRAC ue=unaryExpression { "("^pt^")"^ue }
   (*( ReferenceType ) UnaryExpressionNotPlusMinus*)
 
-primitiveType:
-  | nt=numericType { nt }
-  | BOOLEAN { "boolean" }
-
-referenceType:
-  | coit=classOrInterfaceType { coit }
-  | tv=typeVariable { tv }
-  (*ArrayType*)
-
-classOrInterfaceType:
-  | ct=classType { ct }
-  (*| it=interfaceType { it }*)
-
-classType:
-  | tds=typeDeclSpecifier { tds }
-  (* | tds=typeDeclSpecifier tas=typeArguments { tds^" "^tas } *)
-
-typeDeclSpecifier:
-  | tn=typeName { tn }
-  | coit=classOrInterfaceType POINT id=identifier { coit^"."^id }
-
-typeName:
-  | id=identifier { id }
-  | tn=typeName POINT id=identifier {tn^"."^id}
-
-typeVariable:
-  | id=identifier { id }
-
-
-arrayType: 
-  | mt=myType LSBRAC RSBRAC { mt^"[]" }
-
-numericType:
-  | it=integralType { it }
-  | fpt=floatingPointType { fpt }
-
-integralType:
-  | BYTE { "byte" } | SHORT { "short" } | INT { "int" } | LONG { "long" } | CHAR { "char" }
-
-floatingPointType:
-  | FLOAT { "float" } | DOUBLE { "double" }
-
-resultType:
-  | mt=myType { mt }
-  | VOID { "void" }
-
-myType:
-  | pt = primitiveType { pt }
-  (*| Identifier [TypeArguments]{ . Identifier [TypeArguments]} { [] } *)
-
-basicType:
-  | BYTE { "byte" } | SHORT { "short" } | INT { "int" } | LONG { "long" } | CHAR { "char" }
-  | FLOAT { "float" } | DOUBLE { "double" }
-  | BOOLEAN { "boolean" }
-  
 expression:
   | ae=assignmentExpression { ae }
 
@@ -392,6 +347,111 @@ expressionName:
 ambiguousName:
   | id=identifier { id }
   | an=ambiguousName POINT id=identifier { an^"."^id }
+
+primary:
+  | pnna=primaryNoNewArray { pnna }
+  (*ArrayCreationExpression*)
+
+primaryNoNewArray:
+  | l=literal { l }
+  | mt=myType POINT CLASS { mt^".class" }
+  | VOID POINT CLASS { "void.class" }
+  | THIS { "this" }
+  (*ClassName .this*)
+  | LBRAC e=expression RBRAC { "("^e^")" }
+  (*ClassInstanceCreationExpression
+  FieldAccess
+  MethodInvocation
+  ArrayAccess*)
+
+literal:
+  | i=integerLiteral { i }
+(*FloatingPointLiteral
+BooleanLiteral
+CharacterLiteral
+StringLiteral
+NullLiteral*)
+
+integerLiteral:
+  | dil=decimalIntegerLiteral { dil }
+(*HexIntegerLiteral
+OctalIntegerLiteral*)
+
+decimalIntegerLiteral:
+  | dn=decimalNumeral { dn }
+  (*| dn=decimalNumeral its=integerTypeSuffix { dn^" "^its }*)
+
+decimalNumeral:
+  | ZERODIGIT { "0" }
+  | nzd=NONZERODIGIT { nzd }
+  | nzd=NONZERODIGIT ds=digits { nzd^" "^ds }
+
+digits:
+  | d=digit { d }
+  | ds=digits d=digit { ds^" "^d }
+
+digit:
+  | ZERODIGIT { "0" }
+  | n=NONZERODIGIT { string_of_int n } 
+
+(*integerTypeSuffix:*)
+
+
+(* Type *)
+primitiveType:
+  | nt=numericType { nt }
+  | BOOLEAN { "boolean" }
+
+referenceType:
+  | coit=classOrInterfaceType { coit }
+  | tv=typeVariable { tv }
+  (*ArrayType*)
+
+classOrInterfaceType:
+  | ct=classType { ct }
+  (*| it=interfaceType { it }*)
+
+classType:
+  | tds=typeDeclSpecifier { tds }
+  (* | tds=typeDeclSpecifier tas=typeArguments { tds^" "^tas } *)
+
+typeDeclSpecifier:
+  | tn=typeName { tn }
+  | coit=classOrInterfaceType POINT id=identifier { coit^"."^id }
+
+typeName:
+  | id=identifier { id }
+  | tn=typeName POINT id=identifier {tn^"."^id}
+
+typeVariable:
+  | id=identifier { id }
+
+arrayType: 
+  | mt=myType LSBRAC RSBRAC { mt^"[]" }
+
+numericType:
+  | it=integralType { it }
+  | fpt=floatingPointType { fpt }
+
+integralType:
+  | BYTE { "byte" } | SHORT { "short" } | INT { "int" } | LONG { "long" } | CHAR { "char" }
+
+floatingPointType:
+  | FLOAT { "float" } | DOUBLE { "double" }
+
+resultType:
+  | mt=myType { mt }
+  | VOID { "void" }
+
+myType:
+  | pt = primitiveType { pt }
+  (*| Identifier [TypeArguments]{ . Identifier [TypeArguments]} { [] } *)
+
+basicType:
+  | BYTE { "byte" } | SHORT { "short" } | INT { "int" } | LONG { "long" } | CHAR { "char" }
+  | FLOAT { "float" } | DOUBLE { "double" }
+  | BOOLEAN { "boolean" }
+  
 
 
 
