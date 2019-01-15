@@ -130,37 +130,4 @@ and eolcomment = parse (* end-of-line comment *)
   | _               { eolcomment lexbuf }
 
 {
-let print_lexeme = function
-    | EOF -> print_string "EOF"
-    | PLUS -> print_string "+"
-    | MINUS -> print_string "-"
-    | TIMES -> print_string "*"
-    | DIV -> print_string "/"
-    | LT -> print_string "<"
-    | GT -> print_string ">"
-    | SEMICOLON -> print_string ";"
-    | COMMA -> print_string ","
-    | LPAR -> print_string "{"
-    | RPAR -> print_string "}"
-    | LBRAC -> print_string "("
-    | RBRAC -> print_string ")"
-    | LSBRAC -> print_string "["
-    | RSBRAC -> print_string "]"
-    | EQUAL -> print_string "="
-    | INCR -> print_string "++"
-    | INTEGER i -> print_string "INTEGER("; print_string (string_of_int i); print_string ")"
-    | IDENT s -> print_string "IDENT("; print_string s; print_string ")"
-    | PUBLIC -> print_string "public"
-    | FINAL -> print_string "final"
-    | INT -> print_string "int"
-    | CLASS -> print_string "class"
-    | NONZERODIGIT nzd -> print_string (String.make 1 nzd) 
-
-let rec printtoken buf = 
-  let token = nexttoken buf in
-      print_int buf.lex_curr_p.pos_lnum;
-      print_string ".     ";
-      print_lexeme token;
-      print_string "\n";
-      token
 }
