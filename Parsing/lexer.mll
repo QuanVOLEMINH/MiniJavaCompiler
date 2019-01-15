@@ -26,6 +26,11 @@ rule nexttoken = parse
   | "/"             { print_endline "DIV"; DIV }
   | "<"             { print_endline "<"; LT }
   | ">"             { print_endline ">"; GT }
+  | "<="            { print_endline "<"; LTOE }
+  | ">="            { print_endline ">"; GTOE }
+  | "<<"            { print_endline "<<"; LSHIFT }
+  | ">>"            { print_endline ">>"; RSHIFT }
+  | ">>>"           { print_endline ">>>"; USHIFT }
     (* separators *)
   | ";"             { print_endline "SEMICOLON"; SEMICOLON }
   | ":"             { print_endline "COLON"; COLON }
@@ -33,26 +38,24 @@ rule nexttoken = parse
   | "."             { print_endline "."; POINT }
   | "~"             { print_endline "~"; TILDE }
   | "!"             { print_endline "!"; EP }  
-  | "?"             { print_endline "?"; QM }    
+  | "?"             { print_endline "?"; QM }
+  | "\""             { print_endline "?"; QuoM }    
   | "{"             { print_endline "LPAR"; LPAR }
   | "}"             { print_endline "RPAR"; RPAR }
   | "("             { print_endline "LBRAC"; LBRAC }
   | ")"             { print_endline "RBRAC"; RBRAC }
   | "["             { print_endline "["; LSBRAC }
   | "]"             { print_endline "]"; RSBRAC }
+  | "||"            { print_endline "||"; CONDITIONALOR }
+  | "&&"            { print_endline "&&"; CONDITIONALAND }
+  | "&"             { print_endline "&"; AND }
+  | "|"             { print_endline "|"; INCLUSIVEOR }
+  | "^"             { print_endline "|"; EXCLUSIVEOR }
+  | "=="            { print_endline "=="; CONDITIONALEQUAL }
+  | "!="            { print_endline "!="; CONDITIONALNOTEQUAL }
   | "="             { print_endline "EQUAL"; EQUAL }
   | "++"            { print_endline "INCR"; INCR }
-  | "--"            { print_endline "DECR"; DECR }
-  | "public"        { print_endline "PUBLIC"; PUBLIC }
-  | "final"         { print_endline "FINAL"; FINAL } 
-  | "void"          { print_endline "VOID"; VOID } 
-  | "class"         { print_endline "CLASS"; CLASS }
-  | "return"        { print_endline "RETURN"; RETURN}
-  | "break"         { print_endline "BREAK"; BREAK}
-  | "do"            { print_endline "DO"; DO }
-  | "continue"      { print_endline "CONTINUE"; CONTINUE}
-  | "while"         { print_endline "WHILE"; WHILE}
-    
+  | "--"            { print_endline "DECR"; DECR }    
     (* integral type *)
   | "byte"          { print_endline "BYTE"; BYTE }
   | "short"         { print_endline "SHORT"; SHORT }
@@ -63,16 +66,30 @@ rule nexttoken = parse
     (* floating point type *)
   | "float"         { print_endline "FLOAT"; FLOAT }
   | "double"        { print_endline "DOUBLE"; DOUBLE }
-  | "boolean"       { print_endline "BOOLEAN"; BOOLEAN }
+  
     (* keywords *)
+  | "boolean"       { print_endline "BOOLEAN"; BOOLEAN }
+  | "public"        { print_endline "PUBLIC"; PUBLIC }
+  | "final"         { print_endline "FINAL"; FINAL } 
+  | "void"          { print_endline "VOID"; VOID } 
   | "this"          { print_endline "THIS"; THIS }
-  | "super"          { print_endline "SUPER"; SUPER }
-  | "extends"          { print_endline "EXTENDS"; EXTENDS }
-
-
+  | "super"         { print_endline "SUPER"; SUPER }
+  | "extends"       { print_endline "EXTENDS"; EXTENDS }
+  | "return"        { print_endline "RETURN"; RETURN}
+  | "break"         { print_endline "BREAK"; BREAK}
+  | "do"            { print_endline "DO"; DO }
+  | "continue"      { print_endline "CONTINUE"; CONTINUE}
+  | "while"         { print_endline "WHILE"; WHILE}
+  | "class"         { print_endline "CLASS"; CLASS }
     (* literal *)
   | non_zero_digit as nzd { NONZERODIGIT(nzd) }
   | zero_digit { print_endline "0" ; ZERODIGIT }
+    (* boolean literal *)
+  | "true"          { print_endline "TRUE"; TRUE }
+  | "false"         { print_endline "FALSE"; FALSE }
+    (* null literal *)
+  | "null"          { print_endline "NULL"; NULL}
+
   | integer as i    { print_endline ("INT: " ^ i ); INTEGER (int_of_string i) }
   | ident as str    { print_endline ("IDENT: " ^ str );IDENT str }
 

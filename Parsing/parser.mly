@@ -11,7 +11,7 @@
 %token VOID
 
 (* keywords *)
-%token THIS SUPER EXTENDS
+%token THIS SUPER EXTENDS CLASS BREAK RETURN DO CONTINUE WHILE
 
 (* Special *)
 %token EOF
@@ -20,17 +20,28 @@
 %token BOOLEAN
 
 (* Separators *)
-%token SEMICOLON COMMA COLON POINT TILDE EP QM LPAR RPAR LBRAC RBRAC LSBRAC RSBRAC 
+%token SEMICOLON COMMA COLON POINT TILDE EP QM QuoM LPAR RPAR LBRAC RBRAC LSBRAC RSBRAC 
+
+(* conditional operators *)
+%token CONDITIONALAND CONDITIONALOR AND INCLUSIVEOR EXCLUSIVEOR CONDITIONALEQUAL CONDITIONALNOTEQUAL
+
+(* bitwise operators *)
+%token LSHIFT RSHIFT USHIFT
 
 %token <string> IDENT
 %token <int> INTEGER
 
-%token CLASS BREAK RETURN DO CONTINUE WHILE
-
 (* Op *)
 %token INCR DECR 
 
+(* assignment operators *)
 %token EQUAL
+
+(* boolean literal *)
+%token TRUE FALSE
+
+(* null literal *)
+%token NULL
 
 (* integralType *)
 %token BYTE SHORT INT LONG CHAR
@@ -39,7 +50,7 @@
 %token FLOAT DOUBLE
 
 (* InfixOp *)
-%token PLUS MINUS TIMES DIV MOD LT GT
+%token PLUS MINUS TIMES DIV MOD LT GT LTOE GTOE
 
 (* digits *)
 %token ZERODIGIT
@@ -358,7 +369,62 @@ expression:
   | ae=assignmentExpression { ae }
 
 assignmentExpression:
+  | ce=conditionalExpression { ce }
   | a=assignment { a }
+
+conditionalExpression:
+  | coe=conditionalOrExpression { coe }
+  | coe=conditionalOrExpression QM e=expression COLON ce=conditionalExpression { coe^"?"^e^":"^ce }
+
+conditionalOrExpression:
+  | cae=conditionalAndExpression { cae }
+  | coe=conditionalOrExpression CONDITIONALOR cae=conditionalAndExpression { coe^"||"^cae }
+
+conditionalAndExpression:
+  | ioe=inclusiveOrExpression { ioe }
+  | cae=conditionalAndExpression CONDITIONALAND ioe=inclusiveOrExpression { cae^"&&"^ioe }
+
+inclusiveOrExpression:
+  | eoe=exclusiveOrExpression { eoe }
+  | ioe=inclusiveOrExpression INCLUSIVEOR eoe=exclusiveOrExpression { ioe^"|"^eoe }
+
+exclusiveOrExpression:
+  | ae=andExpression { ae }
+  | eoe=exclusiveOrExpression EXCLUSIVEOR ae=andExpression { eoe^"^"^ae }
+
+andExpression:
+  | ee=equalityExpression { ee }
+  | ae=andExpression AND ee=equalityExpression { ae^"&"^ee }
+
+equalityExpression:
+  | re=relationalExpression { re }
+  | ee=equalityExpression CONDITIONALEQUAL re=relationalExpression { ee^"=="^re }
+  | ee=equalityExpression CONDITIONALNOTEQUAL re=relationalExpression { ee^"!="^re }
+
+relationalExpression:
+  | se=shiftExpression { se }
+  | re=relationalExpression LT se=shiftExpression { re^"<"^se }
+  | re=relationalExpression GT se=shiftExpression { re^">"^se }
+  | re=relationalExpression LTOE se=shiftExpression { re^"<="^se }
+  | re=relationalExpression GTOE se=shiftExpression { re^">="^se }
+  (*|instanceof ReferenceType*)
+
+shiftExpression:
+  | ae=additiveExpression { ae }
+  | se=shiftExpression LSHIFT ae=additiveExpression { se^"<<"^ae }
+  | se=shiftExpression RSHIFT ae=additiveExpression { se^">>"^ae }
+  | se=shiftExpression USHIFT ae=additiveExpression { se^">>>"^ae }
+
+additiveExpression:
+  | me=multiplicativeExpression { me }
+  | ae=additiveExpression PLUS me=multiplicativeExpression { ae^"+"^me }
+  | ae=additiveExpression MINUS me=multiplicativeExpression { ae^"-"^me }
+
+multiplicativeExpression:
+  | ue=unaryExpression { ue }
+  | me=multiplicativeExpression TIMES ue=unaryExpression { me^"*"^ue }
+  | me=multiplicativeExpression DIV ue=unaryExpression { me^"/"^ue }
+  | me=multiplicativeExpression MOD ue=unaryExpression { me^"%"^ue }
 
 assignment:
   | lhs=leftHandSide ao=assignmentOperator ae=expression { lhs^" "^ao^" "^ae }
@@ -408,77 +474,107 @@ primaryNoNewArray:
     ArrayAccess*)
 
 literal:
-  | i=integerLiteral { i }
-(*FloatingPointLiteral
-BooleanLiteral
-CharacterLiteral
-StringLiteral
-NullLiteral*)
+  | il=integerLiteral { il }
+  | fpl=floatingPointLiteral { fpl }
+  | bl=booleanLiteral { bl }
+(*CharacterLiteral*)
+  | sl=stringLiteral { sl }
+  | nl=nullLiteral { nl }
 
 integerLiteral:
   | dil=decimalIntegerLiteral { dil }
 (*HexIntegerLiteral
 OctalIntegerLiteral*)
 
+floatingPointLiteral:
+  | dfpl=decimalFloatingPointLiteral { dfpl }
+(*HexadecimalFloatingPointLiteral*)
+
+booleanLiteral: (* ok *)
+  | TRUE { "true" } | FALSE { "false" }
+
+stringLiteral:
+  | QuoM scs=stringCharacters QuoM { "\""^scs^"\"" }
+
+nullLiteral:
+  | NULL { "null" }
+
 decimalIntegerLiteral:
   | dn=decimalNumeral { dn }
   (*| dn=decimalNumeral its=integerTypeSuffix { dn^" "^its }*)
 
-decimalNumeral:
+decimalFloatingPointLiteral: (* review *)
+  | ds=digits POINT { ds^"." }
+  | ds1=digits POINT ds2=digits { ds1^"."^ds2 }
+  | POINT ds=digits  { "."^ds }
+
+decimalNumeral: (* ok *)
   | ZERODIGIT { "0" }
   | nzd=NONZERODIGIT { String.make 1 nzd }
   | nzd=NONZERODIGIT ds=digits { (String.make 1 nzd)^ds }
 
-digits:
+digits: (* ok *)
   | d=digit { d }
   | ds=digits d=digit { ds^d }
 
-digit:
+digit: (* ok *)
   | ZERODIGIT { "0" }
   | nzd=NONZERODIGIT { (String.make 1 nzd) } 
 
+stringCharacters:
+  | sc=stringCharacter { sc }
+  | scs=stringCharacters sc=stringCharacter { scs^sc }
 
-(*integerTypeSuffix:*)
+stringCharacter: (* to do *)
+  | id=identifier { id }
 
-fieldAccess:
+
+fieldAccess: (* ok *)
   | p=primary POINT id=identifier { p^"."^id }
   | SUPER POINT id=identifier { "super."^id }
-  (*ClassName .super . Identifier*)
+  | cn=className POINT SUPER POINT id=identifier { cn^".super."^id}
 
-arrayAccess:
+arrayAccess: (* ok *)
   | en=expressionName LSBRAC e=expression RSBRAC { en^"["^e^"]" }
   | pnna=primaryNoNewArray LSBRAC e=expression RSBRAC { pnna^"["^e^"]" }
- 
+
+className: (* review *)
+  | id=identifier { id }
+
 (* Type *)
-primitiveType:
+primitiveType: (* ok *)
   | nt=numericType { nt }
   | BOOLEAN { "boolean" }
 
-referenceType:
+referenceType: (* ok *)
   | coit=classOrInterfaceType { coit }
   | tv=typeVariable { tv }
-  (*ArrayType*)
+  | at=arrayType { at }
 
-classOrInterfaceType:
+classOrInterfaceType: (* ok *)
   | ct=classType { ct }
-  (*| it=interfaceType { it }*)
+  | it=interfaceType { it }
 
-classType:
+classType: (* ok *)
   | tds=typeDeclSpecifier { tds }
   | tds=typeDeclSpecifier tas=typeArguments { tds^" "^tas }
 
-typeDeclSpecifier:
+interfaceType: (* ok *)
+  | tds=typeDeclSpecifier { tds }
+  | tds=typeDeclSpecifier tas=typeArguments { tds^" "^tas }
+
+typeDeclSpecifier: (* ok *)
   | tn=typeName { tn }
   | coit=classOrInterfaceType POINT id=identifier { coit^"."^id }
 
-typeName:
+typeName: (* ok *)
   | id=identifier { id }
   | tn=typeName POINT id=identifier {tn^"."^id}
 
-typeVariable:
+typeVariable: (* ok *)
   | id=identifier { id }
 
-arrayType: 
+arrayType: (* ok *)
   | mt=myType LSBRAC RSBRAC { mt^"[]" }
 
 typeArguments: (* ok *)
@@ -499,7 +595,6 @@ wildcard: (* ok *)
 wildcardBounds: (* ok *)
   | EXTENDS rt=referenceType { "extends "^rt }
   | SUPER rt=referenceType { "super "^rt }
-
 
 numericType:
   | it=integralType { it }
