@@ -23,7 +23,7 @@ $ ./Main.native [file_to_be_analyse.java]
 
 Example  
 ```
-$ ./Main.byte test.java
+$ ./Main.byte ./TestFiles/Test.java 
 ```
 
 ## Branch
