@@ -22,7 +22,9 @@ public class Point{
         f++;
     }
 
-    void anotherMethod(double d, float f);
+    void anotherMethod(double d, float f){
+        d >>= 3;
+    };
 }
 
 

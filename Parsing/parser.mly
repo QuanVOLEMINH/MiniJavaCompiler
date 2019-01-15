@@ -365,6 +365,9 @@ castExpression:
   | LBRAC pt=primitiveType RBRAC ue=unaryExpression { "("^pt^")"^ue }
   | LBRAC rt=referenceType RBRAC uenpm=unaryExpressionNotPlusMinus { "("^rt^")"^uenpm }
 
+constantExpression:
+  | e=expression { e }
+  
 expression:
   | ae=assignmentExpression { ae }
 
