@@ -79,10 +79,11 @@ fieldModifiers:
 
 fieldModifier:
   | PUBLIC { "public" }
-  (*Annotation public protected private
-  static
-  final
-  transient
+  | PROTECTED { "protected" }
+  | PRIVATE { "private" }
+  | STATIC { "static" }
+  | FINAL { "final" }
+  (*Annotation   transient
   volatile*)
 
 constructorModifiers:
@@ -93,7 +94,6 @@ constructorModifier:
   | PUBLIC {"public"}
   | PROTECTED {"protected"}
   | PRIVATE {"private"}
-
 (*Annotation*)
 
 variableModifiers:
