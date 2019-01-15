@@ -18,6 +18,17 @@ public class Point{
     void myMethod(int a){
         int f;
         ++f;
+
+        if(++f){
+            if(++f){
+                int f;
+            }
+        }
+        if(++f){
+            ++f;
+        }else{
+            ++d;
+        }
     }
 
     void anotherMethod(double d, float f);

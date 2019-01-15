@@ -49,6 +49,8 @@ rule nexttoken = parse
   | "do"            { print_endline "DO"; DO }
   | "continue"      { print_endline "CONTINUE"; CONTINUE}
   | "while"         { print_endline "WHILE"; WHILE}
+  | "if"            { print_endline "IF"; IF}
+  | "else"          { print_endline "ELSE"; ELSE}
     
     (* integral type *)
   | "byte"          { print_endline "BYTE"; BYTE }

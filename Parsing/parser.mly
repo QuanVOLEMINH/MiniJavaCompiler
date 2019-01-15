@@ -25,7 +25,7 @@
 %token <string> IDENT
 %token <int> INTEGER
 
-%token CLASS BREAK RETURN DO CONTINUE WHILE
+%token CLASS BREAK RETURN DO CONTINUE WHILE IF ELSE
 
 (* Op *)
 %token INCR DECR 
@@ -47,6 +47,9 @@
 
 %start compilationUnit
 %type <string> compilationUnit
+
+%nonassoc THENSTATE
+%nonassoc ELSESTATE
 
 %%
 
@@ -265,12 +268,15 @@ localVariableDeclaration:
   | vms=variableModifiers mt=myType vds=variableDeclarators { vms^" "^mt^" "^vds }
 
 statement:
-  | swtbs=statementWithoutTrailingSubstatement { swtbs }
-  | ls=labeledStatement { ls }
-(*IfThenStatement
-IfThenElseStatement
+  | swtbs=statementWithoutTrailingSubstatement  { swtbs }
+  | ls=labeledStatement                         { ls }
+  | IF LBRAC se=statementExpression RBRAC snif=statement ELSE st=statement  %prec ELSESTATE {("If "^se^" Then: "^snif^" Else: "^st)} 
+  | IF LBRAC se=statementExpression RBRAC st=statement %prec THENSTATE {("If "^se^" Then:"^st)} 
+  
+(*
 WhileStatement
 ForStatement*)
+
 
 statementWithoutTrailingSubstatement:
   | b=block { b }
@@ -286,7 +292,7 @@ statementWithoutTrailingSubstatement:
   (* TryStatement *)
 
 labeledStatement:
-| id=identifier COLON s=statement { id^":"^s }
+  | id=identifier COLON s=statement { id^":"^s }
 
 emptyStatement:
   | SEMICOLON { ";" }
