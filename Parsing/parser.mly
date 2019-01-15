@@ -35,7 +35,7 @@
 %token INCR DECR 
 
 (* assignment operators *)
-%token EQUAL
+%token EQUAL TIMESEQUAL DIVEQUAL MODEQUAL PLUSEQUAL MINUSEQUAL LSHIFTQUAL RSHIFTQUAL USHIFTQUAL ANDQUAL EXCLUSIVEORQUAL INCLUSIVEORQUAL
 
 (* boolean literal *)
 %token TRUE FALSE
@@ -436,18 +436,17 @@ leftHandSide:
 
 assignmentOperator:
   | EQUAL { "=" }
-    (*=
-  *=
-  /=
-  %=
-  +=
-  -=
-  <<=
-  >>=
-  >>>=
-  &=
-  ^=
-  |=*)
+  | TIMESEQUAL { "*=" }
+  | DIVEQUAL { "/=" }
+  | MODEQUAL { "%=" }
+  | PLUSEQUAL { "+=" }
+  | MINUSEQUAL { "-=" }
+  | LSHIFTQUAL { "<<=" }
+  | RSHIFTQUAL { ">>=" }
+  | USHIFTQUAL { ">>>=" }
+  | ANDQUAL { "&="}
+  | EXCLUSIVEORQUAL { "^=" }
+  | INCLUSIVEORQUAL { "|=" }
 
 expressionName:
   | id=identifier { id }

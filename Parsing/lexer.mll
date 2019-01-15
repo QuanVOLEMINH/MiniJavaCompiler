@@ -53,7 +53,20 @@ rule nexttoken = parse
   | "^"             { print_endline "|"; EXCLUSIVEOR }
   | "=="            { print_endline "=="; CONDITIONALEQUAL }
   | "!="            { print_endline "!="; CONDITIONALNOTEQUAL }
+    (* assignment operators *)
   | "="             { print_endline "EQUAL"; EQUAL }
+  | "*="            { print_endline "TIMESEQUAL"; TIMESEQUAL }
+  | "/="            { print_endline "DIVEQUAL"; DIVEQUAL }
+  | "%="            { print_endline "MODEQUAL"; MODEQUAL }
+  | "+="            { print_endline "PLUSEQUAL"; PLUSEQUAL }
+  | "-="            { print_endline "MINUSEQUAL"; MINUSEQUAL }
+  | "<<="           { print_endline "LSHIFTQUAL"; LSHIFTQUAL }
+  | ">>="           { print_endline "RSHIFTQUAL"; RSHIFTQUAL }
+  | ">>>="          { print_endline "USHIFTQUAL"; USHIFTQUAL }
+  | "&="            { print_endline "ANDQUAL"; ANDQUAL }
+  | "^="            { print_endline "EXCLUSIVEORQUAL"; EXCLUSIVEORQUAL }
+  | "|="            { print_endline "INCLUSIVEORQUAL"; INCLUSIVEORQUAL }
+    (* prefix postfix op *)
   | "++"            { print_endline "INCR"; INCR }
   | "--"            { print_endline "DECR"; DECR }    
     (* integral type *)
