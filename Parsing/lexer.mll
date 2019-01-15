@@ -83,6 +83,11 @@ rule nexttoken = parse
     (* keywords *)
   | "boolean"       { print_endline "BOOLEAN"; BOOLEAN }
   | "public"        { print_endline "PUBLIC"; PUBLIC }
+  | "protected"     { print_endline "PROTECTED"; PROTECTED }
+  | "private"       { print_endline "PRIVATE"; PRIVATE }
+  | "abstract"      { print_endline "ABSTRACT"; ABSTRACT }
+  | "static"        { print_endline "STATIC"; STATIC }
+  | "strictfp"      { print_endline "STRICTFP"; STRICTFP }
   | "final"         { print_endline "FINAL"; FINAL } 
   | "void"          { print_endline "VOID"; VOID } 
   | "this"          { print_endline "THIS"; THIS }

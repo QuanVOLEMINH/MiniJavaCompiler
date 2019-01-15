@@ -12,7 +12,7 @@ public class Point{
     float a = 3;
     public Point(){
     }
-    public Point(final int x, int z){
+    private Point(final int x, int z){
     }
 
     void myMethod(int a){
@@ -25,6 +25,7 @@ public class Point{
     void anotherMethod(double d, float f){
         d >>= 3;
     };
+
 }
 
 
@@ -34,4 +35,8 @@ class Animal {
     Animal(){
 
     }
+}
+
+private class InnerClass{
+    int instanceVar = (1+2+3)|9;
 }

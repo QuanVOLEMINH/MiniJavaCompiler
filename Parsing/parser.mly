@@ -4,16 +4,15 @@
 
 (* Named by Java 1.6 Grammar Spec - Chapter 18 *)
 
-(* Modifier *)
-%token PUBLIC FINAL
+
 
 (* Type *)
 %token VOID
 
 (* keywords *)
 %token THIS SUPER EXTENDS CLASS BREAK RETURN DO CONTINUE WHILE
+%token PUBLIC FINAL PROTECTED PRIVATE ABSTRACT STATIC STRICTFP
 
-(* Special *)
 %token EOF
 %token AT
 
@@ -66,9 +65,13 @@ identifier:
   | id=IDENT { id }
 
 (* Modifiers *)
-modifier:
-  (*| a=annotation {a}*)
-  | PUBLIC { "public" }
+classModifiers:
+  | cm=classModifier { cm }
+  | cms=classModifiers cm=classModifier { cms^" "^cm }
+
+classModifier:
+  (*Annotation*)
+  | PUBLIC { "public" } | PROTECTED { "protected" } | PRIVATE { "private" } | ABSTRACT { "abstract" } | STATIC { "static" } | FINAL { "final" } | STRICTFP { "strictfp" }
 
 fieldModifiers:
   | fm=fieldModifier { fm }
@@ -88,7 +91,10 @@ constructorModifiers:
 
 constructorModifier:
   | PUBLIC {"public"}
-(*Annotation protected private*)
+  | PROTECTED {"protected"}
+  | PRIVATE {"private"}
+
+(*Annotation*)
 
 variableModifiers:
   | vm=variableModifier { vm }
@@ -181,7 +187,7 @@ classDeclaration:
 
 normalClassDeclaration:
   | CLASS id=identifier cb=classBody { "class "^id^" "^cb }
-  | m=modifier CLASS id=identifier (*[TypeParameters] [extends Type] [implements TypeList]*) cb=classBody { m^" class "^id^" "^cb }
+  | cms=classModifiers CLASS id=identifier (*[TypeParameters] [extends Type] [implements TypeList]*) cb=classBody { cms^" class "^id^" "^cb }
 
 classBody:
   | LPAR cbds=classBodyDeclarations RPAR { "{\n "^cbds^" \n}\n" }
@@ -367,7 +373,7 @@ castExpression:
 
 constantExpression:
   | e=expression { e }
-  
+
 expression:
   | ae=assignmentExpression { ae }
 
