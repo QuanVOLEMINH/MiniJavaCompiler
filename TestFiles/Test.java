@@ -1,56 +1,35 @@
-// class SomeClass{
-//     b = 5;
-// }
+/************************
+ *******Author***********
+ * - Quan
+ * - Selina
+ * - Thomas
+ * - Weixin
+ */
 
+public class SimpleClass{
+    public int int_num1=1, int_num2;
+    int int_num3, int_num4;
+    boolean boolnum = false;
+    float float_num;
 
-public class Point{
-    ;;
-    ;
-    public int a, b;
-    int c,d,e;
-    boolean a = false;
-    float a = 3;
-    public Point(){
-    }
-    private Point(final int x, int z){
+    private class InnerClass{
+        int inner_int = (1+2+3)|9;
     }
 
     void myMethod(int a){
-        int f;
-        f=5+4-3*2;
-        ++f;
-<<<<<<< HEAD
-
-        if(++f){
-            if(++f){
-                int f;
-            }
-        }
-        if(++f){
-            ++f;
+        int test;
+        test = 1*1+1-1;
+        if(test--){
+            test++;
         }else{
-            ++d;
+            test--;
         }
-=======
-        f++;
->>>>>>> 9eb6668b5495c585a5d4728779954821569a7d05
     }
 
     void anotherMethod(double d, float f){
         d >>= 3;
     };
-
+    
 }
 
 
-class Animal {
-    Animal(int age){
-    }
-    Animal(){
-
-    }
-}
-
-private class InnerClass{
-    int instanceVar = (1+2+3)|9;
-}
