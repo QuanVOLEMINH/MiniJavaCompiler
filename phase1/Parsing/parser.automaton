@@ -1,0 +1,3063 @@
+State 0:
+compilationUnit' -> . compilationUnit [ # ]
+-- On SEMICOLON shift to state 1
+-- On PUBLIC shift to state 2
+-- On CLASS shift to state 3
+-- On typeDeclarations shift to state 228
+-- On typeDeclaration shift to state 232
+-- On normalClassDeclaration shift to state 67
+-- On modifier shift to state 118
+-- On compilationUnit shift to state 233
+-- On classDeclaration shift to state 231
+
+State 1:
+typeDeclaration -> SEMICOLON . [ SEMICOLON PUBLIC EOF CLASS ]
+-- On SEMICOLON reduce production typeDeclaration -> SEMICOLON 
+-- On PUBLIC reduce production typeDeclaration -> SEMICOLON 
+-- On EOF reduce production typeDeclaration -> SEMICOLON 
+-- On CLASS reduce production typeDeclaration -> SEMICOLON 
+
+State 2:
+modifier -> PUBLIC . [ CLASS ]
+-- On CLASS reduce production modifier -> PUBLIC 
+
+State 3:
+normalClassDeclaration -> CLASS . identifier classBody [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL EOF DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On IDENT shift to state 4
+-- On identifier shift to state 5
+
+State 4:
+identifier -> IDENT . [ SEMICOLON RPAR RBRAC POINT LSBRAC LPAR LBRAC INCR EQUAL DECR COMMA COLON ]
+-- On SEMICOLON reduce production identifier -> IDENT 
+-- On RPAR reduce production identifier -> IDENT 
+-- On RBRAC reduce production identifier -> IDENT 
+-- On POINT reduce production identifier -> IDENT 
+-- On LSBRAC reduce production identifier -> IDENT 
+-- On LPAR reduce production identifier -> IDENT 
+-- On LBRAC reduce production identifier -> IDENT 
+-- On INCR reduce production identifier -> IDENT 
+-- On EQUAL reduce production identifier -> IDENT 
+-- On DECR reduce production identifier -> IDENT 
+-- On COMMA reduce production identifier -> IDENT 
+-- On COLON reduce production identifier -> IDENT 
+
+State 5:
+normalClassDeclaration -> CLASS identifier . classBody [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL EOF DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On LPAR shift to state 6
+-- On classBody shift to state 227
+
+State 6:
+classBody -> LPAR . classBodyDeclarations RPAR [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL EOF DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On VOID shift to state 7
+-- On SHORT shift to state 8
+-- On SEMICOLON shift to state 9
+-- On PUBLIC shift to state 10
+-- On LT shift to state 11
+-- On LONG shift to state 19
+-- On INT shift to state 20
+-- On IDENT shift to state 4
+-- On FLOAT shift to state 21
+-- On DOUBLE shift to state 22
+-- On CLASS shift to state 3
+-- On CHAR shift to state 23
+-- On BYTE shift to state 24
+-- On BOOLEAN shift to state 25
+-- On typeParameters shift to state 26
+-- On simpleTypeName shift to state 55
+-- On resultType shift to state 60
+-- On primitiveType shift to state 36
+-- On numericType shift to state 37
+-- On normalClassDeclaration shift to state 67
+-- On myType shift to state 68
+-- On modifier shift to state 118
+-- On methodHeader shift to state 122
+-- On methodDeclaration shift to state 201
+-- On integralType shift to state 41
+-- On identifier shift to state 54
+-- On floatingPointType shift to state 42
+-- On fieldModifiers shift to state 202
+-- On fieldModifier shift to state 208
+-- On fieldDeclaration shift to state 209
+-- On constructorModifiers shift to state 210
+-- On constructorModifier shift to state 217
+-- On constructorDeclarator shift to state 218
+-- On constructorDeclaration shift to state 220
+-- On classMemberDeclaration shift to state 221
+-- On classDeclaration shift to state 222
+-- On classBodyDeclarations shift to state 223
+-- On classBodyDeclaration shift to state 226
+
+State 7:
+resultType -> VOID . [ IDENT ]
+-- On IDENT reduce production resultType -> VOID 
+
+State 8:
+integralType -> SHORT . [ RBRAC POINT IDENT ]
+-- On RBRAC reduce production integralType -> SHORT 
+-- On POINT reduce production integralType -> SHORT 
+-- On IDENT reduce production integralType -> SHORT 
+
+State 9:
+classMemberDeclaration -> SEMICOLON . [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+-- On VOID reduce production classMemberDeclaration -> SEMICOLON 
+-- On SHORT reduce production classMemberDeclaration -> SEMICOLON 
+-- On SEMICOLON reduce production classMemberDeclaration -> SEMICOLON 
+-- On RPAR reduce production classMemberDeclaration -> SEMICOLON 
+-- On PUBLIC reduce production classMemberDeclaration -> SEMICOLON 
+-- On LT reduce production classMemberDeclaration -> SEMICOLON 
+-- On LONG reduce production classMemberDeclaration -> SEMICOLON 
+-- On INT reduce production classMemberDeclaration -> SEMICOLON 
+-- On IDENT reduce production classMemberDeclaration -> SEMICOLON 
+-- On FLOAT reduce production classMemberDeclaration -> SEMICOLON 
+-- On DOUBLE reduce production classMemberDeclaration -> SEMICOLON 
+-- On CLASS reduce production classMemberDeclaration -> SEMICOLON 
+-- On CHAR reduce production classMemberDeclaration -> SEMICOLON 
+-- On BYTE reduce production classMemberDeclaration -> SEMICOLON 
+-- On BOOLEAN reduce production classMemberDeclaration -> SEMICOLON 
+
+State 10:
+constructorModifier -> PUBLIC . [ PUBLIC LT IDENT ]
+fieldModifier -> PUBLIC . [ SHORT PUBLIC LONG INT FLOAT DOUBLE CHAR BYTE BOOLEAN ]
+modifier -> PUBLIC . [ CLASS ]
+-- On SHORT reduce production fieldModifier -> PUBLIC 
+-- On PUBLIC reduce production constructorModifier -> PUBLIC 
+-- On PUBLIC reduce production fieldModifier -> PUBLIC 
+-- On LT reduce production constructorModifier -> PUBLIC 
+-- On LONG reduce production fieldModifier -> PUBLIC 
+-- On INT reduce production fieldModifier -> PUBLIC 
+-- On IDENT reduce production constructorModifier -> PUBLIC 
+-- On FLOAT reduce production fieldModifier -> PUBLIC 
+-- On DOUBLE reduce production fieldModifier -> PUBLIC 
+-- On CLASS reduce production modifier -> PUBLIC 
+-- On CHAR reduce production fieldModifier -> PUBLIC 
+-- On BYTE reduce production fieldModifier -> PUBLIC 
+-- On BOOLEAN reduce production fieldModifier -> PUBLIC 
+** Conflict on PUBLIC
+
+State 11:
+typeParameters -> LT . typeParameter LPAR COMMA typeParameter RPAR GT [ IDENT ]
+-- On IDENT shift to state 4
+-- On typeParameter shift to state 12
+-- On identifier shift to state 18
+
+State 12:
+typeParameters -> LT typeParameter . LPAR COMMA typeParameter RPAR GT [ IDENT ]
+-- On LPAR shift to state 13
+
+State 13:
+typeParameters -> LT typeParameter LPAR . COMMA typeParameter RPAR GT [ IDENT ]
+-- On COMMA shift to state 14
+
+State 14:
+typeParameters -> LT typeParameter LPAR COMMA . typeParameter RPAR GT [ IDENT ]
+-- On IDENT shift to state 4
+-- On typeParameter shift to state 15
+-- On identifier shift to state 18
+
+State 15:
+typeParameters -> LT typeParameter LPAR COMMA typeParameter . RPAR GT [ IDENT ]
+-- On RPAR shift to state 16
+
+State 16:
+typeParameters -> LT typeParameter LPAR COMMA typeParameter RPAR . GT [ IDENT ]
+-- On GT shift to state 17
+
+State 17:
+typeParameters -> LT typeParameter LPAR COMMA typeParameter RPAR GT . [ IDENT ]
+-- On IDENT reduce production typeParameters -> LT typeParameter LPAR COMMA typeParameter RPAR GT 
+
+State 18:
+typeParameter -> identifier . [ RPAR LPAR ]
+-- On RPAR reduce production typeParameter -> identifier 
+-- On LPAR reduce production typeParameter -> identifier 
+
+State 19:
+integralType -> LONG . [ RBRAC POINT IDENT ]
+-- On RBRAC reduce production integralType -> LONG 
+-- On POINT reduce production integralType -> LONG 
+-- On IDENT reduce production integralType -> LONG 
+
+State 20:
+integralType -> INT . [ RBRAC POINT IDENT ]
+-- On RBRAC reduce production integralType -> INT 
+-- On POINT reduce production integralType -> INT 
+-- On IDENT reduce production integralType -> INT 
+
+State 21:
+floatingPointType -> FLOAT . [ RBRAC POINT IDENT ]
+-- On RBRAC reduce production floatingPointType -> FLOAT 
+-- On POINT reduce production floatingPointType -> FLOAT 
+-- On IDENT reduce production floatingPointType -> FLOAT 
+
+State 22:
+floatingPointType -> DOUBLE . [ RBRAC POINT IDENT ]
+-- On RBRAC reduce production floatingPointType -> DOUBLE 
+-- On POINT reduce production floatingPointType -> DOUBLE 
+-- On IDENT reduce production floatingPointType -> DOUBLE 
+
+State 23:
+integralType -> CHAR . [ RBRAC POINT IDENT ]
+-- On RBRAC reduce production integralType -> CHAR 
+-- On POINT reduce production integralType -> CHAR 
+-- On IDENT reduce production integralType -> CHAR 
+
+State 24:
+integralType -> BYTE . [ RBRAC POINT IDENT ]
+-- On RBRAC reduce production integralType -> BYTE 
+-- On POINT reduce production integralType -> BYTE 
+-- On IDENT reduce production integralType -> BYTE 
+
+State 25:
+primitiveType -> BOOLEAN . [ RBRAC POINT IDENT ]
+-- On RBRAC reduce production primitiveType -> BOOLEAN 
+-- On POINT reduce production primitiveType -> BOOLEAN 
+-- On IDENT reduce production primitiveType -> BOOLEAN 
+
+State 26:
+constructorDeclarator -> typeParameters . simpleTypeName LBRAC RBRAC [ LPAR ]
+constructorDeclarator -> typeParameters . simpleTypeName LBRAC formalParameterList RBRAC [ LPAR ]
+-- On IDENT shift to state 4
+-- On simpleTypeName shift to state 27
+-- On identifier shift to state 54
+
+State 27:
+constructorDeclarator -> typeParameters simpleTypeName . LBRAC RBRAC [ LPAR ]
+constructorDeclarator -> typeParameters simpleTypeName . LBRAC formalParameterList RBRAC [ LPAR ]
+-- On LBRAC shift to state 28
+
+State 28:
+constructorDeclarator -> typeParameters simpleTypeName LBRAC . RBRAC [ LPAR ]
+constructorDeclarator -> typeParameters simpleTypeName LBRAC . formalParameterList RBRAC [ LPAR ]
+-- On SHORT shift to state 8
+-- On RBRAC shift to state 29
+-- On LONG shift to state 19
+-- On INT shift to state 20
+-- On FLOAT shift to state 21
+-- On FINAL shift to state 30
+-- On DOUBLE shift to state 22
+-- On CHAR shift to state 23
+-- On BYTE shift to state 24
+-- On BOOLEAN shift to state 25
+-- On variableModifiers shift to state 31
+-- On variableModifier shift to state 43
+-- On primitiveType shift to state 36
+-- On numericType shift to state 37
+-- On myType shift to state 44
+-- On lastFormalParameter shift to state 46
+-- On integralType shift to state 41
+-- On formalParameters shift to state 47
+-- On formalParameterList shift to state 51
+-- On formalParameter shift to state 53
+-- On floatingPointType shift to state 42
+
+State 29:
+constructorDeclarator -> typeParameters simpleTypeName LBRAC RBRAC . [ LPAR ]
+-- On LPAR reduce production constructorDeclarator -> typeParameters simpleTypeName LBRAC RBRAC 
+
+State 30:
+variableModifier -> FINAL . [ SHORT LONG INT IDENT FLOAT FINAL DOUBLE CHAR BYTE BOOLEAN ]
+-- On SHORT reduce production variableModifier -> FINAL 
+-- On LONG reduce production variableModifier -> FINAL 
+-- On INT reduce production variableModifier -> FINAL 
+-- On IDENT reduce production variableModifier -> FINAL 
+-- On FLOAT reduce production variableModifier -> FINAL 
+-- On FINAL reduce production variableModifier -> FINAL 
+-- On DOUBLE reduce production variableModifier -> FINAL 
+-- On CHAR reduce production variableModifier -> FINAL 
+-- On BYTE reduce production variableModifier -> FINAL 
+-- On BOOLEAN reduce production variableModifier -> FINAL 
+
+State 31:
+formalParameter -> variableModifiers . myType variableDeclaratorId [ RBRAC COMMA ]
+lastFormalParameter -> variableModifiers . variableDeclaratorId [ RBRAC ]
+lastFormalParameter -> variableModifiers . myType variableDeclaratorId [ RBRAC ]
+variableModifiers -> variableModifiers . variableModifier [ SHORT LONG INT IDENT FLOAT FINAL DOUBLE CHAR BYTE BOOLEAN ]
+-- On SHORT shift to state 8
+-- On LONG shift to state 19
+-- On INT shift to state 20
+-- On IDENT shift to state 4
+-- On FLOAT shift to state 21
+-- On FINAL shift to state 30
+-- On DOUBLE shift to state 22
+-- On CHAR shift to state 23
+-- On BYTE shift to state 24
+-- On BOOLEAN shift to state 25
+-- On variableModifier shift to state 32
+-- On variableDeclaratorId shift to state 33
+-- On primitiveType shift to state 36
+-- On numericType shift to state 37
+-- On myType shift to state 38
+-- On integralType shift to state 41
+-- On identifier shift to state 40
+-- On floatingPointType shift to state 42
+
+State 32:
+variableModifiers -> variableModifiers variableModifier . [ SHORT LONG INT IDENT FLOAT FINAL DOUBLE CHAR BYTE BOOLEAN ]
+-- On SHORT reduce production variableModifiers -> variableModifiers variableModifier 
+-- On LONG reduce production variableModifiers -> variableModifiers variableModifier 
+-- On INT reduce production variableModifiers -> variableModifiers variableModifier 
+-- On IDENT reduce production variableModifiers -> variableModifiers variableModifier 
+-- On FLOAT reduce production variableModifiers -> variableModifiers variableModifier 
+-- On FINAL reduce production variableModifiers -> variableModifiers variableModifier 
+-- On DOUBLE reduce production variableModifiers -> variableModifiers variableModifier 
+-- On CHAR reduce production variableModifiers -> variableModifiers variableModifier 
+-- On BYTE reduce production variableModifiers -> variableModifiers variableModifier 
+-- On BOOLEAN reduce production variableModifiers -> variableModifiers variableModifier 
+
+State 33:
+lastFormalParameter -> variableModifiers variableDeclaratorId . [ RBRAC ]
+variableDeclaratorId -> variableDeclaratorId . LSBRAC RSBRAC [ RBRAC LSBRAC ]
+-- On LSBRAC shift to state 34
+-- On RBRAC reduce production lastFormalParameter -> variableModifiers variableDeclaratorId 
+
+State 34:
+variableDeclaratorId -> variableDeclaratorId LSBRAC . RSBRAC [ SEMICOLON RBRAC LSBRAC EQUAL COMMA ]
+-- On RSBRAC shift to state 35
+
+State 35:
+variableDeclaratorId -> variableDeclaratorId LSBRAC RSBRAC . [ SEMICOLON RBRAC LSBRAC EQUAL COMMA ]
+-- On SEMICOLON reduce production variableDeclaratorId -> variableDeclaratorId LSBRAC RSBRAC 
+-- On RBRAC reduce production variableDeclaratorId -> variableDeclaratorId LSBRAC RSBRAC 
+-- On LSBRAC reduce production variableDeclaratorId -> variableDeclaratorId LSBRAC RSBRAC 
+-- On EQUAL reduce production variableDeclaratorId -> variableDeclaratorId LSBRAC RSBRAC 
+-- On COMMA reduce production variableDeclaratorId -> variableDeclaratorId LSBRAC RSBRAC 
+
+State 36:
+myType -> primitiveType . [ POINT IDENT ]
+-- On POINT reduce production myType -> primitiveType 
+-- On IDENT reduce production myType -> primitiveType 
+
+State 37:
+primitiveType -> numericType . [ RBRAC POINT IDENT ]
+-- On RBRAC reduce production primitiveType -> numericType 
+-- On POINT reduce production primitiveType -> numericType 
+-- On IDENT reduce production primitiveType -> numericType 
+
+State 38:
+formalParameter -> variableModifiers myType . variableDeclaratorId [ RBRAC COMMA ]
+lastFormalParameter -> variableModifiers myType . variableDeclaratorId [ RBRAC ]
+-- On IDENT shift to state 4
+-- On variableDeclaratorId shift to state 39
+-- On identifier shift to state 40
+
+State 39:
+formalParameter -> variableModifiers myType variableDeclaratorId . [ RBRAC COMMA ]
+lastFormalParameter -> variableModifiers myType variableDeclaratorId . [ RBRAC ]
+variableDeclaratorId -> variableDeclaratorId . LSBRAC RSBRAC [ RBRAC LSBRAC COMMA ]
+-- On LSBRAC shift to state 34
+-- On RBRAC reduce production formalParameter -> variableModifiers myType variableDeclaratorId 
+-- On RBRAC reduce production lastFormalParameter -> variableModifiers myType variableDeclaratorId 
+-- On COMMA reduce production formalParameter -> variableModifiers myType variableDeclaratorId 
+** Conflict on RBRAC
+
+State 40:
+variableDeclaratorId -> identifier . [ SEMICOLON RBRAC LSBRAC EQUAL COMMA ]
+-- On SEMICOLON reduce production variableDeclaratorId -> identifier 
+-- On RBRAC reduce production variableDeclaratorId -> identifier 
+-- On LSBRAC reduce production variableDeclaratorId -> identifier 
+-- On EQUAL reduce production variableDeclaratorId -> identifier 
+-- On COMMA reduce production variableDeclaratorId -> identifier 
+
+State 41:
+numericType -> integralType . [ RBRAC POINT IDENT ]
+-- On RBRAC reduce production numericType -> integralType 
+-- On POINT reduce production numericType -> integralType 
+-- On IDENT reduce production numericType -> integralType 
+
+State 42:
+numericType -> floatingPointType . [ RBRAC POINT IDENT ]
+-- On RBRAC reduce production numericType -> floatingPointType 
+-- On POINT reduce production numericType -> floatingPointType 
+-- On IDENT reduce production numericType -> floatingPointType 
+
+State 43:
+variableModifiers -> variableModifier . [ SHORT LONG INT IDENT FLOAT FINAL DOUBLE CHAR BYTE BOOLEAN ]
+-- On SHORT reduce production variableModifiers -> variableModifier 
+-- On LONG reduce production variableModifiers -> variableModifier 
+-- On INT reduce production variableModifiers -> variableModifier 
+-- On IDENT reduce production variableModifiers -> variableModifier 
+-- On FLOAT reduce production variableModifiers -> variableModifier 
+-- On FINAL reduce production variableModifiers -> variableModifier 
+-- On DOUBLE reduce production variableModifiers -> variableModifier 
+-- On CHAR reduce production variableModifiers -> variableModifier 
+-- On BYTE reduce production variableModifiers -> variableModifier 
+-- On BOOLEAN reduce production variableModifiers -> variableModifier 
+
+State 44:
+formalParameter -> myType . variableDeclaratorId [ RBRAC COMMA ]
+-- On IDENT shift to state 4
+-- On variableDeclaratorId shift to state 45
+-- On identifier shift to state 40
+
+State 45:
+formalParameter -> myType variableDeclaratorId . [ RBRAC COMMA ]
+variableDeclaratorId -> variableDeclaratorId . LSBRAC RSBRAC [ RBRAC LSBRAC COMMA ]
+-- On LSBRAC shift to state 34
+-- On RBRAC reduce production formalParameter -> myType variableDeclaratorId 
+-- On COMMA reduce production formalParameter -> myType variableDeclaratorId 
+
+State 46:
+formalParameterList -> lastFormalParameter . [ RBRAC ]
+-- On RBRAC reduce production formalParameterList -> lastFormalParameter 
+
+State 47:
+formalParameterList -> formalParameters . COMMA lastFormalParameter [ RBRAC ]
+formalParameters -> formalParameters . COMMA formalParameter [ COMMA ]
+-- On COMMA shift to state 48
+
+State 48:
+formalParameterList -> formalParameters COMMA . lastFormalParameter [ RBRAC ]
+formalParameters -> formalParameters COMMA . formalParameter [ COMMA ]
+-- On SHORT shift to state 8
+-- On LONG shift to state 19
+-- On INT shift to state 20
+-- On FLOAT shift to state 21
+-- On FINAL shift to state 30
+-- On DOUBLE shift to state 22
+-- On CHAR shift to state 23
+-- On BYTE shift to state 24
+-- On BOOLEAN shift to state 25
+-- On variableModifiers shift to state 31
+-- On variableModifier shift to state 43
+-- On primitiveType shift to state 36
+-- On numericType shift to state 37
+-- On myType shift to state 44
+-- On lastFormalParameter shift to state 49
+-- On integralType shift to state 41
+-- On formalParameter shift to state 50
+-- On floatingPointType shift to state 42
+
+State 49:
+formalParameterList -> formalParameters COMMA lastFormalParameter . [ RBRAC ]
+-- On RBRAC reduce production formalParameterList -> formalParameters COMMA lastFormalParameter 
+
+State 50:
+formalParameters -> formalParameters COMMA formalParameter . [ COMMA ]
+lastFormalParameter -> formalParameter . [ RBRAC ]
+-- On RBRAC reduce production lastFormalParameter -> formalParameter 
+-- On COMMA reduce production formalParameters -> formalParameters COMMA formalParameter 
+
+State 51:
+constructorDeclarator -> typeParameters simpleTypeName LBRAC formalParameterList . RBRAC [ LPAR ]
+-- On RBRAC shift to state 52
+
+State 52:
+constructorDeclarator -> typeParameters simpleTypeName LBRAC formalParameterList RBRAC . [ LPAR ]
+-- On LPAR reduce production constructorDeclarator -> typeParameters simpleTypeName LBRAC formalParameterList RBRAC 
+
+State 53:
+formalParameters -> formalParameter . [ COMMA ]
+lastFormalParameter -> formalParameter . [ RBRAC ]
+-- On RBRAC reduce production lastFormalParameter -> formalParameter 
+-- On COMMA reduce production formalParameters -> formalParameter 
+
+State 54:
+simpleTypeName -> identifier . [ LBRAC ]
+-- On LBRAC reduce production simpleTypeName -> identifier 
+
+State 55:
+constructorDeclarator -> simpleTypeName . LBRAC RBRAC [ LPAR ]
+constructorDeclarator -> simpleTypeName . LBRAC formalParameterList RBRAC [ LPAR ]
+-- On LBRAC shift to state 56
+
+State 56:
+constructorDeclarator -> simpleTypeName LBRAC . RBRAC [ LPAR ]
+constructorDeclarator -> simpleTypeName LBRAC . formalParameterList RBRAC [ LPAR ]
+-- On SHORT shift to state 8
+-- On RBRAC shift to state 57
+-- On LONG shift to state 19
+-- On INT shift to state 20
+-- On FLOAT shift to state 21
+-- On FINAL shift to state 30
+-- On DOUBLE shift to state 22
+-- On CHAR shift to state 23
+-- On BYTE shift to state 24
+-- On BOOLEAN shift to state 25
+-- On variableModifiers shift to state 31
+-- On variableModifier shift to state 43
+-- On primitiveType shift to state 36
+-- On numericType shift to state 37
+-- On myType shift to state 44
+-- On lastFormalParameter shift to state 46
+-- On integralType shift to state 41
+-- On formalParameters shift to state 47
+-- On formalParameterList shift to state 58
+-- On formalParameter shift to state 53
+-- On floatingPointType shift to state 42
+
+State 57:
+constructorDeclarator -> simpleTypeName LBRAC RBRAC . [ LPAR ]
+-- On LPAR reduce production constructorDeclarator -> simpleTypeName LBRAC RBRAC 
+
+State 58:
+constructorDeclarator -> simpleTypeName LBRAC formalParameterList . RBRAC [ LPAR ]
+-- On RBRAC shift to state 59
+
+State 59:
+constructorDeclarator -> simpleTypeName LBRAC formalParameterList RBRAC . [ LPAR ]
+-- On LPAR reduce production constructorDeclarator -> simpleTypeName LBRAC formalParameterList RBRAC 
+
+State 60:
+methodHeader -> resultType . methodDeclarator [ SEMICOLON LPAR ]
+-- On IDENT shift to state 4
+-- On methodDeclarator shift to state 61
+-- On identifier shift to state 62
+
+State 61:
+methodHeader -> resultType methodDeclarator . [ SEMICOLON LPAR ]
+-- On SEMICOLON reduce production methodHeader -> resultType methodDeclarator 
+-- On LPAR reduce production methodHeader -> resultType methodDeclarator 
+
+State 62:
+methodDeclarator -> identifier . LBRAC RBRAC [ SEMICOLON LPAR ]
+methodDeclarator -> identifier . LBRAC formalParameterList RBRAC [ SEMICOLON LPAR ]
+-- On LBRAC shift to state 63
+
+State 63:
+methodDeclarator -> identifier LBRAC . RBRAC [ SEMICOLON LPAR ]
+methodDeclarator -> identifier LBRAC . formalParameterList RBRAC [ SEMICOLON LPAR ]
+-- On SHORT shift to state 8
+-- On RBRAC shift to state 64
+-- On LONG shift to state 19
+-- On INT shift to state 20
+-- On FLOAT shift to state 21
+-- On FINAL shift to state 30
+-- On DOUBLE shift to state 22
+-- On CHAR shift to state 23
+-- On BYTE shift to state 24
+-- On BOOLEAN shift to state 25
+-- On variableModifiers shift to state 31
+-- On variableModifier shift to state 43
+-- On primitiveType shift to state 36
+-- On numericType shift to state 37
+-- On myType shift to state 44
+-- On lastFormalParameter shift to state 46
+-- On integralType shift to state 41
+-- On formalParameters shift to state 47
+-- On formalParameterList shift to state 65
+-- On formalParameter shift to state 53
+-- On floatingPointType shift to state 42
+
+State 64:
+methodDeclarator -> identifier LBRAC RBRAC . [ SEMICOLON LPAR ]
+-- On SEMICOLON reduce production methodDeclarator -> identifier LBRAC RBRAC 
+-- On LPAR reduce production methodDeclarator -> identifier LBRAC RBRAC 
+
+State 65:
+methodDeclarator -> identifier LBRAC formalParameterList . RBRAC [ SEMICOLON LPAR ]
+-- On RBRAC shift to state 66
+
+State 66:
+methodDeclarator -> identifier LBRAC formalParameterList RBRAC . [ SEMICOLON LPAR ]
+-- On SEMICOLON reduce production methodDeclarator -> identifier LBRAC formalParameterList RBRAC 
+-- On LPAR reduce production methodDeclarator -> identifier LBRAC formalParameterList RBRAC 
+
+State 67:
+classDeclaration -> normalClassDeclaration . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL EOF DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production classDeclaration -> normalClassDeclaration 
+-- On VOID reduce production classDeclaration -> normalClassDeclaration 
+-- On THIS reduce production classDeclaration -> normalClassDeclaration 
+-- On SUPER reduce production classDeclaration -> normalClassDeclaration 
+-- On SHORT reduce production classDeclaration -> normalClassDeclaration 
+-- On SEMICOLON reduce production classDeclaration -> normalClassDeclaration 
+-- On RPAR reduce production classDeclaration -> normalClassDeclaration 
+-- On RETURN reduce production classDeclaration -> normalClassDeclaration 
+-- On PUBLIC reduce production classDeclaration -> normalClassDeclaration 
+-- On NONZERODIGIT reduce production classDeclaration -> normalClassDeclaration 
+-- On LT reduce production classDeclaration -> normalClassDeclaration 
+-- On LPAR reduce production classDeclaration -> normalClassDeclaration 
+-- On LONG reduce production classDeclaration -> normalClassDeclaration 
+-- On LBRAC reduce production classDeclaration -> normalClassDeclaration 
+-- On INT reduce production classDeclaration -> normalClassDeclaration 
+-- On INCR reduce production classDeclaration -> normalClassDeclaration 
+-- On IF reduce production classDeclaration -> normalClassDeclaration 
+-- On IDENT reduce production classDeclaration -> normalClassDeclaration 
+-- On FLOAT reduce production classDeclaration -> normalClassDeclaration 
+-- On FINAL reduce production classDeclaration -> normalClassDeclaration 
+-- On EOF reduce production classDeclaration -> normalClassDeclaration 
+-- On DOUBLE reduce production classDeclaration -> normalClassDeclaration 
+-- On DECR reduce production classDeclaration -> normalClassDeclaration 
+-- On CONTINUE reduce production classDeclaration -> normalClassDeclaration 
+-- On CLASS reduce production classDeclaration -> normalClassDeclaration 
+-- On CHAR reduce production classDeclaration -> normalClassDeclaration 
+-- On BYTE reduce production classDeclaration -> normalClassDeclaration 
+-- On BREAK reduce production classDeclaration -> normalClassDeclaration 
+-- On BOOLEAN reduce production classDeclaration -> normalClassDeclaration 
+
+State 68:
+fieldDeclaration -> myType . variableDeclarators SEMICOLON [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+resultType -> myType . [ IDENT ]
+-- On IDENT shift to state 4
+-- On variableDeclarators shift to state 69
+-- On variableDeclaratorId shift to state 72
+-- On variableDeclarator shift to state 117
+-- On identifier shift to state 40
+-- On IDENT reduce production resultType -> myType 
+** Conflict on IDENT
+
+State 69:
+fieldDeclaration -> myType variableDeclarators . SEMICOLON [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+variableDeclarators -> variableDeclarators . COMMA variableDeclarator [ SEMICOLON COMMA ]
+-- On SEMICOLON shift to state 70
+-- On COMMA shift to state 71
+
+State 70:
+fieldDeclaration -> myType variableDeclarators SEMICOLON . [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+-- On VOID reduce production fieldDeclaration -> myType variableDeclarators SEMICOLON 
+-- On SHORT reduce production fieldDeclaration -> myType variableDeclarators SEMICOLON 
+-- On SEMICOLON reduce production fieldDeclaration -> myType variableDeclarators SEMICOLON 
+-- On RPAR reduce production fieldDeclaration -> myType variableDeclarators SEMICOLON 
+-- On PUBLIC reduce production fieldDeclaration -> myType variableDeclarators SEMICOLON 
+-- On LT reduce production fieldDeclaration -> myType variableDeclarators SEMICOLON 
+-- On LONG reduce production fieldDeclaration -> myType variableDeclarators SEMICOLON 
+-- On INT reduce production fieldDeclaration -> myType variableDeclarators SEMICOLON 
+-- On IDENT reduce production fieldDeclaration -> myType variableDeclarators SEMICOLON 
+-- On FLOAT reduce production fieldDeclaration -> myType variableDeclarators SEMICOLON 
+-- On DOUBLE reduce production fieldDeclaration -> myType variableDeclarators SEMICOLON 
+-- On CLASS reduce production fieldDeclaration -> myType variableDeclarators SEMICOLON 
+-- On CHAR reduce production fieldDeclaration -> myType variableDeclarators SEMICOLON 
+-- On BYTE reduce production fieldDeclaration -> myType variableDeclarators SEMICOLON 
+-- On BOOLEAN reduce production fieldDeclaration -> myType variableDeclarators SEMICOLON 
+
+State 71:
+variableDeclarators -> variableDeclarators COMMA . variableDeclarator [ SEMICOLON COMMA ]
+-- On IDENT shift to state 4
+-- On variableDeclaratorId shift to state 72
+-- On variableDeclarator shift to state 116
+-- On identifier shift to state 40
+
+State 72:
+variableDeclarator -> variableDeclaratorId . [ SEMICOLON COMMA ]
+variableDeclarator -> variableDeclaratorId . EQUAL variableInitializer [ SEMICOLON COMMA ]
+variableDeclaratorId -> variableDeclaratorId . LSBRAC RSBRAC [ SEMICOLON LSBRAC EQUAL COMMA ]
+-- On LSBRAC shift to state 34
+-- On EQUAL shift to state 73
+-- On SEMICOLON reduce production variableDeclarator -> variableDeclaratorId 
+-- On COMMA reduce production variableDeclarator -> variableDeclaratorId 
+
+State 73:
+variableDeclarator -> variableDeclaratorId EQUAL . variableInitializer [ SEMICOLON COMMA ]
+-- On ZERODIGIT shift to state 74
+-- On VOID shift to state 75
+-- On THIS shift to state 78
+-- On SUPER shift to state 79
+-- On SHORT shift to state 8
+-- On NONZERODIGIT shift to state 82
+-- On LONG shift to state 19
+-- On LBRAC shift to state 88
+-- On INT shift to state 20
+-- On IDENT shift to state 4
+-- On FLOAT shift to state 21
+-- On DOUBLE shift to state 22
+-- On CHAR shift to state 23
+-- On BYTE shift to state 24
+-- On BOOLEAN shift to state 25
+-- On variableInitializer shift to state 114
+-- On primitiveType shift to state 36
+-- On primaryNoNewArray shift to state 89
+-- On primary shift to state 90
+-- On numericType shift to state 37
+-- On myType shift to state 93
+-- On literal shift to state 96
+-- On leftHandSide shift to state 97
+-- On integralType shift to state 41
+-- On integerLiteral shift to state 100
+-- On identifier shift to state 101
+-- On floatingPointType shift to state 42
+-- On fieldAccess shift to state 102
+-- On expressionName shift to state 103
+-- On expression shift to state 115
+-- On decimalNumeral shift to state 105
+-- On decimalIntegerLiteral shift to state 106
+-- On assignmentExpression shift to state 107
+-- On assignment shift to state 108
+-- On ambiguousName shift to state 109
+
+State 74:
+decimalNumeral -> ZERODIGIT . [ POINT ]
+-- On POINT reduce production decimalNumeral -> ZERODIGIT 
+
+State 75:
+primaryNoNewArray -> VOID . POINT CLASS [ POINT ]
+-- On POINT shift to state 76
+
+State 76:
+primaryNoNewArray -> VOID POINT . CLASS [ POINT ]
+-- On CLASS shift to state 77
+
+State 77:
+primaryNoNewArray -> VOID POINT CLASS . [ POINT ]
+-- On POINT reduce production primaryNoNewArray -> VOID POINT CLASS 
+
+State 78:
+primaryNoNewArray -> THIS . [ POINT ]
+-- On POINT reduce production primaryNoNewArray -> THIS 
+
+State 79:
+fieldAccess -> SUPER . POINT identifier [ POINT EQUAL ]
+-- On POINT shift to state 80
+
+State 80:
+fieldAccess -> SUPER POINT . identifier [ POINT EQUAL ]
+-- On IDENT shift to state 4
+-- On identifier shift to state 81
+
+State 81:
+fieldAccess -> SUPER POINT identifier . [ POINT EQUAL ]
+-- On POINT reduce production fieldAccess -> SUPER POINT identifier 
+-- On EQUAL reduce production fieldAccess -> SUPER POINT identifier 
+
+State 82:
+decimalNumeral -> NONZERODIGIT . [ POINT ]
+decimalNumeral -> NONZERODIGIT . digits [ POINT ]
+-- On ZERODIGIT shift to state 83
+-- On NONZERODIGIT shift to state 84
+-- On digits shift to state 85
+-- On digit shift to state 87
+-- On POINT reduce production decimalNumeral -> NONZERODIGIT 
+
+State 83:
+digit -> ZERODIGIT . [ ZERODIGIT POINT NONZERODIGIT ]
+-- On ZERODIGIT reduce production digit -> ZERODIGIT 
+-- On POINT reduce production digit -> ZERODIGIT 
+-- On NONZERODIGIT reduce production digit -> ZERODIGIT 
+
+State 84:
+digit -> NONZERODIGIT . [ ZERODIGIT POINT NONZERODIGIT ]
+-- On ZERODIGIT reduce production digit -> NONZERODIGIT 
+-- On POINT reduce production digit -> NONZERODIGIT 
+-- On NONZERODIGIT reduce production digit -> NONZERODIGIT 
+
+State 85:
+decimalNumeral -> NONZERODIGIT digits . [ POINT ]
+digits -> digits . digit [ ZERODIGIT POINT NONZERODIGIT ]
+-- On ZERODIGIT shift to state 83
+-- On NONZERODIGIT shift to state 84
+-- On digit shift to state 86
+-- On POINT reduce production decimalNumeral -> NONZERODIGIT digits 
+
+State 86:
+digits -> digits digit . [ ZERODIGIT POINT NONZERODIGIT ]
+-- On ZERODIGIT reduce production digits -> digits digit 
+-- On POINT reduce production digits -> digits digit 
+-- On NONZERODIGIT reduce production digits -> digits digit 
+
+State 87:
+digits -> digit . [ ZERODIGIT POINT NONZERODIGIT ]
+-- On ZERODIGIT reduce production digits -> digit 
+-- On POINT reduce production digits -> digit 
+-- On NONZERODIGIT reduce production digits -> digit 
+
+State 88:
+primaryNoNewArray -> LBRAC . expression RBRAC [ POINT ]
+-- On ZERODIGIT shift to state 74
+-- On VOID shift to state 75
+-- On THIS shift to state 78
+-- On SUPER shift to state 79
+-- On SHORT shift to state 8
+-- On NONZERODIGIT shift to state 82
+-- On LONG shift to state 19
+-- On LBRAC shift to state 88
+-- On INT shift to state 20
+-- On IDENT shift to state 4
+-- On FLOAT shift to state 21
+-- On DOUBLE shift to state 22
+-- On CHAR shift to state 23
+-- On BYTE shift to state 24
+-- On BOOLEAN shift to state 25
+-- On primitiveType shift to state 36
+-- On primaryNoNewArray shift to state 89
+-- On primary shift to state 90
+-- On numericType shift to state 37
+-- On myType shift to state 93
+-- On literal shift to state 96
+-- On leftHandSide shift to state 97
+-- On integralType shift to state 41
+-- On integerLiteral shift to state 100
+-- On identifier shift to state 101
+-- On floatingPointType shift to state 42
+-- On fieldAccess shift to state 102
+-- On expressionName shift to state 103
+-- On expression shift to state 112
+-- On decimalNumeral shift to state 105
+-- On decimalIntegerLiteral shift to state 106
+-- On assignmentExpression shift to state 107
+-- On assignment shift to state 108
+-- On ambiguousName shift to state 109
+
+State 89:
+primary -> primaryNoNewArray . [ POINT ]
+-- On POINT reduce production primary -> primaryNoNewArray 
+
+State 90:
+fieldAccess -> primary . POINT identifier [ POINT EQUAL ]
+-- On POINT shift to state 91
+
+State 91:
+fieldAccess -> primary POINT . identifier [ POINT EQUAL ]
+-- On IDENT shift to state 4
+-- On identifier shift to state 92
+
+State 92:
+fieldAccess -> primary POINT identifier . [ POINT EQUAL ]
+-- On POINT reduce production fieldAccess -> primary POINT identifier 
+-- On EQUAL reduce production fieldAccess -> primary POINT identifier 
+
+State 93:
+primaryNoNewArray -> myType . POINT CLASS [ POINT ]
+-- On POINT shift to state 94
+
+State 94:
+primaryNoNewArray -> myType POINT . CLASS [ POINT ]
+-- On CLASS shift to state 95
+
+State 95:
+primaryNoNewArray -> myType POINT CLASS . [ POINT ]
+-- On POINT reduce production primaryNoNewArray -> myType POINT CLASS 
+
+State 96:
+primaryNoNewArray -> literal . [ POINT ]
+-- On POINT reduce production primaryNoNewArray -> literal 
+
+State 97:
+assignment -> leftHandSide . assignmentOperator expression [ SEMICOLON RBRAC COMMA ]
+-- On EQUAL shift to state 98
+-- On assignmentOperator shift to state 99
+
+State 98:
+assignmentOperator -> EQUAL . [ ZERODIGIT VOID THIS SUPER SHORT NONZERODIGIT LONG LBRAC INT IDENT FLOAT DOUBLE CHAR BYTE BOOLEAN ]
+-- On ZERODIGIT reduce production assignmentOperator -> EQUAL 
+-- On VOID reduce production assignmentOperator -> EQUAL 
+-- On THIS reduce production assignmentOperator -> EQUAL 
+-- On SUPER reduce production assignmentOperator -> EQUAL 
+-- On SHORT reduce production assignmentOperator -> EQUAL 
+-- On NONZERODIGIT reduce production assignmentOperator -> EQUAL 
+-- On LONG reduce production assignmentOperator -> EQUAL 
+-- On LBRAC reduce production assignmentOperator -> EQUAL 
+-- On INT reduce production assignmentOperator -> EQUAL 
+-- On IDENT reduce production assignmentOperator -> EQUAL 
+-- On FLOAT reduce production assignmentOperator -> EQUAL 
+-- On DOUBLE reduce production assignmentOperator -> EQUAL 
+-- On CHAR reduce production assignmentOperator -> EQUAL 
+-- On BYTE reduce production assignmentOperator -> EQUAL 
+-- On BOOLEAN reduce production assignmentOperator -> EQUAL 
+
+State 99:
+assignment -> leftHandSide assignmentOperator . expression [ SEMICOLON RBRAC COMMA ]
+-- On ZERODIGIT shift to state 74
+-- On VOID shift to state 75
+-- On THIS shift to state 78
+-- On SUPER shift to state 79
+-- On SHORT shift to state 8
+-- On NONZERODIGIT shift to state 82
+-- On LONG shift to state 19
+-- On LBRAC shift to state 88
+-- On INT shift to state 20
+-- On IDENT shift to state 4
+-- On FLOAT shift to state 21
+-- On DOUBLE shift to state 22
+-- On CHAR shift to state 23
+-- On BYTE shift to state 24
+-- On BOOLEAN shift to state 25
+-- On primitiveType shift to state 36
+-- On primaryNoNewArray shift to state 89
+-- On primary shift to state 90
+-- On numericType shift to state 37
+-- On myType shift to state 93
+-- On literal shift to state 96
+-- On leftHandSide shift to state 97
+-- On integralType shift to state 41
+-- On integerLiteral shift to state 100
+-- On identifier shift to state 101
+-- On floatingPointType shift to state 42
+-- On fieldAccess shift to state 102
+-- On expressionName shift to state 103
+-- On expression shift to state 104
+-- On decimalNumeral shift to state 105
+-- On decimalIntegerLiteral shift to state 106
+-- On assignmentExpression shift to state 107
+-- On assignment shift to state 108
+-- On ambiguousName shift to state 109
+
+State 100:
+literal -> integerLiteral . [ POINT ]
+-- On POINT reduce production literal -> integerLiteral 
+
+State 101:
+ambiguousName -> identifier . [ POINT ]
+expressionName -> identifier . [ SEMICOLON RBRAC INCR EQUAL DECR ]
+-- On SEMICOLON reduce production expressionName -> identifier 
+-- On RBRAC reduce production expressionName -> identifier 
+-- On POINT reduce production ambiguousName -> identifier 
+-- On INCR reduce production expressionName -> identifier 
+-- On EQUAL reduce production expressionName -> identifier 
+-- On DECR reduce production expressionName -> identifier 
+
+State 102:
+leftHandSide -> fieldAccess . [ EQUAL ]
+primaryNoNewArray -> fieldAccess . [ POINT ]
+-- On POINT reduce production primaryNoNewArray -> fieldAccess 
+-- On EQUAL reduce production leftHandSide -> fieldAccess 
+
+State 103:
+leftHandSide -> expressionName . [ EQUAL ]
+-- On EQUAL reduce production leftHandSide -> expressionName 
+
+State 104:
+assignment -> leftHandSide assignmentOperator expression . [ SEMICOLON RBRAC COMMA ]
+-- On SEMICOLON reduce production assignment -> leftHandSide assignmentOperator expression 
+-- On RBRAC reduce production assignment -> leftHandSide assignmentOperator expression 
+-- On COMMA reduce production assignment -> leftHandSide assignmentOperator expression 
+
+State 105:
+decimalIntegerLiteral -> decimalNumeral . [ POINT ]
+-- On POINT reduce production decimalIntegerLiteral -> decimalNumeral 
+
+State 106:
+integerLiteral -> decimalIntegerLiteral . [ POINT ]
+-- On POINT reduce production integerLiteral -> decimalIntegerLiteral 
+
+State 107:
+expression -> assignmentExpression . [ SEMICOLON RBRAC COMMA ]
+-- On SEMICOLON reduce production expression -> assignmentExpression 
+-- On RBRAC reduce production expression -> assignmentExpression 
+-- On COMMA reduce production expression -> assignmentExpression 
+
+State 108:
+assignmentExpression -> assignment . [ SEMICOLON RBRAC COMMA ]
+-- On SEMICOLON reduce production assignmentExpression -> assignment 
+-- On RBRAC reduce production assignmentExpression -> assignment 
+-- On COMMA reduce production assignmentExpression -> assignment 
+
+State 109:
+ambiguousName -> ambiguousName . POINT identifier [ POINT ]
+expressionName -> ambiguousName . POINT identifier [ SEMICOLON RBRAC INCR EQUAL DECR ]
+-- On POINT shift to state 110
+
+State 110:
+ambiguousName -> ambiguousName POINT . identifier [ POINT ]
+expressionName -> ambiguousName POINT . identifier [ SEMICOLON RBRAC INCR EQUAL DECR ]
+-- On IDENT shift to state 4
+-- On identifier shift to state 111
+
+State 111:
+ambiguousName -> ambiguousName POINT identifier . [ POINT ]
+expressionName -> ambiguousName POINT identifier . [ SEMICOLON RBRAC INCR EQUAL DECR ]
+-- On SEMICOLON reduce production expressionName -> ambiguousName POINT identifier 
+-- On RBRAC reduce production expressionName -> ambiguousName POINT identifier 
+-- On POINT reduce production ambiguousName -> ambiguousName POINT identifier 
+-- On INCR reduce production expressionName -> ambiguousName POINT identifier 
+-- On EQUAL reduce production expressionName -> ambiguousName POINT identifier 
+-- On DECR reduce production expressionName -> ambiguousName POINT identifier 
+
+State 112:
+primaryNoNewArray -> LBRAC expression . RBRAC [ POINT ]
+-- On RBRAC shift to state 113
+
+State 113:
+primaryNoNewArray -> LBRAC expression RBRAC . [ POINT ]
+-- On POINT reduce production primaryNoNewArray -> LBRAC expression RBRAC 
+
+State 114:
+variableDeclarator -> variableDeclaratorId EQUAL variableInitializer . [ SEMICOLON COMMA ]
+-- On SEMICOLON reduce production variableDeclarator -> variableDeclaratorId EQUAL variableInitializer 
+-- On COMMA reduce production variableDeclarator -> variableDeclaratorId EQUAL variableInitializer 
+
+State 115:
+variableInitializer -> expression . [ SEMICOLON COMMA ]
+-- On SEMICOLON reduce production variableInitializer -> expression 
+-- On COMMA reduce production variableInitializer -> expression 
+
+State 116:
+variableDeclarators -> variableDeclarators COMMA variableDeclarator . [ SEMICOLON COMMA ]
+-- On SEMICOLON reduce production variableDeclarators -> variableDeclarators COMMA variableDeclarator 
+-- On COMMA reduce production variableDeclarators -> variableDeclarators COMMA variableDeclarator 
+
+State 117:
+variableDeclarators -> variableDeclarator . [ SEMICOLON COMMA ]
+-- On SEMICOLON reduce production variableDeclarators -> variableDeclarator 
+-- On COMMA reduce production variableDeclarators -> variableDeclarator 
+
+State 118:
+normalClassDeclaration -> modifier . CLASS identifier classBody [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL EOF DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On CLASS shift to state 119
+
+State 119:
+normalClassDeclaration -> modifier CLASS . identifier classBody [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL EOF DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On IDENT shift to state 4
+-- On identifier shift to state 120
+
+State 120:
+normalClassDeclaration -> modifier CLASS identifier . classBody [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL EOF DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On LPAR shift to state 6
+-- On classBody shift to state 121
+
+State 121:
+normalClassDeclaration -> modifier CLASS identifier classBody . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL EOF DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On VOID reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On THIS reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On SUPER reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On SHORT reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On SEMICOLON reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On RPAR reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On RETURN reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On PUBLIC reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On NONZERODIGIT reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On LT reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On LPAR reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On LONG reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On LBRAC reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On INT reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On INCR reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On IF reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On IDENT reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On FLOAT reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On FINAL reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On EOF reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On DOUBLE reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On DECR reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On CONTINUE reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On CLASS reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On CHAR reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On BYTE reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On BREAK reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+-- On BOOLEAN reduce production normalClassDeclaration -> modifier CLASS identifier classBody 
+
+State 122:
+methodDeclaration -> methodHeader . methodBody [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+-- On SEMICOLON shift to state 123
+-- On LPAR shift to state 124
+-- On methodBody shift to state 199
+-- On block shift to state 200
+
+State 123:
+methodBody -> SEMICOLON . [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+-- On VOID reduce production methodBody -> SEMICOLON 
+-- On SHORT reduce production methodBody -> SEMICOLON 
+-- On SEMICOLON reduce production methodBody -> SEMICOLON 
+-- On RPAR reduce production methodBody -> SEMICOLON 
+-- On PUBLIC reduce production methodBody -> SEMICOLON 
+-- On LT reduce production methodBody -> SEMICOLON 
+-- On LONG reduce production methodBody -> SEMICOLON 
+-- On INT reduce production methodBody -> SEMICOLON 
+-- On IDENT reduce production methodBody -> SEMICOLON 
+-- On FLOAT reduce production methodBody -> SEMICOLON 
+-- On DOUBLE reduce production methodBody -> SEMICOLON 
+-- On CLASS reduce production methodBody -> SEMICOLON 
+-- On CHAR reduce production methodBody -> SEMICOLON 
+-- On BYTE reduce production methodBody -> SEMICOLON 
+-- On BOOLEAN reduce production methodBody -> SEMICOLON 
+
+State 124:
+block -> LPAR . blockStatements RPAR [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT shift to state 74
+-- On VOID shift to state 75
+-- On THIS shift to state 78
+-- On SUPER shift to state 79
+-- On SHORT shift to state 8
+-- On SEMICOLON shift to state 125
+-- On RETURN shift to state 126
+-- On PUBLIC shift to state 2
+-- On NONZERODIGIT shift to state 82
+-- On LPAR shift to state 124
+-- On LONG shift to state 19
+-- On LBRAC shift to state 88
+-- On INT shift to state 20
+-- On INCR shift to state 130
+-- On IF shift to state 148
+-- On IDENT shift to state 4
+-- On FLOAT shift to state 21
+-- On FINAL shift to state 30
+-- On DOUBLE shift to state 22
+-- On DECR shift to state 136
+-- On CONTINUE shift to state 152
+-- On CLASS shift to state 3
+-- On CHAR shift to state 23
+-- On BYTE shift to state 24
+-- On BREAK shift to state 156
+-- On BOOLEAN shift to state 25
+-- On variableModifiers shift to state 185
+-- On variableModifier shift to state 43
+-- On statementWithoutTrailingSubstatement shift to state 160
+-- On statementExpression shift to state 161
+-- On statement shift to state 188
+-- On returnStatement shift to state 166
+-- On primitiveType shift to state 36
+-- On primaryNoNewArray shift to state 89
+-- On primary shift to state 90
+-- On preIncrementExpression shift to state 167
+-- On preDecrementExpression shift to state 168
+-- On postfixExpression shift to state 169
+-- On postIncrementExpression shift to state 172
+-- On postDecrementExpression shift to state 173
+-- On numericType shift to state 37
+-- On normalClassDeclaration shift to state 67
+-- On myType shift to state 189
+-- On modifier shift to state 118
+-- On localVariableDeclarationStatement shift to state 191
+-- On localVariableDeclaration shift to state 192
+-- On literal shift to state 96
+-- On leftHandSide shift to state 97
+-- On labeledStatement shift to state 174
+-- On integralType shift to state 41
+-- On integerLiteral shift to state 100
+-- On identifier shift to state 175
+-- On floatingPointType shift to state 42
+-- On fieldAccess shift to state 102
+-- On expressionStatement shift to state 178
+-- On expressionName shift to state 179
+-- On emptyStatement shift to state 180
+-- On decimalNumeral shift to state 105
+-- On decimalIntegerLiteral shift to state 106
+-- On continueStatement shift to state 181
+-- On classDeclaration shift to state 194
+-- On breakStatement shift to state 182
+-- On blockStatements shift to state 195
+-- On blockStatement shift to state 198
+-- On block shift to state 183
+-- On assignment shift to state 184
+-- On ambiguousName shift to state 109
+
+State 125:
+emptyStatement -> SEMICOLON . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production emptyStatement -> SEMICOLON 
+-- On VOID reduce production emptyStatement -> SEMICOLON 
+-- On THIS reduce production emptyStatement -> SEMICOLON 
+-- On SUPER reduce production emptyStatement -> SEMICOLON 
+-- On SHORT reduce production emptyStatement -> SEMICOLON 
+-- On SEMICOLON reduce production emptyStatement -> SEMICOLON 
+-- On RPAR reduce production emptyStatement -> SEMICOLON 
+-- On RETURN reduce production emptyStatement -> SEMICOLON 
+-- On PUBLIC reduce production emptyStatement -> SEMICOLON 
+-- On NONZERODIGIT reduce production emptyStatement -> SEMICOLON 
+-- On LPAR reduce production emptyStatement -> SEMICOLON 
+-- On LONG reduce production emptyStatement -> SEMICOLON 
+-- On LBRAC reduce production emptyStatement -> SEMICOLON 
+-- On INT reduce production emptyStatement -> SEMICOLON 
+-- On INCR reduce production emptyStatement -> SEMICOLON 
+-- On IF reduce production emptyStatement -> SEMICOLON 
+-- On IDENT reduce production emptyStatement -> SEMICOLON 
+-- On FLOAT reduce production emptyStatement -> SEMICOLON 
+-- On FINAL reduce production emptyStatement -> SEMICOLON 
+-- On ELSE reduce production emptyStatement -> SEMICOLON 
+-- On DOUBLE reduce production emptyStatement -> SEMICOLON 
+-- On DECR reduce production emptyStatement -> SEMICOLON 
+-- On CONTINUE reduce production emptyStatement -> SEMICOLON 
+-- On CLASS reduce production emptyStatement -> SEMICOLON 
+-- On CHAR reduce production emptyStatement -> SEMICOLON 
+-- On BYTE reduce production emptyStatement -> SEMICOLON 
+-- On BREAK reduce production emptyStatement -> SEMICOLON 
+-- On BOOLEAN reduce production emptyStatement -> SEMICOLON 
+
+State 126:
+returnStatement -> RETURN . SEMICOLON [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+returnStatement -> RETURN . expression SEMICOLON [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT shift to state 74
+-- On VOID shift to state 75
+-- On THIS shift to state 78
+-- On SUPER shift to state 79
+-- On SHORT shift to state 8
+-- On SEMICOLON shift to state 127
+-- On NONZERODIGIT shift to state 82
+-- On LONG shift to state 19
+-- On LBRAC shift to state 88
+-- On INT shift to state 20
+-- On IDENT shift to state 4
+-- On FLOAT shift to state 21
+-- On DOUBLE shift to state 22
+-- On CHAR shift to state 23
+-- On BYTE shift to state 24
+-- On BOOLEAN shift to state 25
+-- On primitiveType shift to state 36
+-- On primaryNoNewArray shift to state 89
+-- On primary shift to state 90
+-- On numericType shift to state 37
+-- On myType shift to state 93
+-- On literal shift to state 96
+-- On leftHandSide shift to state 97
+-- On integralType shift to state 41
+-- On integerLiteral shift to state 100
+-- On identifier shift to state 101
+-- On floatingPointType shift to state 42
+-- On fieldAccess shift to state 102
+-- On expressionName shift to state 103
+-- On expression shift to state 128
+-- On decimalNumeral shift to state 105
+-- On decimalIntegerLiteral shift to state 106
+-- On assignmentExpression shift to state 107
+-- On assignment shift to state 108
+-- On ambiguousName shift to state 109
+
+State 127:
+returnStatement -> RETURN SEMICOLON . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production returnStatement -> RETURN SEMICOLON 
+-- On VOID reduce production returnStatement -> RETURN SEMICOLON 
+-- On THIS reduce production returnStatement -> RETURN SEMICOLON 
+-- On SUPER reduce production returnStatement -> RETURN SEMICOLON 
+-- On SHORT reduce production returnStatement -> RETURN SEMICOLON 
+-- On SEMICOLON reduce production returnStatement -> RETURN SEMICOLON 
+-- On RPAR reduce production returnStatement -> RETURN SEMICOLON 
+-- On RETURN reduce production returnStatement -> RETURN SEMICOLON 
+-- On PUBLIC reduce production returnStatement -> RETURN SEMICOLON 
+-- On NONZERODIGIT reduce production returnStatement -> RETURN SEMICOLON 
+-- On LPAR reduce production returnStatement -> RETURN SEMICOLON 
+-- On LONG reduce production returnStatement -> RETURN SEMICOLON 
+-- On LBRAC reduce production returnStatement -> RETURN SEMICOLON 
+-- On INT reduce production returnStatement -> RETURN SEMICOLON 
+-- On INCR reduce production returnStatement -> RETURN SEMICOLON 
+-- On IF reduce production returnStatement -> RETURN SEMICOLON 
+-- On IDENT reduce production returnStatement -> RETURN SEMICOLON 
+-- On FLOAT reduce production returnStatement -> RETURN SEMICOLON 
+-- On FINAL reduce production returnStatement -> RETURN SEMICOLON 
+-- On ELSE reduce production returnStatement -> RETURN SEMICOLON 
+-- On DOUBLE reduce production returnStatement -> RETURN SEMICOLON 
+-- On DECR reduce production returnStatement -> RETURN SEMICOLON 
+-- On CONTINUE reduce production returnStatement -> RETURN SEMICOLON 
+-- On CLASS reduce production returnStatement -> RETURN SEMICOLON 
+-- On CHAR reduce production returnStatement -> RETURN SEMICOLON 
+-- On BYTE reduce production returnStatement -> RETURN SEMICOLON 
+-- On BREAK reduce production returnStatement -> RETURN SEMICOLON 
+-- On BOOLEAN reduce production returnStatement -> RETURN SEMICOLON 
+
+State 128:
+returnStatement -> RETURN expression . SEMICOLON [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On SEMICOLON shift to state 129
+
+State 129:
+returnStatement -> RETURN expression SEMICOLON . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On VOID reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On THIS reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On SUPER reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On SHORT reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On SEMICOLON reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On RPAR reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On RETURN reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On PUBLIC reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On NONZERODIGIT reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On LPAR reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On LONG reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On LBRAC reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On INT reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On INCR reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On IF reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On IDENT reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On FLOAT reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On FINAL reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On ELSE reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On DOUBLE reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On DECR reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On CONTINUE reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On CLASS reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On CHAR reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On BYTE reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On BREAK reduce production returnStatement -> RETURN expression SEMICOLON 
+-- On BOOLEAN reduce production returnStatement -> RETURN expression SEMICOLON 
+
+State 130:
+preIncrementExpression -> INCR . unaryExpression [ SEMICOLON RBRAC ]
+-- On PLUS shift to state 131
+-- On MINUS shift to state 132
+-- On LBRAC shift to state 133
+-- On INCR shift to state 130
+-- On IDENT shift to state 4
+-- On DECR shift to state 136
+-- On unaryExpressionNotPlusMinus shift to state 137
+-- On unaryExpression shift to state 147
+-- On preIncrementExpression shift to state 139
+-- On preDecrementExpression shift to state 140
+-- On postfixExpression shift to state 141
+-- On identifier shift to state 101
+-- On expressionName shift to state 142
+-- On castExpression shift to state 143
+-- On ambiguousName shift to state 109
+
+State 131:
+unaryExpression -> PLUS . unaryExpression [ SEMICOLON RBRAC ]
+-- On PLUS shift to state 131
+-- On MINUS shift to state 132
+-- On LBRAC shift to state 133
+-- On INCR shift to state 130
+-- On IDENT shift to state 4
+-- On DECR shift to state 136
+-- On unaryExpressionNotPlusMinus shift to state 137
+-- On unaryExpression shift to state 146
+-- On preIncrementExpression shift to state 139
+-- On preDecrementExpression shift to state 140
+-- On postfixExpression shift to state 141
+-- On identifier shift to state 101
+-- On expressionName shift to state 142
+-- On castExpression shift to state 143
+-- On ambiguousName shift to state 109
+
+State 132:
+unaryExpression -> MINUS . unaryExpression [ SEMICOLON RBRAC ]
+-- On PLUS shift to state 131
+-- On MINUS shift to state 132
+-- On LBRAC shift to state 133
+-- On INCR shift to state 130
+-- On IDENT shift to state 4
+-- On DECR shift to state 136
+-- On unaryExpressionNotPlusMinus shift to state 137
+-- On unaryExpression shift to state 145
+-- On preIncrementExpression shift to state 139
+-- On preDecrementExpression shift to state 140
+-- On postfixExpression shift to state 141
+-- On identifier shift to state 101
+-- On expressionName shift to state 142
+-- On castExpression shift to state 143
+-- On ambiguousName shift to state 109
+
+State 133:
+castExpression -> LBRAC . primitiveType RBRAC unaryExpression [ SEMICOLON RBRAC ]
+-- On SHORT shift to state 8
+-- On LONG shift to state 19
+-- On INT shift to state 20
+-- On FLOAT shift to state 21
+-- On DOUBLE shift to state 22
+-- On CHAR shift to state 23
+-- On BYTE shift to state 24
+-- On BOOLEAN shift to state 25
+-- On primitiveType shift to state 134
+-- On numericType shift to state 37
+-- On integralType shift to state 41
+-- On floatingPointType shift to state 42
+
+State 134:
+castExpression -> LBRAC primitiveType . RBRAC unaryExpression [ SEMICOLON RBRAC ]
+-- On RBRAC shift to state 135
+
+State 135:
+castExpression -> LBRAC primitiveType RBRAC . unaryExpression [ SEMICOLON RBRAC ]
+-- On PLUS shift to state 131
+-- On MINUS shift to state 132
+-- On LBRAC shift to state 133
+-- On INCR shift to state 130
+-- On IDENT shift to state 4
+-- On DECR shift to state 136
+-- On unaryExpressionNotPlusMinus shift to state 137
+-- On unaryExpression shift to state 144
+-- On preIncrementExpression shift to state 139
+-- On preDecrementExpression shift to state 140
+-- On postfixExpression shift to state 141
+-- On identifier shift to state 101
+-- On expressionName shift to state 142
+-- On castExpression shift to state 143
+-- On ambiguousName shift to state 109
+
+State 136:
+preDecrementExpression -> DECR . unaryExpression [ SEMICOLON RBRAC ]
+-- On PLUS shift to state 131
+-- On MINUS shift to state 132
+-- On LBRAC shift to state 133
+-- On INCR shift to state 130
+-- On IDENT shift to state 4
+-- On DECR shift to state 136
+-- On unaryExpressionNotPlusMinus shift to state 137
+-- On unaryExpression shift to state 138
+-- On preIncrementExpression shift to state 139
+-- On preDecrementExpression shift to state 140
+-- On postfixExpression shift to state 141
+-- On identifier shift to state 101
+-- On expressionName shift to state 142
+-- On castExpression shift to state 143
+-- On ambiguousName shift to state 109
+
+State 137:
+unaryExpression -> unaryExpressionNotPlusMinus . [ SEMICOLON RBRAC ]
+-- On SEMICOLON reduce production unaryExpression -> unaryExpressionNotPlusMinus 
+-- On RBRAC reduce production unaryExpression -> unaryExpressionNotPlusMinus 
+
+State 138:
+preDecrementExpression -> DECR unaryExpression . [ SEMICOLON RBRAC ]
+-- On SEMICOLON reduce production preDecrementExpression -> DECR unaryExpression 
+-- On RBRAC reduce production preDecrementExpression -> DECR unaryExpression 
+
+State 139:
+unaryExpression -> preIncrementExpression . [ SEMICOLON RBRAC ]
+-- On SEMICOLON reduce production unaryExpression -> preIncrementExpression 
+-- On RBRAC reduce production unaryExpression -> preIncrementExpression 
+
+State 140:
+unaryExpression -> preDecrementExpression . [ SEMICOLON RBRAC ]
+-- On SEMICOLON reduce production unaryExpression -> preDecrementExpression 
+-- On RBRAC reduce production unaryExpression -> preDecrementExpression 
+
+State 141:
+unaryExpressionNotPlusMinus -> postfixExpression . [ SEMICOLON RBRAC ]
+-- On SEMICOLON reduce production unaryExpressionNotPlusMinus -> postfixExpression 
+-- On RBRAC reduce production unaryExpressionNotPlusMinus -> postfixExpression 
+
+State 142:
+postfixExpression -> expressionName . [ SEMICOLON RBRAC ]
+-- On SEMICOLON reduce production postfixExpression -> expressionName 
+-- On RBRAC reduce production postfixExpression -> expressionName 
+
+State 143:
+unaryExpressionNotPlusMinus -> castExpression . [ SEMICOLON RBRAC ]
+-- On SEMICOLON reduce production unaryExpressionNotPlusMinus -> castExpression 
+-- On RBRAC reduce production unaryExpressionNotPlusMinus -> castExpression 
+
+State 144:
+castExpression -> LBRAC primitiveType RBRAC unaryExpression . [ SEMICOLON RBRAC ]
+-- On SEMICOLON reduce production castExpression -> LBRAC primitiveType RBRAC unaryExpression 
+-- On RBRAC reduce production castExpression -> LBRAC primitiveType RBRAC unaryExpression 
+
+State 145:
+unaryExpression -> MINUS unaryExpression . [ SEMICOLON RBRAC ]
+-- On SEMICOLON reduce production unaryExpression -> MINUS unaryExpression 
+-- On RBRAC reduce production unaryExpression -> MINUS unaryExpression 
+
+State 146:
+unaryExpression -> PLUS unaryExpression . [ SEMICOLON RBRAC ]
+-- On SEMICOLON reduce production unaryExpression -> PLUS unaryExpression 
+-- On RBRAC reduce production unaryExpression -> PLUS unaryExpression 
+
+State 147:
+preIncrementExpression -> INCR unaryExpression . [ SEMICOLON RBRAC ]
+-- On SEMICOLON reduce production preIncrementExpression -> INCR unaryExpression 
+-- On RBRAC reduce production preIncrementExpression -> INCR unaryExpression 
+
+State 148:
+statement -> IF . LBRAC statementExpression RBRAC statement ELSE statement [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+statement -> IF . LBRAC statementExpression RBRAC statement [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On LBRAC shift to state 149
+
+State 149:
+statement -> IF LBRAC . statementExpression RBRAC statement ELSE statement [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+statement -> IF LBRAC . statementExpression RBRAC statement [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT shift to state 74
+-- On VOID shift to state 75
+-- On THIS shift to state 78
+-- On SUPER shift to state 79
+-- On SHORT shift to state 8
+-- On NONZERODIGIT shift to state 82
+-- On LONG shift to state 19
+-- On LBRAC shift to state 88
+-- On INT shift to state 20
+-- On INCR shift to state 130
+-- On IDENT shift to state 4
+-- On FLOAT shift to state 21
+-- On DOUBLE shift to state 22
+-- On DECR shift to state 136
+-- On CHAR shift to state 23
+-- On BYTE shift to state 24
+-- On BOOLEAN shift to state 25
+-- On statementExpression shift to state 150
+-- On primitiveType shift to state 36
+-- On primaryNoNewArray shift to state 89
+-- On primary shift to state 90
+-- On preIncrementExpression shift to state 167
+-- On preDecrementExpression shift to state 168
+-- On postfixExpression shift to state 169
+-- On postIncrementExpression shift to state 172
+-- On postDecrementExpression shift to state 173
+-- On numericType shift to state 37
+-- On myType shift to state 93
+-- On literal shift to state 96
+-- On leftHandSide shift to state 97
+-- On integralType shift to state 41
+-- On integerLiteral shift to state 100
+-- On identifier shift to state 101
+-- On floatingPointType shift to state 42
+-- On fieldAccess shift to state 102
+-- On expressionName shift to state 179
+-- On decimalNumeral shift to state 105
+-- On decimalIntegerLiteral shift to state 106
+-- On assignment shift to state 184
+-- On ambiguousName shift to state 109
+
+State 150:
+statement -> IF LBRAC statementExpression . RBRAC statement ELSE statement [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+statement -> IF LBRAC statementExpression . RBRAC statement [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On RBRAC shift to state 151
+
+State 151:
+statement -> IF LBRAC statementExpression RBRAC . statement ELSE statement [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+statement -> IF LBRAC statementExpression RBRAC . statement [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT shift to state 74
+-- On VOID shift to state 75
+-- On THIS shift to state 78
+-- On SUPER shift to state 79
+-- On SHORT shift to state 8
+-- On SEMICOLON shift to state 125
+-- On RETURN shift to state 126
+-- On NONZERODIGIT shift to state 82
+-- On LPAR shift to state 124
+-- On LONG shift to state 19
+-- On LBRAC shift to state 88
+-- On INT shift to state 20
+-- On INCR shift to state 130
+-- On IF shift to state 148
+-- On IDENT shift to state 4
+-- On FLOAT shift to state 21
+-- On DOUBLE shift to state 22
+-- On DECR shift to state 136
+-- On CONTINUE shift to state 152
+-- On CHAR shift to state 23
+-- On BYTE shift to state 24
+-- On BREAK shift to state 156
+-- On BOOLEAN shift to state 25
+-- On statementWithoutTrailingSubstatement shift to state 160
+-- On statementExpression shift to state 161
+-- On statement shift to state 163
+-- On returnStatement shift to state 166
+-- On primitiveType shift to state 36
+-- On primaryNoNewArray shift to state 89
+-- On primary shift to state 90
+-- On preIncrementExpression shift to state 167
+-- On preDecrementExpression shift to state 168
+-- On postfixExpression shift to state 169
+-- On postIncrementExpression shift to state 172
+-- On postDecrementExpression shift to state 173
+-- On numericType shift to state 37
+-- On myType shift to state 93
+-- On literal shift to state 96
+-- On leftHandSide shift to state 97
+-- On labeledStatement shift to state 174
+-- On integralType shift to state 41
+-- On integerLiteral shift to state 100
+-- On identifier shift to state 175
+-- On floatingPointType shift to state 42
+-- On fieldAccess shift to state 102
+-- On expressionStatement shift to state 178
+-- On expressionName shift to state 179
+-- On emptyStatement shift to state 180
+-- On decimalNumeral shift to state 105
+-- On decimalIntegerLiteral shift to state 106
+-- On continueStatement shift to state 181
+-- On breakStatement shift to state 182
+-- On block shift to state 183
+-- On assignment shift to state 184
+-- On ambiguousName shift to state 109
+
+State 152:
+continueStatement -> CONTINUE . SEMICOLON [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+continueStatement -> CONTINUE . identifier SEMICOLON [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On SEMICOLON shift to state 153
+-- On IDENT shift to state 4
+-- On identifier shift to state 154
+
+State 153:
+continueStatement -> CONTINUE SEMICOLON . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On VOID reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On THIS reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On SUPER reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On SHORT reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On SEMICOLON reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On RPAR reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On RETURN reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On PUBLIC reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On NONZERODIGIT reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On LPAR reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On LONG reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On LBRAC reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On INT reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On INCR reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On IF reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On IDENT reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On FLOAT reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On FINAL reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On ELSE reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On DOUBLE reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On DECR reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On CONTINUE reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On CLASS reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On CHAR reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On BYTE reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On BREAK reduce production continueStatement -> CONTINUE SEMICOLON 
+-- On BOOLEAN reduce production continueStatement -> CONTINUE SEMICOLON 
+
+State 154:
+continueStatement -> CONTINUE identifier . SEMICOLON [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On SEMICOLON shift to state 155
+
+State 155:
+continueStatement -> CONTINUE identifier SEMICOLON . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On VOID reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On THIS reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On SUPER reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On SHORT reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On SEMICOLON reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On RPAR reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On RETURN reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On PUBLIC reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On NONZERODIGIT reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On LPAR reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On LONG reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On LBRAC reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On INT reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On INCR reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On IF reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On IDENT reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On FLOAT reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On FINAL reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On ELSE reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On DOUBLE reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On DECR reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On CONTINUE reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On CLASS reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On CHAR reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On BYTE reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On BREAK reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+-- On BOOLEAN reduce production continueStatement -> CONTINUE identifier SEMICOLON 
+
+State 156:
+breakStatement -> BREAK . SEMICOLON [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+breakStatement -> BREAK . identifier SEMICOLON [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On SEMICOLON shift to state 157
+-- On IDENT shift to state 4
+-- On identifier shift to state 158
+
+State 157:
+breakStatement -> BREAK SEMICOLON . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production breakStatement -> BREAK SEMICOLON 
+-- On VOID reduce production breakStatement -> BREAK SEMICOLON 
+-- On THIS reduce production breakStatement -> BREAK SEMICOLON 
+-- On SUPER reduce production breakStatement -> BREAK SEMICOLON 
+-- On SHORT reduce production breakStatement -> BREAK SEMICOLON 
+-- On SEMICOLON reduce production breakStatement -> BREAK SEMICOLON 
+-- On RPAR reduce production breakStatement -> BREAK SEMICOLON 
+-- On RETURN reduce production breakStatement -> BREAK SEMICOLON 
+-- On PUBLIC reduce production breakStatement -> BREAK SEMICOLON 
+-- On NONZERODIGIT reduce production breakStatement -> BREAK SEMICOLON 
+-- On LPAR reduce production breakStatement -> BREAK SEMICOLON 
+-- On LONG reduce production breakStatement -> BREAK SEMICOLON 
+-- On LBRAC reduce production breakStatement -> BREAK SEMICOLON 
+-- On INT reduce production breakStatement -> BREAK SEMICOLON 
+-- On INCR reduce production breakStatement -> BREAK SEMICOLON 
+-- On IF reduce production breakStatement -> BREAK SEMICOLON 
+-- On IDENT reduce production breakStatement -> BREAK SEMICOLON 
+-- On FLOAT reduce production breakStatement -> BREAK SEMICOLON 
+-- On FINAL reduce production breakStatement -> BREAK SEMICOLON 
+-- On ELSE reduce production breakStatement -> BREAK SEMICOLON 
+-- On DOUBLE reduce production breakStatement -> BREAK SEMICOLON 
+-- On DECR reduce production breakStatement -> BREAK SEMICOLON 
+-- On CONTINUE reduce production breakStatement -> BREAK SEMICOLON 
+-- On CLASS reduce production breakStatement -> BREAK SEMICOLON 
+-- On CHAR reduce production breakStatement -> BREAK SEMICOLON 
+-- On BYTE reduce production breakStatement -> BREAK SEMICOLON 
+-- On BREAK reduce production breakStatement -> BREAK SEMICOLON 
+-- On BOOLEAN reduce production breakStatement -> BREAK SEMICOLON 
+
+State 158:
+breakStatement -> BREAK identifier . SEMICOLON [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On SEMICOLON shift to state 159
+
+State 159:
+breakStatement -> BREAK identifier SEMICOLON . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On VOID reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On THIS reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On SUPER reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On SHORT reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On SEMICOLON reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On RPAR reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On RETURN reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On PUBLIC reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On NONZERODIGIT reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On LPAR reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On LONG reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On LBRAC reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On INT reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On INCR reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On IF reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On IDENT reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On FLOAT reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On FINAL reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On ELSE reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On DOUBLE reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On DECR reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On CONTINUE reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On CLASS reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On CHAR reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On BYTE reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On BREAK reduce production breakStatement -> BREAK identifier SEMICOLON 
+-- On BOOLEAN reduce production breakStatement -> BREAK identifier SEMICOLON 
+
+State 160:
+statement -> statementWithoutTrailingSubstatement . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production statement -> statementWithoutTrailingSubstatement 
+-- On VOID reduce production statement -> statementWithoutTrailingSubstatement 
+-- On THIS reduce production statement -> statementWithoutTrailingSubstatement 
+-- On SUPER reduce production statement -> statementWithoutTrailingSubstatement 
+-- On SHORT reduce production statement -> statementWithoutTrailingSubstatement 
+-- On SEMICOLON reduce production statement -> statementWithoutTrailingSubstatement 
+-- On RPAR reduce production statement -> statementWithoutTrailingSubstatement 
+-- On RETURN reduce production statement -> statementWithoutTrailingSubstatement 
+-- On PUBLIC reduce production statement -> statementWithoutTrailingSubstatement 
+-- On NONZERODIGIT reduce production statement -> statementWithoutTrailingSubstatement 
+-- On LPAR reduce production statement -> statementWithoutTrailingSubstatement 
+-- On LONG reduce production statement -> statementWithoutTrailingSubstatement 
+-- On LBRAC reduce production statement -> statementWithoutTrailingSubstatement 
+-- On INT reduce production statement -> statementWithoutTrailingSubstatement 
+-- On INCR reduce production statement -> statementWithoutTrailingSubstatement 
+-- On IF reduce production statement -> statementWithoutTrailingSubstatement 
+-- On IDENT reduce production statement -> statementWithoutTrailingSubstatement 
+-- On FLOAT reduce production statement -> statementWithoutTrailingSubstatement 
+-- On FINAL reduce production statement -> statementWithoutTrailingSubstatement 
+-- On ELSE reduce production statement -> statementWithoutTrailingSubstatement 
+-- On DOUBLE reduce production statement -> statementWithoutTrailingSubstatement 
+-- On DECR reduce production statement -> statementWithoutTrailingSubstatement 
+-- On CONTINUE reduce production statement -> statementWithoutTrailingSubstatement 
+-- On CLASS reduce production statement -> statementWithoutTrailingSubstatement 
+-- On CHAR reduce production statement -> statementWithoutTrailingSubstatement 
+-- On BYTE reduce production statement -> statementWithoutTrailingSubstatement 
+-- On BREAK reduce production statement -> statementWithoutTrailingSubstatement 
+-- On BOOLEAN reduce production statement -> statementWithoutTrailingSubstatement 
+
+State 161:
+expressionStatement -> statementExpression . SEMICOLON [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On SEMICOLON shift to state 162
+
+State 162:
+expressionStatement -> statementExpression SEMICOLON . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On VOID reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On THIS reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On SUPER reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On SHORT reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On SEMICOLON reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On RPAR reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On RETURN reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On PUBLIC reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On NONZERODIGIT reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On LPAR reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On LONG reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On LBRAC reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On INT reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On INCR reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On IF reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On IDENT reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On FLOAT reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On FINAL reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On ELSE reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On DOUBLE reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On DECR reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On CONTINUE reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On CLASS reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On CHAR reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On BYTE reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On BREAK reduce production expressionStatement -> statementExpression SEMICOLON 
+-- On BOOLEAN reduce production expressionStatement -> statementExpression SEMICOLON 
+
+State 163:
+statement -> IF LBRAC statementExpression RBRAC statement . ELSE statement [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+statement -> IF LBRAC statementExpression RBRAC statement . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ELSE shift to state 164
+-- On ZERODIGIT reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On VOID reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On THIS reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On SUPER reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On SHORT reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On SEMICOLON reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On RPAR reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On RETURN reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On PUBLIC reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On NONZERODIGIT reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On LPAR reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On LONG reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On LBRAC reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On INT reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On INCR reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On IF reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On IDENT reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On FLOAT reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On FINAL reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On ELSE reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On DOUBLE reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On DECR reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On CONTINUE reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On CLASS reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On CHAR reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On BYTE reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On BREAK reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+-- On BOOLEAN reduce production statement -> IF LBRAC statementExpression RBRAC statement 
+** Conflict on ELSE
+
+State 164:
+statement -> IF LBRAC statementExpression RBRAC statement ELSE . statement [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT shift to state 74
+-- On VOID shift to state 75
+-- On THIS shift to state 78
+-- On SUPER shift to state 79
+-- On SHORT shift to state 8
+-- On SEMICOLON shift to state 125
+-- On RETURN shift to state 126
+-- On NONZERODIGIT shift to state 82
+-- On LPAR shift to state 124
+-- On LONG shift to state 19
+-- On LBRAC shift to state 88
+-- On INT shift to state 20
+-- On INCR shift to state 130
+-- On IF shift to state 148
+-- On IDENT shift to state 4
+-- On FLOAT shift to state 21
+-- On DOUBLE shift to state 22
+-- On DECR shift to state 136
+-- On CONTINUE shift to state 152
+-- On CHAR shift to state 23
+-- On BYTE shift to state 24
+-- On BREAK shift to state 156
+-- On BOOLEAN shift to state 25
+-- On statementWithoutTrailingSubstatement shift to state 160
+-- On statementExpression shift to state 161
+-- On statement shift to state 165
+-- On returnStatement shift to state 166
+-- On primitiveType shift to state 36
+-- On primaryNoNewArray shift to state 89
+-- On primary shift to state 90
+-- On preIncrementExpression shift to state 167
+-- On preDecrementExpression shift to state 168
+-- On postfixExpression shift to state 169
+-- On postIncrementExpression shift to state 172
+-- On postDecrementExpression shift to state 173
+-- On numericType shift to state 37
+-- On myType shift to state 93
+-- On literal shift to state 96
+-- On leftHandSide shift to state 97
+-- On labeledStatement shift to state 174
+-- On integralType shift to state 41
+-- On integerLiteral shift to state 100
+-- On identifier shift to state 175
+-- On floatingPointType shift to state 42
+-- On fieldAccess shift to state 102
+-- On expressionStatement shift to state 178
+-- On expressionName shift to state 179
+-- On emptyStatement shift to state 180
+-- On decimalNumeral shift to state 105
+-- On decimalIntegerLiteral shift to state 106
+-- On continueStatement shift to state 181
+-- On breakStatement shift to state 182
+-- On block shift to state 183
+-- On assignment shift to state 184
+-- On ambiguousName shift to state 109
+
+State 165:
+statement -> IF LBRAC statementExpression RBRAC statement ELSE statement . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On VOID reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On THIS reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On SUPER reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On SHORT reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On SEMICOLON reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On RPAR reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On RETURN reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On PUBLIC reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On NONZERODIGIT reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On LPAR reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On LONG reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On LBRAC reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On INT reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On INCR reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On IF reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On IDENT reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On FLOAT reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On FINAL reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On ELSE reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On DOUBLE reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On DECR reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On CONTINUE reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On CLASS reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On CHAR reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On BYTE reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On BREAK reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+-- On BOOLEAN reduce production statement -> IF LBRAC statementExpression RBRAC statement ELSE statement 
+
+State 166:
+statementWithoutTrailingSubstatement -> returnStatement . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On VOID reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On THIS reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On SUPER reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On SHORT reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On SEMICOLON reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On RPAR reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On RETURN reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On PUBLIC reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On NONZERODIGIT reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On LPAR reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On LONG reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On LBRAC reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On INT reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On INCR reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On IF reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On IDENT reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On FLOAT reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On FINAL reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On ELSE reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On DOUBLE reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On DECR reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On CONTINUE reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On CLASS reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On CHAR reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On BYTE reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On BREAK reduce production statementWithoutTrailingSubstatement -> returnStatement 
+-- On BOOLEAN reduce production statementWithoutTrailingSubstatement -> returnStatement 
+
+State 167:
+statementExpression -> preIncrementExpression . [ SEMICOLON RBRAC ]
+-- On SEMICOLON reduce production statementExpression -> preIncrementExpression 
+-- On RBRAC reduce production statementExpression -> preIncrementExpression 
+
+State 168:
+statementExpression -> preDecrementExpression . [ SEMICOLON RBRAC ]
+-- On SEMICOLON reduce production statementExpression -> preDecrementExpression 
+-- On RBRAC reduce production statementExpression -> preDecrementExpression 
+
+State 169:
+postDecrementExpression -> postfixExpression . DECR [ SEMICOLON RBRAC ]
+postIncrementExpression -> postfixExpression . INCR [ SEMICOLON RBRAC ]
+-- On INCR shift to state 170
+-- On DECR shift to state 171
+
+State 170:
+postIncrementExpression -> postfixExpression INCR . [ SEMICOLON RBRAC ]
+-- On SEMICOLON reduce production postIncrementExpression -> postfixExpression INCR 
+-- On RBRAC reduce production postIncrementExpression -> postfixExpression INCR 
+
+State 171:
+postDecrementExpression -> postfixExpression DECR . [ SEMICOLON RBRAC ]
+-- On SEMICOLON reduce production postDecrementExpression -> postfixExpression DECR 
+-- On RBRAC reduce production postDecrementExpression -> postfixExpression DECR 
+
+State 172:
+statementExpression -> postIncrementExpression . [ SEMICOLON RBRAC ]
+-- On SEMICOLON reduce production statementExpression -> postIncrementExpression 
+-- On RBRAC reduce production statementExpression -> postIncrementExpression 
+
+State 173:
+statementExpression -> postDecrementExpression . [ SEMICOLON RBRAC ]
+-- On SEMICOLON reduce production statementExpression -> postDecrementExpression 
+-- On RBRAC reduce production statementExpression -> postDecrementExpression 
+
+State 174:
+statement -> labeledStatement . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production statement -> labeledStatement 
+-- On VOID reduce production statement -> labeledStatement 
+-- On THIS reduce production statement -> labeledStatement 
+-- On SUPER reduce production statement -> labeledStatement 
+-- On SHORT reduce production statement -> labeledStatement 
+-- On SEMICOLON reduce production statement -> labeledStatement 
+-- On RPAR reduce production statement -> labeledStatement 
+-- On RETURN reduce production statement -> labeledStatement 
+-- On PUBLIC reduce production statement -> labeledStatement 
+-- On NONZERODIGIT reduce production statement -> labeledStatement 
+-- On LPAR reduce production statement -> labeledStatement 
+-- On LONG reduce production statement -> labeledStatement 
+-- On LBRAC reduce production statement -> labeledStatement 
+-- On INT reduce production statement -> labeledStatement 
+-- On INCR reduce production statement -> labeledStatement 
+-- On IF reduce production statement -> labeledStatement 
+-- On IDENT reduce production statement -> labeledStatement 
+-- On FLOAT reduce production statement -> labeledStatement 
+-- On FINAL reduce production statement -> labeledStatement 
+-- On ELSE reduce production statement -> labeledStatement 
+-- On DOUBLE reduce production statement -> labeledStatement 
+-- On DECR reduce production statement -> labeledStatement 
+-- On CONTINUE reduce production statement -> labeledStatement 
+-- On CLASS reduce production statement -> labeledStatement 
+-- On CHAR reduce production statement -> labeledStatement 
+-- On BYTE reduce production statement -> labeledStatement 
+-- On BREAK reduce production statement -> labeledStatement 
+-- On BOOLEAN reduce production statement -> labeledStatement 
+
+State 175:
+ambiguousName -> identifier . [ POINT ]
+expressionName -> identifier . [ INCR EQUAL DECR ]
+labeledStatement -> identifier . COLON statement [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On COLON shift to state 176
+-- On POINT reduce production ambiguousName -> identifier 
+-- On INCR reduce production expressionName -> identifier 
+-- On EQUAL reduce production expressionName -> identifier 
+-- On DECR reduce production expressionName -> identifier 
+
+State 176:
+labeledStatement -> identifier COLON . statement [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT shift to state 74
+-- On VOID shift to state 75
+-- On THIS shift to state 78
+-- On SUPER shift to state 79
+-- On SHORT shift to state 8
+-- On SEMICOLON shift to state 125
+-- On RETURN shift to state 126
+-- On NONZERODIGIT shift to state 82
+-- On LPAR shift to state 124
+-- On LONG shift to state 19
+-- On LBRAC shift to state 88
+-- On INT shift to state 20
+-- On INCR shift to state 130
+-- On IF shift to state 148
+-- On IDENT shift to state 4
+-- On FLOAT shift to state 21
+-- On DOUBLE shift to state 22
+-- On DECR shift to state 136
+-- On CONTINUE shift to state 152
+-- On CHAR shift to state 23
+-- On BYTE shift to state 24
+-- On BREAK shift to state 156
+-- On BOOLEAN shift to state 25
+-- On statementWithoutTrailingSubstatement shift to state 160
+-- On statementExpression shift to state 161
+-- On statement shift to state 177
+-- On returnStatement shift to state 166
+-- On primitiveType shift to state 36
+-- On primaryNoNewArray shift to state 89
+-- On primary shift to state 90
+-- On preIncrementExpression shift to state 167
+-- On preDecrementExpression shift to state 168
+-- On postfixExpression shift to state 169
+-- On postIncrementExpression shift to state 172
+-- On postDecrementExpression shift to state 173
+-- On numericType shift to state 37
+-- On myType shift to state 93
+-- On literal shift to state 96
+-- On leftHandSide shift to state 97
+-- On labeledStatement shift to state 174
+-- On integralType shift to state 41
+-- On integerLiteral shift to state 100
+-- On identifier shift to state 175
+-- On floatingPointType shift to state 42
+-- On fieldAccess shift to state 102
+-- On expressionStatement shift to state 178
+-- On expressionName shift to state 179
+-- On emptyStatement shift to state 180
+-- On decimalNumeral shift to state 105
+-- On decimalIntegerLiteral shift to state 106
+-- On continueStatement shift to state 181
+-- On breakStatement shift to state 182
+-- On block shift to state 183
+-- On assignment shift to state 184
+-- On ambiguousName shift to state 109
+
+State 177:
+labeledStatement -> identifier COLON statement . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production labeledStatement -> identifier COLON statement 
+-- On VOID reduce production labeledStatement -> identifier COLON statement 
+-- On THIS reduce production labeledStatement -> identifier COLON statement 
+-- On SUPER reduce production labeledStatement -> identifier COLON statement 
+-- On SHORT reduce production labeledStatement -> identifier COLON statement 
+-- On SEMICOLON reduce production labeledStatement -> identifier COLON statement 
+-- On RPAR reduce production labeledStatement -> identifier COLON statement 
+-- On RETURN reduce production labeledStatement -> identifier COLON statement 
+-- On PUBLIC reduce production labeledStatement -> identifier COLON statement 
+-- On NONZERODIGIT reduce production labeledStatement -> identifier COLON statement 
+-- On LPAR reduce production labeledStatement -> identifier COLON statement 
+-- On LONG reduce production labeledStatement -> identifier COLON statement 
+-- On LBRAC reduce production labeledStatement -> identifier COLON statement 
+-- On INT reduce production labeledStatement -> identifier COLON statement 
+-- On INCR reduce production labeledStatement -> identifier COLON statement 
+-- On IF reduce production labeledStatement -> identifier COLON statement 
+-- On IDENT reduce production labeledStatement -> identifier COLON statement 
+-- On FLOAT reduce production labeledStatement -> identifier COLON statement 
+-- On FINAL reduce production labeledStatement -> identifier COLON statement 
+-- On ELSE reduce production labeledStatement -> identifier COLON statement 
+-- On DOUBLE reduce production labeledStatement -> identifier COLON statement 
+-- On DECR reduce production labeledStatement -> identifier COLON statement 
+-- On CONTINUE reduce production labeledStatement -> identifier COLON statement 
+-- On CLASS reduce production labeledStatement -> identifier COLON statement 
+-- On CHAR reduce production labeledStatement -> identifier COLON statement 
+-- On BYTE reduce production labeledStatement -> identifier COLON statement 
+-- On BREAK reduce production labeledStatement -> identifier COLON statement 
+-- On BOOLEAN reduce production labeledStatement -> identifier COLON statement 
+
+State 178:
+statementWithoutTrailingSubstatement -> expressionStatement . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On VOID reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On THIS reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On SUPER reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On SHORT reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On SEMICOLON reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On RPAR reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On RETURN reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On PUBLIC reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On NONZERODIGIT reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On LPAR reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On LONG reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On LBRAC reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On INT reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On INCR reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On IF reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On IDENT reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On FLOAT reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On FINAL reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On ELSE reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On DOUBLE reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On DECR reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On CONTINUE reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On CLASS reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On CHAR reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On BYTE reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On BREAK reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+-- On BOOLEAN reduce production statementWithoutTrailingSubstatement -> expressionStatement 
+
+State 179:
+leftHandSide -> expressionName . [ EQUAL ]
+postfixExpression -> expressionName . [ INCR DECR ]
+-- On INCR reduce production postfixExpression -> expressionName 
+-- On EQUAL reduce production leftHandSide -> expressionName 
+-- On DECR reduce production postfixExpression -> expressionName 
+
+State 180:
+statementWithoutTrailingSubstatement -> emptyStatement . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On VOID reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On THIS reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On SUPER reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On SHORT reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On SEMICOLON reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On RPAR reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On RETURN reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On PUBLIC reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On NONZERODIGIT reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On LPAR reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On LONG reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On LBRAC reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On INT reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On INCR reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On IF reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On IDENT reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On FLOAT reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On FINAL reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On ELSE reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On DOUBLE reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On DECR reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On CONTINUE reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On CLASS reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On CHAR reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On BYTE reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On BREAK reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+-- On BOOLEAN reduce production statementWithoutTrailingSubstatement -> emptyStatement 
+
+State 181:
+statementWithoutTrailingSubstatement -> continueStatement . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On VOID reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On THIS reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On SUPER reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On SHORT reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On SEMICOLON reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On RPAR reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On RETURN reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On PUBLIC reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On NONZERODIGIT reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On LPAR reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On LONG reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On LBRAC reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On INT reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On INCR reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On IF reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On IDENT reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On FLOAT reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On FINAL reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On ELSE reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On DOUBLE reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On DECR reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On CONTINUE reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On CLASS reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On CHAR reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On BYTE reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On BREAK reduce production statementWithoutTrailingSubstatement -> continueStatement 
+-- On BOOLEAN reduce production statementWithoutTrailingSubstatement -> continueStatement 
+
+State 182:
+statementWithoutTrailingSubstatement -> breakStatement . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On VOID reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On THIS reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On SUPER reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On SHORT reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On SEMICOLON reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On RPAR reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On RETURN reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On PUBLIC reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On NONZERODIGIT reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On LPAR reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On LONG reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On LBRAC reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On INT reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On INCR reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On IF reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On IDENT reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On FLOAT reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On FINAL reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On ELSE reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On DOUBLE reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On DECR reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On CONTINUE reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On CLASS reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On CHAR reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On BYTE reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On BREAK reduce production statementWithoutTrailingSubstatement -> breakStatement 
+-- On BOOLEAN reduce production statementWithoutTrailingSubstatement -> breakStatement 
+
+State 183:
+statementWithoutTrailingSubstatement -> block . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production statementWithoutTrailingSubstatement -> block 
+-- On VOID reduce production statementWithoutTrailingSubstatement -> block 
+-- On THIS reduce production statementWithoutTrailingSubstatement -> block 
+-- On SUPER reduce production statementWithoutTrailingSubstatement -> block 
+-- On SHORT reduce production statementWithoutTrailingSubstatement -> block 
+-- On SEMICOLON reduce production statementWithoutTrailingSubstatement -> block 
+-- On RPAR reduce production statementWithoutTrailingSubstatement -> block 
+-- On RETURN reduce production statementWithoutTrailingSubstatement -> block 
+-- On PUBLIC reduce production statementWithoutTrailingSubstatement -> block 
+-- On NONZERODIGIT reduce production statementWithoutTrailingSubstatement -> block 
+-- On LPAR reduce production statementWithoutTrailingSubstatement -> block 
+-- On LONG reduce production statementWithoutTrailingSubstatement -> block 
+-- On LBRAC reduce production statementWithoutTrailingSubstatement -> block 
+-- On INT reduce production statementWithoutTrailingSubstatement -> block 
+-- On INCR reduce production statementWithoutTrailingSubstatement -> block 
+-- On IF reduce production statementWithoutTrailingSubstatement -> block 
+-- On IDENT reduce production statementWithoutTrailingSubstatement -> block 
+-- On FLOAT reduce production statementWithoutTrailingSubstatement -> block 
+-- On FINAL reduce production statementWithoutTrailingSubstatement -> block 
+-- On ELSE reduce production statementWithoutTrailingSubstatement -> block 
+-- On DOUBLE reduce production statementWithoutTrailingSubstatement -> block 
+-- On DECR reduce production statementWithoutTrailingSubstatement -> block 
+-- On CONTINUE reduce production statementWithoutTrailingSubstatement -> block 
+-- On CLASS reduce production statementWithoutTrailingSubstatement -> block 
+-- On CHAR reduce production statementWithoutTrailingSubstatement -> block 
+-- On BYTE reduce production statementWithoutTrailingSubstatement -> block 
+-- On BREAK reduce production statementWithoutTrailingSubstatement -> block 
+-- On BOOLEAN reduce production statementWithoutTrailingSubstatement -> block 
+
+State 184:
+statementExpression -> assignment . [ SEMICOLON RBRAC ]
+-- On SEMICOLON reduce production statementExpression -> assignment 
+-- On RBRAC reduce production statementExpression -> assignment 
+
+State 185:
+localVariableDeclaration -> variableModifiers . myType variableDeclarators [ SEMICOLON ]
+variableModifiers -> variableModifiers . variableModifier [ SHORT LONG INT FLOAT FINAL DOUBLE CHAR BYTE BOOLEAN ]
+-- On SHORT shift to state 8
+-- On LONG shift to state 19
+-- On INT shift to state 20
+-- On FLOAT shift to state 21
+-- On FINAL shift to state 30
+-- On DOUBLE shift to state 22
+-- On CHAR shift to state 23
+-- On BYTE shift to state 24
+-- On BOOLEAN shift to state 25
+-- On variableModifier shift to state 32
+-- On primitiveType shift to state 36
+-- On numericType shift to state 37
+-- On myType shift to state 186
+-- On integralType shift to state 41
+-- On floatingPointType shift to state 42
+
+State 186:
+localVariableDeclaration -> variableModifiers myType . variableDeclarators [ SEMICOLON ]
+-- On IDENT shift to state 4
+-- On variableDeclarators shift to state 187
+-- On variableDeclaratorId shift to state 72
+-- On variableDeclarator shift to state 117
+-- On identifier shift to state 40
+
+State 187:
+localVariableDeclaration -> variableModifiers myType variableDeclarators . [ SEMICOLON ]
+variableDeclarators -> variableDeclarators . COMMA variableDeclarator [ SEMICOLON COMMA ]
+-- On COMMA shift to state 71
+-- On SEMICOLON reduce production localVariableDeclaration -> variableModifiers myType variableDeclarators 
+
+State 188:
+blockStatement -> statement . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production blockStatement -> statement 
+-- On VOID reduce production blockStatement -> statement 
+-- On THIS reduce production blockStatement -> statement 
+-- On SUPER reduce production blockStatement -> statement 
+-- On SHORT reduce production blockStatement -> statement 
+-- On SEMICOLON reduce production blockStatement -> statement 
+-- On RPAR reduce production blockStatement -> statement 
+-- On RETURN reduce production blockStatement -> statement 
+-- On PUBLIC reduce production blockStatement -> statement 
+-- On NONZERODIGIT reduce production blockStatement -> statement 
+-- On LPAR reduce production blockStatement -> statement 
+-- On LONG reduce production blockStatement -> statement 
+-- On LBRAC reduce production blockStatement -> statement 
+-- On INT reduce production blockStatement -> statement 
+-- On INCR reduce production blockStatement -> statement 
+-- On IF reduce production blockStatement -> statement 
+-- On IDENT reduce production blockStatement -> statement 
+-- On FLOAT reduce production blockStatement -> statement 
+-- On FINAL reduce production blockStatement -> statement 
+-- On DOUBLE reduce production blockStatement -> statement 
+-- On DECR reduce production blockStatement -> statement 
+-- On CONTINUE reduce production blockStatement -> statement 
+-- On CLASS reduce production blockStatement -> statement 
+-- On CHAR reduce production blockStatement -> statement 
+-- On BYTE reduce production blockStatement -> statement 
+-- On BREAK reduce production blockStatement -> statement 
+-- On BOOLEAN reduce production blockStatement -> statement 
+
+State 189:
+localVariableDeclaration -> myType . variableDeclarators [ SEMICOLON ]
+primaryNoNewArray -> myType . POINT CLASS [ POINT ]
+-- On POINT shift to state 94
+-- On IDENT shift to state 4
+-- On variableDeclarators shift to state 190
+-- On variableDeclaratorId shift to state 72
+-- On variableDeclarator shift to state 117
+-- On identifier shift to state 40
+
+State 190:
+localVariableDeclaration -> myType variableDeclarators . [ SEMICOLON ]
+variableDeclarators -> variableDeclarators . COMMA variableDeclarator [ SEMICOLON COMMA ]
+-- On COMMA shift to state 71
+-- On SEMICOLON reduce production localVariableDeclaration -> myType variableDeclarators 
+
+State 191:
+blockStatement -> localVariableDeclarationStatement . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production blockStatement -> localVariableDeclarationStatement 
+-- On VOID reduce production blockStatement -> localVariableDeclarationStatement 
+-- On THIS reduce production blockStatement -> localVariableDeclarationStatement 
+-- On SUPER reduce production blockStatement -> localVariableDeclarationStatement 
+-- On SHORT reduce production blockStatement -> localVariableDeclarationStatement 
+-- On SEMICOLON reduce production blockStatement -> localVariableDeclarationStatement 
+-- On RPAR reduce production blockStatement -> localVariableDeclarationStatement 
+-- On RETURN reduce production blockStatement -> localVariableDeclarationStatement 
+-- On PUBLIC reduce production blockStatement -> localVariableDeclarationStatement 
+-- On NONZERODIGIT reduce production blockStatement -> localVariableDeclarationStatement 
+-- On LPAR reduce production blockStatement -> localVariableDeclarationStatement 
+-- On LONG reduce production blockStatement -> localVariableDeclarationStatement 
+-- On LBRAC reduce production blockStatement -> localVariableDeclarationStatement 
+-- On INT reduce production blockStatement -> localVariableDeclarationStatement 
+-- On INCR reduce production blockStatement -> localVariableDeclarationStatement 
+-- On IF reduce production blockStatement -> localVariableDeclarationStatement 
+-- On IDENT reduce production blockStatement -> localVariableDeclarationStatement 
+-- On FLOAT reduce production blockStatement -> localVariableDeclarationStatement 
+-- On FINAL reduce production blockStatement -> localVariableDeclarationStatement 
+-- On DOUBLE reduce production blockStatement -> localVariableDeclarationStatement 
+-- On DECR reduce production blockStatement -> localVariableDeclarationStatement 
+-- On CONTINUE reduce production blockStatement -> localVariableDeclarationStatement 
+-- On CLASS reduce production blockStatement -> localVariableDeclarationStatement 
+-- On CHAR reduce production blockStatement -> localVariableDeclarationStatement 
+-- On BYTE reduce production blockStatement -> localVariableDeclarationStatement 
+-- On BREAK reduce production blockStatement -> localVariableDeclarationStatement 
+-- On BOOLEAN reduce production blockStatement -> localVariableDeclarationStatement 
+
+State 192:
+localVariableDeclarationStatement -> localVariableDeclaration . SEMICOLON [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On SEMICOLON shift to state 193
+
+State 193:
+localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+-- On VOID reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+-- On THIS reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+-- On SUPER reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+-- On SHORT reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+-- On SEMICOLON reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+-- On RPAR reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+-- On RETURN reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+-- On PUBLIC reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+-- On NONZERODIGIT reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+-- On LPAR reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+-- On LONG reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+-- On LBRAC reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+-- On INT reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+-- On INCR reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+-- On IF reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+-- On IDENT reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+-- On FLOAT reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+-- On FINAL reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+-- On DOUBLE reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+-- On DECR reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+-- On CONTINUE reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+-- On CLASS reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+-- On CHAR reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+-- On BYTE reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+-- On BREAK reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+-- On BOOLEAN reduce production localVariableDeclarationStatement -> localVariableDeclaration SEMICOLON 
+
+State 194:
+blockStatement -> classDeclaration . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production blockStatement -> classDeclaration 
+-- On VOID reduce production blockStatement -> classDeclaration 
+-- On THIS reduce production blockStatement -> classDeclaration 
+-- On SUPER reduce production blockStatement -> classDeclaration 
+-- On SHORT reduce production blockStatement -> classDeclaration 
+-- On SEMICOLON reduce production blockStatement -> classDeclaration 
+-- On RPAR reduce production blockStatement -> classDeclaration 
+-- On RETURN reduce production blockStatement -> classDeclaration 
+-- On PUBLIC reduce production blockStatement -> classDeclaration 
+-- On NONZERODIGIT reduce production blockStatement -> classDeclaration 
+-- On LPAR reduce production blockStatement -> classDeclaration 
+-- On LONG reduce production blockStatement -> classDeclaration 
+-- On LBRAC reduce production blockStatement -> classDeclaration 
+-- On INT reduce production blockStatement -> classDeclaration 
+-- On INCR reduce production blockStatement -> classDeclaration 
+-- On IF reduce production blockStatement -> classDeclaration 
+-- On IDENT reduce production blockStatement -> classDeclaration 
+-- On FLOAT reduce production blockStatement -> classDeclaration 
+-- On FINAL reduce production blockStatement -> classDeclaration 
+-- On DOUBLE reduce production blockStatement -> classDeclaration 
+-- On DECR reduce production blockStatement -> classDeclaration 
+-- On CONTINUE reduce production blockStatement -> classDeclaration 
+-- On CLASS reduce production blockStatement -> classDeclaration 
+-- On CHAR reduce production blockStatement -> classDeclaration 
+-- On BYTE reduce production blockStatement -> classDeclaration 
+-- On BREAK reduce production blockStatement -> classDeclaration 
+-- On BOOLEAN reduce production blockStatement -> classDeclaration 
+
+State 195:
+block -> LPAR blockStatements . RPAR [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+blockStatements -> blockStatements . blockStatement [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT shift to state 74
+-- On VOID shift to state 75
+-- On THIS shift to state 78
+-- On SUPER shift to state 79
+-- On SHORT shift to state 8
+-- On SEMICOLON shift to state 125
+-- On RPAR shift to state 196
+-- On RETURN shift to state 126
+-- On PUBLIC shift to state 2
+-- On NONZERODIGIT shift to state 82
+-- On LPAR shift to state 124
+-- On LONG shift to state 19
+-- On LBRAC shift to state 88
+-- On INT shift to state 20
+-- On INCR shift to state 130
+-- On IF shift to state 148
+-- On IDENT shift to state 4
+-- On FLOAT shift to state 21
+-- On FINAL shift to state 30
+-- On DOUBLE shift to state 22
+-- On DECR shift to state 136
+-- On CONTINUE shift to state 152
+-- On CLASS shift to state 3
+-- On CHAR shift to state 23
+-- On BYTE shift to state 24
+-- On BREAK shift to state 156
+-- On BOOLEAN shift to state 25
+-- On variableModifiers shift to state 185
+-- On variableModifier shift to state 43
+-- On statementWithoutTrailingSubstatement shift to state 160
+-- On statementExpression shift to state 161
+-- On statement shift to state 188
+-- On returnStatement shift to state 166
+-- On primitiveType shift to state 36
+-- On primaryNoNewArray shift to state 89
+-- On primary shift to state 90
+-- On preIncrementExpression shift to state 167
+-- On preDecrementExpression shift to state 168
+-- On postfixExpression shift to state 169
+-- On postIncrementExpression shift to state 172
+-- On postDecrementExpression shift to state 173
+-- On numericType shift to state 37
+-- On normalClassDeclaration shift to state 67
+-- On myType shift to state 189
+-- On modifier shift to state 118
+-- On localVariableDeclarationStatement shift to state 191
+-- On localVariableDeclaration shift to state 192
+-- On literal shift to state 96
+-- On leftHandSide shift to state 97
+-- On labeledStatement shift to state 174
+-- On integralType shift to state 41
+-- On integerLiteral shift to state 100
+-- On identifier shift to state 175
+-- On floatingPointType shift to state 42
+-- On fieldAccess shift to state 102
+-- On expressionStatement shift to state 178
+-- On expressionName shift to state 179
+-- On emptyStatement shift to state 180
+-- On decimalNumeral shift to state 105
+-- On decimalIntegerLiteral shift to state 106
+-- On continueStatement shift to state 181
+-- On classDeclaration shift to state 194
+-- On breakStatement shift to state 182
+-- On blockStatement shift to state 197
+-- On block shift to state 183
+-- On assignment shift to state 184
+-- On ambiguousName shift to state 109
+
+State 196:
+block -> LPAR blockStatements RPAR . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL ELSE DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production block -> LPAR blockStatements RPAR 
+-- On VOID reduce production block -> LPAR blockStatements RPAR 
+-- On THIS reduce production block -> LPAR blockStatements RPAR 
+-- On SUPER reduce production block -> LPAR blockStatements RPAR 
+-- On SHORT reduce production block -> LPAR blockStatements RPAR 
+-- On SEMICOLON reduce production block -> LPAR blockStatements RPAR 
+-- On RPAR reduce production block -> LPAR blockStatements RPAR 
+-- On RETURN reduce production block -> LPAR blockStatements RPAR 
+-- On PUBLIC reduce production block -> LPAR blockStatements RPAR 
+-- On NONZERODIGIT reduce production block -> LPAR blockStatements RPAR 
+-- On LT reduce production block -> LPAR blockStatements RPAR 
+-- On LPAR reduce production block -> LPAR blockStatements RPAR 
+-- On LONG reduce production block -> LPAR blockStatements RPAR 
+-- On LBRAC reduce production block -> LPAR blockStatements RPAR 
+-- On INT reduce production block -> LPAR blockStatements RPAR 
+-- On INCR reduce production block -> LPAR blockStatements RPAR 
+-- On IF reduce production block -> LPAR blockStatements RPAR 
+-- On IDENT reduce production block -> LPAR blockStatements RPAR 
+-- On FLOAT reduce production block -> LPAR blockStatements RPAR 
+-- On FINAL reduce production block -> LPAR blockStatements RPAR 
+-- On ELSE reduce production block -> LPAR blockStatements RPAR 
+-- On DOUBLE reduce production block -> LPAR blockStatements RPAR 
+-- On DECR reduce production block -> LPAR blockStatements RPAR 
+-- On CONTINUE reduce production block -> LPAR blockStatements RPAR 
+-- On CLASS reduce production block -> LPAR blockStatements RPAR 
+-- On CHAR reduce production block -> LPAR blockStatements RPAR 
+-- On BYTE reduce production block -> LPAR blockStatements RPAR 
+-- On BREAK reduce production block -> LPAR blockStatements RPAR 
+-- On BOOLEAN reduce production block -> LPAR blockStatements RPAR 
+
+State 197:
+blockStatements -> blockStatements blockStatement . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production blockStatements -> blockStatements blockStatement 
+-- On VOID reduce production blockStatements -> blockStatements blockStatement 
+-- On THIS reduce production blockStatements -> blockStatements blockStatement 
+-- On SUPER reduce production blockStatements -> blockStatements blockStatement 
+-- On SHORT reduce production blockStatements -> blockStatements blockStatement 
+-- On SEMICOLON reduce production blockStatements -> blockStatements blockStatement 
+-- On RPAR reduce production blockStatements -> blockStatements blockStatement 
+-- On RETURN reduce production blockStatements -> blockStatements blockStatement 
+-- On PUBLIC reduce production blockStatements -> blockStatements blockStatement 
+-- On NONZERODIGIT reduce production blockStatements -> blockStatements blockStatement 
+-- On LPAR reduce production blockStatements -> blockStatements blockStatement 
+-- On LONG reduce production blockStatements -> blockStatements blockStatement 
+-- On LBRAC reduce production blockStatements -> blockStatements blockStatement 
+-- On INT reduce production blockStatements -> blockStatements blockStatement 
+-- On INCR reduce production blockStatements -> blockStatements blockStatement 
+-- On IF reduce production blockStatements -> blockStatements blockStatement 
+-- On IDENT reduce production blockStatements -> blockStatements blockStatement 
+-- On FLOAT reduce production blockStatements -> blockStatements blockStatement 
+-- On FINAL reduce production blockStatements -> blockStatements blockStatement 
+-- On DOUBLE reduce production blockStatements -> blockStatements blockStatement 
+-- On DECR reduce production blockStatements -> blockStatements blockStatement 
+-- On CONTINUE reduce production blockStatements -> blockStatements blockStatement 
+-- On CLASS reduce production blockStatements -> blockStatements blockStatement 
+-- On CHAR reduce production blockStatements -> blockStatements blockStatement 
+-- On BYTE reduce production blockStatements -> blockStatements blockStatement 
+-- On BREAK reduce production blockStatements -> blockStatements blockStatement 
+-- On BOOLEAN reduce production blockStatements -> blockStatements blockStatement 
+
+State 198:
+blockStatements -> blockStatement . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production blockStatements -> blockStatement 
+-- On VOID reduce production blockStatements -> blockStatement 
+-- On THIS reduce production blockStatements -> blockStatement 
+-- On SUPER reduce production blockStatements -> blockStatement 
+-- On SHORT reduce production blockStatements -> blockStatement 
+-- On SEMICOLON reduce production blockStatements -> blockStatement 
+-- On RPAR reduce production blockStatements -> blockStatement 
+-- On RETURN reduce production blockStatements -> blockStatement 
+-- On PUBLIC reduce production blockStatements -> blockStatement 
+-- On NONZERODIGIT reduce production blockStatements -> blockStatement 
+-- On LPAR reduce production blockStatements -> blockStatement 
+-- On LONG reduce production blockStatements -> blockStatement 
+-- On LBRAC reduce production blockStatements -> blockStatement 
+-- On INT reduce production blockStatements -> blockStatement 
+-- On INCR reduce production blockStatements -> blockStatement 
+-- On IF reduce production blockStatements -> blockStatement 
+-- On IDENT reduce production blockStatements -> blockStatement 
+-- On FLOAT reduce production blockStatements -> blockStatement 
+-- On FINAL reduce production blockStatements -> blockStatement 
+-- On DOUBLE reduce production blockStatements -> blockStatement 
+-- On DECR reduce production blockStatements -> blockStatement 
+-- On CONTINUE reduce production blockStatements -> blockStatement 
+-- On CLASS reduce production blockStatements -> blockStatement 
+-- On CHAR reduce production blockStatements -> blockStatement 
+-- On BYTE reduce production blockStatements -> blockStatement 
+-- On BREAK reduce production blockStatements -> blockStatement 
+-- On BOOLEAN reduce production blockStatements -> blockStatement 
+
+State 199:
+methodDeclaration -> methodHeader methodBody . [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+-- On VOID reduce production methodDeclaration -> methodHeader methodBody 
+-- On SHORT reduce production methodDeclaration -> methodHeader methodBody 
+-- On SEMICOLON reduce production methodDeclaration -> methodHeader methodBody 
+-- On RPAR reduce production methodDeclaration -> methodHeader methodBody 
+-- On PUBLIC reduce production methodDeclaration -> methodHeader methodBody 
+-- On LT reduce production methodDeclaration -> methodHeader methodBody 
+-- On LONG reduce production methodDeclaration -> methodHeader methodBody 
+-- On INT reduce production methodDeclaration -> methodHeader methodBody 
+-- On IDENT reduce production methodDeclaration -> methodHeader methodBody 
+-- On FLOAT reduce production methodDeclaration -> methodHeader methodBody 
+-- On DOUBLE reduce production methodDeclaration -> methodHeader methodBody 
+-- On CLASS reduce production methodDeclaration -> methodHeader methodBody 
+-- On CHAR reduce production methodDeclaration -> methodHeader methodBody 
+-- On BYTE reduce production methodDeclaration -> methodHeader methodBody 
+-- On BOOLEAN reduce production methodDeclaration -> methodHeader methodBody 
+
+State 200:
+methodBody -> block . [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+-- On VOID reduce production methodBody -> block 
+-- On SHORT reduce production methodBody -> block 
+-- On SEMICOLON reduce production methodBody -> block 
+-- On RPAR reduce production methodBody -> block 
+-- On PUBLIC reduce production methodBody -> block 
+-- On LT reduce production methodBody -> block 
+-- On LONG reduce production methodBody -> block 
+-- On INT reduce production methodBody -> block 
+-- On IDENT reduce production methodBody -> block 
+-- On FLOAT reduce production methodBody -> block 
+-- On DOUBLE reduce production methodBody -> block 
+-- On CLASS reduce production methodBody -> block 
+-- On CHAR reduce production methodBody -> block 
+-- On BYTE reduce production methodBody -> block 
+-- On BOOLEAN reduce production methodBody -> block 
+
+State 201:
+classMemberDeclaration -> methodDeclaration . [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+-- On VOID reduce production classMemberDeclaration -> methodDeclaration 
+-- On SHORT reduce production classMemberDeclaration -> methodDeclaration 
+-- On SEMICOLON reduce production classMemberDeclaration -> methodDeclaration 
+-- On RPAR reduce production classMemberDeclaration -> methodDeclaration 
+-- On PUBLIC reduce production classMemberDeclaration -> methodDeclaration 
+-- On LT reduce production classMemberDeclaration -> methodDeclaration 
+-- On LONG reduce production classMemberDeclaration -> methodDeclaration 
+-- On INT reduce production classMemberDeclaration -> methodDeclaration 
+-- On IDENT reduce production classMemberDeclaration -> methodDeclaration 
+-- On FLOAT reduce production classMemberDeclaration -> methodDeclaration 
+-- On DOUBLE reduce production classMemberDeclaration -> methodDeclaration 
+-- On CLASS reduce production classMemberDeclaration -> methodDeclaration 
+-- On CHAR reduce production classMemberDeclaration -> methodDeclaration 
+-- On BYTE reduce production classMemberDeclaration -> methodDeclaration 
+-- On BOOLEAN reduce production classMemberDeclaration -> methodDeclaration 
+
+State 202:
+fieldDeclaration -> fieldModifiers . myType variableDeclarators SEMICOLON [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+fieldModifiers -> fieldModifiers . fieldModifier [ SHORT PUBLIC LONG INT FLOAT DOUBLE CHAR BYTE BOOLEAN ]
+-- On SHORT shift to state 8
+-- On PUBLIC shift to state 203
+-- On LONG shift to state 19
+-- On INT shift to state 20
+-- On FLOAT shift to state 21
+-- On DOUBLE shift to state 22
+-- On CHAR shift to state 23
+-- On BYTE shift to state 24
+-- On BOOLEAN shift to state 25
+-- On primitiveType shift to state 36
+-- On numericType shift to state 37
+-- On myType shift to state 204
+-- On integralType shift to state 41
+-- On floatingPointType shift to state 42
+-- On fieldModifier shift to state 207
+
+State 203:
+fieldModifier -> PUBLIC . [ SHORT PUBLIC LONG INT FLOAT DOUBLE CHAR BYTE BOOLEAN ]
+-- On SHORT reduce production fieldModifier -> PUBLIC 
+-- On PUBLIC reduce production fieldModifier -> PUBLIC 
+-- On LONG reduce production fieldModifier -> PUBLIC 
+-- On INT reduce production fieldModifier -> PUBLIC 
+-- On FLOAT reduce production fieldModifier -> PUBLIC 
+-- On DOUBLE reduce production fieldModifier -> PUBLIC 
+-- On CHAR reduce production fieldModifier -> PUBLIC 
+-- On BYTE reduce production fieldModifier -> PUBLIC 
+-- On BOOLEAN reduce production fieldModifier -> PUBLIC 
+
+State 204:
+fieldDeclaration -> fieldModifiers myType . variableDeclarators SEMICOLON [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+-- On IDENT shift to state 4
+-- On variableDeclarators shift to state 205
+-- On variableDeclaratorId shift to state 72
+-- On variableDeclarator shift to state 117
+-- On identifier shift to state 40
+
+State 205:
+fieldDeclaration -> fieldModifiers myType variableDeclarators . SEMICOLON [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+variableDeclarators -> variableDeclarators . COMMA variableDeclarator [ SEMICOLON COMMA ]
+-- On SEMICOLON shift to state 206
+-- On COMMA shift to state 71
+
+State 206:
+fieldDeclaration -> fieldModifiers myType variableDeclarators SEMICOLON . [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+-- On VOID reduce production fieldDeclaration -> fieldModifiers myType variableDeclarators SEMICOLON 
+-- On SHORT reduce production fieldDeclaration -> fieldModifiers myType variableDeclarators SEMICOLON 
+-- On SEMICOLON reduce production fieldDeclaration -> fieldModifiers myType variableDeclarators SEMICOLON 
+-- On RPAR reduce production fieldDeclaration -> fieldModifiers myType variableDeclarators SEMICOLON 
+-- On PUBLIC reduce production fieldDeclaration -> fieldModifiers myType variableDeclarators SEMICOLON 
+-- On LT reduce production fieldDeclaration -> fieldModifiers myType variableDeclarators SEMICOLON 
+-- On LONG reduce production fieldDeclaration -> fieldModifiers myType variableDeclarators SEMICOLON 
+-- On INT reduce production fieldDeclaration -> fieldModifiers myType variableDeclarators SEMICOLON 
+-- On IDENT reduce production fieldDeclaration -> fieldModifiers myType variableDeclarators SEMICOLON 
+-- On FLOAT reduce production fieldDeclaration -> fieldModifiers myType variableDeclarators SEMICOLON 
+-- On DOUBLE reduce production fieldDeclaration -> fieldModifiers myType variableDeclarators SEMICOLON 
+-- On CLASS reduce production fieldDeclaration -> fieldModifiers myType variableDeclarators SEMICOLON 
+-- On CHAR reduce production fieldDeclaration -> fieldModifiers myType variableDeclarators SEMICOLON 
+-- On BYTE reduce production fieldDeclaration -> fieldModifiers myType variableDeclarators SEMICOLON 
+-- On BOOLEAN reduce production fieldDeclaration -> fieldModifiers myType variableDeclarators SEMICOLON 
+
+State 207:
+fieldModifiers -> fieldModifiers fieldModifier . [ SHORT PUBLIC LONG INT FLOAT DOUBLE CHAR BYTE BOOLEAN ]
+-- On SHORT reduce production fieldModifiers -> fieldModifiers fieldModifier 
+-- On PUBLIC reduce production fieldModifiers -> fieldModifiers fieldModifier 
+-- On LONG reduce production fieldModifiers -> fieldModifiers fieldModifier 
+-- On INT reduce production fieldModifiers -> fieldModifiers fieldModifier 
+-- On FLOAT reduce production fieldModifiers -> fieldModifiers fieldModifier 
+-- On DOUBLE reduce production fieldModifiers -> fieldModifiers fieldModifier 
+-- On CHAR reduce production fieldModifiers -> fieldModifiers fieldModifier 
+-- On BYTE reduce production fieldModifiers -> fieldModifiers fieldModifier 
+-- On BOOLEAN reduce production fieldModifiers -> fieldModifiers fieldModifier 
+
+State 208:
+fieldModifiers -> fieldModifier . [ SHORT PUBLIC LONG INT FLOAT DOUBLE CHAR BYTE BOOLEAN ]
+-- On SHORT reduce production fieldModifiers -> fieldModifier 
+-- On PUBLIC reduce production fieldModifiers -> fieldModifier 
+-- On LONG reduce production fieldModifiers -> fieldModifier 
+-- On INT reduce production fieldModifiers -> fieldModifier 
+-- On FLOAT reduce production fieldModifiers -> fieldModifier 
+-- On DOUBLE reduce production fieldModifiers -> fieldModifier 
+-- On CHAR reduce production fieldModifiers -> fieldModifier 
+-- On BYTE reduce production fieldModifiers -> fieldModifier 
+-- On BOOLEAN reduce production fieldModifiers -> fieldModifier 
+
+State 209:
+classMemberDeclaration -> fieldDeclaration . [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+-- On VOID reduce production classMemberDeclaration -> fieldDeclaration 
+-- On SHORT reduce production classMemberDeclaration -> fieldDeclaration 
+-- On SEMICOLON reduce production classMemberDeclaration -> fieldDeclaration 
+-- On RPAR reduce production classMemberDeclaration -> fieldDeclaration 
+-- On PUBLIC reduce production classMemberDeclaration -> fieldDeclaration 
+-- On LT reduce production classMemberDeclaration -> fieldDeclaration 
+-- On LONG reduce production classMemberDeclaration -> fieldDeclaration 
+-- On INT reduce production classMemberDeclaration -> fieldDeclaration 
+-- On IDENT reduce production classMemberDeclaration -> fieldDeclaration 
+-- On FLOAT reduce production classMemberDeclaration -> fieldDeclaration 
+-- On DOUBLE reduce production classMemberDeclaration -> fieldDeclaration 
+-- On CLASS reduce production classMemberDeclaration -> fieldDeclaration 
+-- On CHAR reduce production classMemberDeclaration -> fieldDeclaration 
+-- On BYTE reduce production classMemberDeclaration -> fieldDeclaration 
+-- On BOOLEAN reduce production classMemberDeclaration -> fieldDeclaration 
+
+State 210:
+constructorDeclaration -> constructorModifiers . constructorDeclarator constructorBody [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+constructorModifiers -> constructorModifiers . constructorModifier [ PUBLIC LT IDENT ]
+-- On PUBLIC shift to state 211
+-- On LT shift to state 11
+-- On IDENT shift to state 4
+-- On typeParameters shift to state 26
+-- On simpleTypeName shift to state 55
+-- On identifier shift to state 54
+-- On constructorModifier shift to state 212
+-- On constructorDeclarator shift to state 213
+
+State 211:
+constructorModifier -> PUBLIC . [ PUBLIC LT IDENT ]
+-- On PUBLIC reduce production constructorModifier -> PUBLIC 
+-- On LT reduce production constructorModifier -> PUBLIC 
+-- On IDENT reduce production constructorModifier -> PUBLIC 
+
+State 212:
+constructorModifiers -> constructorModifiers constructorModifier . [ PUBLIC LT IDENT ]
+-- On PUBLIC reduce production constructorModifiers -> constructorModifiers constructorModifier 
+-- On LT reduce production constructorModifiers -> constructorModifiers constructorModifier 
+-- On IDENT reduce production constructorModifiers -> constructorModifiers constructorModifier 
+
+State 213:
+constructorDeclaration -> constructorModifiers constructorDeclarator . constructorBody [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+-- On LPAR shift to state 214
+-- On constructorBody shift to state 216
+
+State 214:
+constructorBody -> LPAR . RPAR [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+-- On RPAR shift to state 215
+
+State 215:
+constructorBody -> LPAR RPAR . [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+-- On VOID reduce production constructorBody -> LPAR RPAR 
+-- On SHORT reduce production constructorBody -> LPAR RPAR 
+-- On SEMICOLON reduce production constructorBody -> LPAR RPAR 
+-- On RPAR reduce production constructorBody -> LPAR RPAR 
+-- On PUBLIC reduce production constructorBody -> LPAR RPAR 
+-- On LT reduce production constructorBody -> LPAR RPAR 
+-- On LONG reduce production constructorBody -> LPAR RPAR 
+-- On INT reduce production constructorBody -> LPAR RPAR 
+-- On IDENT reduce production constructorBody -> LPAR RPAR 
+-- On FLOAT reduce production constructorBody -> LPAR RPAR 
+-- On DOUBLE reduce production constructorBody -> LPAR RPAR 
+-- On CLASS reduce production constructorBody -> LPAR RPAR 
+-- On CHAR reduce production constructorBody -> LPAR RPAR 
+-- On BYTE reduce production constructorBody -> LPAR RPAR 
+-- On BOOLEAN reduce production constructorBody -> LPAR RPAR 
+
+State 216:
+constructorDeclaration -> constructorModifiers constructorDeclarator constructorBody . [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+-- On VOID reduce production constructorDeclaration -> constructorModifiers constructorDeclarator constructorBody 
+-- On SHORT reduce production constructorDeclaration -> constructorModifiers constructorDeclarator constructorBody 
+-- On SEMICOLON reduce production constructorDeclaration -> constructorModifiers constructorDeclarator constructorBody 
+-- On RPAR reduce production constructorDeclaration -> constructorModifiers constructorDeclarator constructorBody 
+-- On PUBLIC reduce production constructorDeclaration -> constructorModifiers constructorDeclarator constructorBody 
+-- On LT reduce production constructorDeclaration -> constructorModifiers constructorDeclarator constructorBody 
+-- On LONG reduce production constructorDeclaration -> constructorModifiers constructorDeclarator constructorBody 
+-- On INT reduce production constructorDeclaration -> constructorModifiers constructorDeclarator constructorBody 
+-- On IDENT reduce production constructorDeclaration -> constructorModifiers constructorDeclarator constructorBody 
+-- On FLOAT reduce production constructorDeclaration -> constructorModifiers constructorDeclarator constructorBody 
+-- On DOUBLE reduce production constructorDeclaration -> constructorModifiers constructorDeclarator constructorBody 
+-- On CLASS reduce production constructorDeclaration -> constructorModifiers constructorDeclarator constructorBody 
+-- On CHAR reduce production constructorDeclaration -> constructorModifiers constructorDeclarator constructorBody 
+-- On BYTE reduce production constructorDeclaration -> constructorModifiers constructorDeclarator constructorBody 
+-- On BOOLEAN reduce production constructorDeclaration -> constructorModifiers constructorDeclarator constructorBody 
+
+State 217:
+constructorModifiers -> constructorModifier . [ PUBLIC LT IDENT ]
+-- On PUBLIC reduce production constructorModifiers -> constructorModifier 
+-- On LT reduce production constructorModifiers -> constructorModifier 
+-- On IDENT reduce production constructorModifiers -> constructorModifier 
+
+State 218:
+constructorDeclaration -> constructorDeclarator . constructorBody [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+-- On LPAR shift to state 214
+-- On constructorBody shift to state 219
+
+State 219:
+constructorDeclaration -> constructorDeclarator constructorBody . [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+-- On VOID reduce production constructorDeclaration -> constructorDeclarator constructorBody 
+-- On SHORT reduce production constructorDeclaration -> constructorDeclarator constructorBody 
+-- On SEMICOLON reduce production constructorDeclaration -> constructorDeclarator constructorBody 
+-- On RPAR reduce production constructorDeclaration -> constructorDeclarator constructorBody 
+-- On PUBLIC reduce production constructorDeclaration -> constructorDeclarator constructorBody 
+-- On LT reduce production constructorDeclaration -> constructorDeclarator constructorBody 
+-- On LONG reduce production constructorDeclaration -> constructorDeclarator constructorBody 
+-- On INT reduce production constructorDeclaration -> constructorDeclarator constructorBody 
+-- On IDENT reduce production constructorDeclaration -> constructorDeclarator constructorBody 
+-- On FLOAT reduce production constructorDeclaration -> constructorDeclarator constructorBody 
+-- On DOUBLE reduce production constructorDeclaration -> constructorDeclarator constructorBody 
+-- On CLASS reduce production constructorDeclaration -> constructorDeclarator constructorBody 
+-- On CHAR reduce production constructorDeclaration -> constructorDeclarator constructorBody 
+-- On BYTE reduce production constructorDeclaration -> constructorDeclarator constructorBody 
+-- On BOOLEAN reduce production constructorDeclaration -> constructorDeclarator constructorBody 
+
+State 220:
+classBodyDeclaration -> constructorDeclaration . [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+-- On VOID reduce production classBodyDeclaration -> constructorDeclaration 
+-- On SHORT reduce production classBodyDeclaration -> constructorDeclaration 
+-- On SEMICOLON reduce production classBodyDeclaration -> constructorDeclaration 
+-- On RPAR reduce production classBodyDeclaration -> constructorDeclaration 
+-- On PUBLIC reduce production classBodyDeclaration -> constructorDeclaration 
+-- On LT reduce production classBodyDeclaration -> constructorDeclaration 
+-- On LONG reduce production classBodyDeclaration -> constructorDeclaration 
+-- On INT reduce production classBodyDeclaration -> constructorDeclaration 
+-- On IDENT reduce production classBodyDeclaration -> constructorDeclaration 
+-- On FLOAT reduce production classBodyDeclaration -> constructorDeclaration 
+-- On DOUBLE reduce production classBodyDeclaration -> constructorDeclaration 
+-- On CLASS reduce production classBodyDeclaration -> constructorDeclaration 
+-- On CHAR reduce production classBodyDeclaration -> constructorDeclaration 
+-- On BYTE reduce production classBodyDeclaration -> constructorDeclaration 
+-- On BOOLEAN reduce production classBodyDeclaration -> constructorDeclaration 
+
+State 221:
+classBodyDeclaration -> classMemberDeclaration . [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+-- On VOID reduce production classBodyDeclaration -> classMemberDeclaration 
+-- On SHORT reduce production classBodyDeclaration -> classMemberDeclaration 
+-- On SEMICOLON reduce production classBodyDeclaration -> classMemberDeclaration 
+-- On RPAR reduce production classBodyDeclaration -> classMemberDeclaration 
+-- On PUBLIC reduce production classBodyDeclaration -> classMemberDeclaration 
+-- On LT reduce production classBodyDeclaration -> classMemberDeclaration 
+-- On LONG reduce production classBodyDeclaration -> classMemberDeclaration 
+-- On INT reduce production classBodyDeclaration -> classMemberDeclaration 
+-- On IDENT reduce production classBodyDeclaration -> classMemberDeclaration 
+-- On FLOAT reduce production classBodyDeclaration -> classMemberDeclaration 
+-- On DOUBLE reduce production classBodyDeclaration -> classMemberDeclaration 
+-- On CLASS reduce production classBodyDeclaration -> classMemberDeclaration 
+-- On CHAR reduce production classBodyDeclaration -> classMemberDeclaration 
+-- On BYTE reduce production classBodyDeclaration -> classMemberDeclaration 
+-- On BOOLEAN reduce production classBodyDeclaration -> classMemberDeclaration 
+
+State 222:
+classMemberDeclaration -> classDeclaration . [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+-- On VOID reduce production classMemberDeclaration -> classDeclaration 
+-- On SHORT reduce production classMemberDeclaration -> classDeclaration 
+-- On SEMICOLON reduce production classMemberDeclaration -> classDeclaration 
+-- On RPAR reduce production classMemberDeclaration -> classDeclaration 
+-- On PUBLIC reduce production classMemberDeclaration -> classDeclaration 
+-- On LT reduce production classMemberDeclaration -> classDeclaration 
+-- On LONG reduce production classMemberDeclaration -> classDeclaration 
+-- On INT reduce production classMemberDeclaration -> classDeclaration 
+-- On IDENT reduce production classMemberDeclaration -> classDeclaration 
+-- On FLOAT reduce production classMemberDeclaration -> classDeclaration 
+-- On DOUBLE reduce production classMemberDeclaration -> classDeclaration 
+-- On CLASS reduce production classMemberDeclaration -> classDeclaration 
+-- On CHAR reduce production classMemberDeclaration -> classDeclaration 
+-- On BYTE reduce production classMemberDeclaration -> classDeclaration 
+-- On BOOLEAN reduce production classMemberDeclaration -> classDeclaration 
+
+State 223:
+classBody -> LPAR classBodyDeclarations . RPAR [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL EOF DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+classBodyDeclarations -> classBodyDeclarations . classBodyDeclaration [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+-- On VOID shift to state 7
+-- On SHORT shift to state 8
+-- On SEMICOLON shift to state 9
+-- On RPAR shift to state 224
+-- On PUBLIC shift to state 10
+-- On LT shift to state 11
+-- On LONG shift to state 19
+-- On INT shift to state 20
+-- On IDENT shift to state 4
+-- On FLOAT shift to state 21
+-- On DOUBLE shift to state 22
+-- On CLASS shift to state 3
+-- On CHAR shift to state 23
+-- On BYTE shift to state 24
+-- On BOOLEAN shift to state 25
+-- On typeParameters shift to state 26
+-- On simpleTypeName shift to state 55
+-- On resultType shift to state 60
+-- On primitiveType shift to state 36
+-- On numericType shift to state 37
+-- On normalClassDeclaration shift to state 67
+-- On myType shift to state 68
+-- On modifier shift to state 118
+-- On methodHeader shift to state 122
+-- On methodDeclaration shift to state 201
+-- On integralType shift to state 41
+-- On identifier shift to state 54
+-- On floatingPointType shift to state 42
+-- On fieldModifiers shift to state 202
+-- On fieldModifier shift to state 208
+-- On fieldDeclaration shift to state 209
+-- On constructorModifiers shift to state 210
+-- On constructorModifier shift to state 217
+-- On constructorDeclarator shift to state 218
+-- On constructorDeclaration shift to state 220
+-- On classMemberDeclaration shift to state 221
+-- On classDeclaration shift to state 222
+-- On classBodyDeclaration shift to state 225
+
+State 224:
+classBody -> LPAR classBodyDeclarations RPAR . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL EOF DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On VOID reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On THIS reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On SUPER reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On SHORT reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On SEMICOLON reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On RPAR reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On RETURN reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On PUBLIC reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On NONZERODIGIT reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On LT reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On LPAR reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On LONG reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On LBRAC reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On INT reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On INCR reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On IF reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On IDENT reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On FLOAT reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On FINAL reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On EOF reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On DOUBLE reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On DECR reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On CONTINUE reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On CLASS reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On CHAR reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On BYTE reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On BREAK reduce production classBody -> LPAR classBodyDeclarations RPAR 
+-- On BOOLEAN reduce production classBody -> LPAR classBodyDeclarations RPAR 
+
+State 225:
+classBodyDeclarations -> classBodyDeclarations classBodyDeclaration . [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+-- On VOID reduce production classBodyDeclarations -> classBodyDeclarations classBodyDeclaration 
+-- On SHORT reduce production classBodyDeclarations -> classBodyDeclarations classBodyDeclaration 
+-- On SEMICOLON reduce production classBodyDeclarations -> classBodyDeclarations classBodyDeclaration 
+-- On RPAR reduce production classBodyDeclarations -> classBodyDeclarations classBodyDeclaration 
+-- On PUBLIC reduce production classBodyDeclarations -> classBodyDeclarations classBodyDeclaration 
+-- On LT reduce production classBodyDeclarations -> classBodyDeclarations classBodyDeclaration 
+-- On LONG reduce production classBodyDeclarations -> classBodyDeclarations classBodyDeclaration 
+-- On INT reduce production classBodyDeclarations -> classBodyDeclarations classBodyDeclaration 
+-- On IDENT reduce production classBodyDeclarations -> classBodyDeclarations classBodyDeclaration 
+-- On FLOAT reduce production classBodyDeclarations -> classBodyDeclarations classBodyDeclaration 
+-- On DOUBLE reduce production classBodyDeclarations -> classBodyDeclarations classBodyDeclaration 
+-- On CLASS reduce production classBodyDeclarations -> classBodyDeclarations classBodyDeclaration 
+-- On CHAR reduce production classBodyDeclarations -> classBodyDeclarations classBodyDeclaration 
+-- On BYTE reduce production classBodyDeclarations -> classBodyDeclarations classBodyDeclaration 
+-- On BOOLEAN reduce production classBodyDeclarations -> classBodyDeclarations classBodyDeclaration 
+
+State 226:
+classBodyDeclarations -> classBodyDeclaration . [ VOID SHORT SEMICOLON RPAR PUBLIC LT LONG INT IDENT FLOAT DOUBLE CLASS CHAR BYTE BOOLEAN ]
+-- On VOID reduce production classBodyDeclarations -> classBodyDeclaration 
+-- On SHORT reduce production classBodyDeclarations -> classBodyDeclaration 
+-- On SEMICOLON reduce production classBodyDeclarations -> classBodyDeclaration 
+-- On RPAR reduce production classBodyDeclarations -> classBodyDeclaration 
+-- On PUBLIC reduce production classBodyDeclarations -> classBodyDeclaration 
+-- On LT reduce production classBodyDeclarations -> classBodyDeclaration 
+-- On LONG reduce production classBodyDeclarations -> classBodyDeclaration 
+-- On INT reduce production classBodyDeclarations -> classBodyDeclaration 
+-- On IDENT reduce production classBodyDeclarations -> classBodyDeclaration 
+-- On FLOAT reduce production classBodyDeclarations -> classBodyDeclaration 
+-- On DOUBLE reduce production classBodyDeclarations -> classBodyDeclaration 
+-- On CLASS reduce production classBodyDeclarations -> classBodyDeclaration 
+-- On CHAR reduce production classBodyDeclarations -> classBodyDeclaration 
+-- On BYTE reduce production classBodyDeclarations -> classBodyDeclaration 
+-- On BOOLEAN reduce production classBodyDeclarations -> classBodyDeclaration 
+
+State 227:
+normalClassDeclaration -> CLASS identifier classBody . [ ZERODIGIT VOID THIS SUPER SHORT SEMICOLON RPAR RETURN PUBLIC NONZERODIGIT LT LPAR LONG LBRAC INT INCR IF IDENT FLOAT FINAL EOF DOUBLE DECR CONTINUE CLASS CHAR BYTE BREAK BOOLEAN ]
+-- On ZERODIGIT reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On VOID reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On THIS reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On SUPER reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On SHORT reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On SEMICOLON reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On RPAR reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On RETURN reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On PUBLIC reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On NONZERODIGIT reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On LT reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On LPAR reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On LONG reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On LBRAC reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On INT reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On INCR reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On IF reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On IDENT reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On FLOAT reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On FINAL reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On EOF reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On DOUBLE reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On DECR reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On CONTINUE reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On CLASS reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On CHAR reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On BYTE reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On BREAK reduce production normalClassDeclaration -> CLASS identifier classBody 
+-- On BOOLEAN reduce production normalClassDeclaration -> CLASS identifier classBody 
+
+State 228:
+compilationUnit -> typeDeclarations . EOF [ # ]
+typeDeclarations -> typeDeclarations . typeDeclaration [ SEMICOLON PUBLIC EOF CLASS ]
+-- On SEMICOLON shift to state 1
+-- On PUBLIC shift to state 2
+-- On EOF shift to state 229
+-- On CLASS shift to state 3
+-- On typeDeclaration shift to state 230
+-- On normalClassDeclaration shift to state 67
+-- On modifier shift to state 118
+-- On classDeclaration shift to state 231
+
+State 229:
+compilationUnit -> typeDeclarations EOF . [ # ]
+-- On # reduce production compilationUnit -> typeDeclarations EOF 
+
+State 230:
+typeDeclarations -> typeDeclarations typeDeclaration . [ SEMICOLON PUBLIC EOF CLASS ]
+-- On SEMICOLON reduce production typeDeclarations -> typeDeclarations typeDeclaration 
+-- On PUBLIC reduce production typeDeclarations -> typeDeclarations typeDeclaration 
+-- On EOF reduce production typeDeclarations -> typeDeclarations typeDeclaration 
+-- On CLASS reduce production typeDeclarations -> typeDeclarations typeDeclaration 
+
+State 231:
+typeDeclaration -> classDeclaration . [ SEMICOLON PUBLIC EOF CLASS ]
+-- On SEMICOLON reduce production typeDeclaration -> classDeclaration 
+-- On PUBLIC reduce production typeDeclaration -> classDeclaration 
+-- On EOF reduce production typeDeclaration -> classDeclaration 
+-- On CLASS reduce production typeDeclaration -> classDeclaration 
+
+State 232:
+typeDeclarations -> typeDeclaration . [ SEMICOLON PUBLIC EOF CLASS ]
+-- On SEMICOLON reduce production typeDeclarations -> typeDeclaration 
+-- On PUBLIC reduce production typeDeclarations -> typeDeclaration 
+-- On EOF reduce production typeDeclarations -> typeDeclaration 
+-- On CLASS reduce production typeDeclarations -> typeDeclaration 
+
+State 233:
+compilationUnit' -> compilationUnit . [ # ]
+-- On # accept compilationUnit
+
