@@ -2,6 +2,11 @@ package tutu.titi.toto;
 
 class I {}
 
+class I {}
+
+class I {}
+
+/*
 public class A {
     Int a1 = 1;
     int[] a = { 3,4,5 };
@@ -52,4 +57,4 @@ abstract class B extends C {
     Int matt4() { this.ab; }
 }
 static private class C extends A {}
-
+*/
