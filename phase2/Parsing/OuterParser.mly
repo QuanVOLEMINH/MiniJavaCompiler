@@ -92,13 +92,17 @@ classOrInterfaceDeclaration:
     | Some t -> t in
   let atts, inits, meths, consts, types = separate cl in
   id , Class {
-           cparent = extends;
-           cattributes = atts;
-           cinits = inits;
-           cconsts = consts;
-           cmethods = meths;
-           ctypes = types;
-           cloc = Location.none;
+          cid = "";
+          cname = "";
+          cscope = [];
+          cmodifiers = [];
+          cparent = extends;
+          cattributes = atts;
+          cinits = inits;
+          cconsts = consts;
+          cmethods = meths;
+          ctypes = types;
+          cloc = Location.none;
          }
     }
   | INTERFACE id = IDENTIFIER ext = option(preceded(EXTENDS,separated_list(COMMA,classOrInterfaceType))) cl=body(interfaceContent* ) {

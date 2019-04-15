@@ -149,6 +149,10 @@ type astconst = {
   }
 
 and astclass = {
+    mutable cid:string;
+    mutable cname:string;
+    mutable cscope: astclass list;
+    mutable cmodifiers: modifier list;
     cparent : Type.ref_type;
     cattributes : astattribute list;
     cinits : initial list;
