@@ -6,8 +6,8 @@ let make_word_parser _ _ =
     | [] -> [], []
     | kw :: t ->
        let rest_lex, rest_yacc = build_lex_yacc t in
-       let lex = Printf.sprintf "\"%s\", %s ;" kw (String.uppercase kw) in
-       let yacc = "%token "^(String.uppercase kw) in
+       let lex = Printf.sprintf "\"%s\", %s ;" kw (String.uppercase_ascii kw) in
+       let yacc = "%token "^(String.uppercase_ascii kw) in
        lex::rest_lex, yacc::rest_yacc in
   let lex_list, yacc_list = build_lex_yacc kw_list in
   let kw_str =
