@@ -5,7 +5,6 @@ let execute lexbuf verbose =
     let ast = compilationUnit Lexer.token lexbuf in
     print_endline "successfull parsing";
     let tp = Typing.type_program ast in
-    Typing.print_type_program tp;
     if verbose then AST.print_program ast 
   with 
     | Error ->

@@ -1,39 +1,22 @@
 open AST
 
-type method_info = {
-  return_type : Type.t;
-  args : argument list
-}
+let rec get_classes (type_list : AST.asttype list): AST.astclass list = 
+  []
 
-type class_info = {
-  parent : Type.ref_type;
-  methods : (string, method_info) Hashtbl.t;
-  constructors : (string, method_info) Hashtbl.t;
-  attributes : (string, Type.t) Hashtbl.t;
-}
+let rec add_package (package_name: AST.qualified_name) (list_classes: AST.astclass list) = 
+  []
 
-type global = {
-  classes : (string, class_info) Hashtbl.t ;
-  mutable current : string
-}
-
-type scope = {
-  return_type: Type.t;
-  vars: (string, Type.t) Hashtbl.t
-}
-
-let type_val v =
-  match v with
-  | Int i -> Some(Type.Primitive(Type.Int))
-  | Float f -> Some(Type.Primitive(Type.Float))
-  | Char c -> Some(Type.Primitive(Type.Char))
-  | String s -> Some(Type.Ref({ tpath = []; tid = "String" }))
-  | Boolean b -> Some(Type.Primitive(Type.Boolean))
-  | Null -> None
+let get_package (package_name : AST.qualified_name option) (list_classes: AST.astclass list) : AST.astclass list =
+  match package_name with
+  | None -> list_classes
+  | Some pn -> (add_package pn list_classes)
 
 
-let type_program tp = let global = { classes = Hashtbl.create 10; current = "" } in 
-  print_endline "ok"
+let get_program_info (package_name : AST.qualified_name option) (list_classes : AST.astclass list) : AST.astclass list =
+  let classes = get_package package_name list_classes in
+  classes
 
-let print_type_program tp =
-  print_endline "OK"
+
+let type_program (program : AST.t) = 
+  let classes = get_program_info (program.package) (get_classes program.type_list) in
+  program
