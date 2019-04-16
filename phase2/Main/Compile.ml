@@ -8,6 +8,7 @@ let execute lexbuf verbose =
     Typing.typage ast;
     print_endline "FIN DE TYPAGE"
   with 
+    | Typing.Class_exist class_name  -> print_endline ("Class "^class_name^" already exist")
     | Error ->
       print_string "Syntax error: ";
       Location.print (Location.curr lexbuf)

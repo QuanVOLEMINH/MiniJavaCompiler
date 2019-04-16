@@ -1,4 +1,7 @@
-The minijavac compiler.
+# The minijavac compiler.
+
+## [THIS POST](https://stackoverflow.com/questions/13188750/type-checking-in-compilers#) may help!!
+
 
 A compilation project for Third year students of Telecom Bretagne.
 
@@ -26,3 +29,4 @@ contains a remaining conflict: a conflict between expression and
 declaration of variable in statements that could be solved at the
 price of a much more complex grammar... Here the behavior of choosing
 shift should be ok.
+

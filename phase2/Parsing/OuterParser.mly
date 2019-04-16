@@ -88,12 +88,12 @@ classOrInterfaceDeclaration:
 %public classDeclaration:
   | CLASS id = IDENTIFIER ext = option(preceded(EXTENDS,classOrInterfaceType)) option(preceded(IMPLEMENTS,separated_list(COMMA,classOrInterfaceType))) cl=body(classContent* ) {
   let extends = match ext with
-    | None -> object_type
+    | None -> object_type (* default parent class Object*)
     | Some t -> t in
   let atts, inits, meths, consts, types = separate cl in
   id , Class {
-           cparent = extends;
-           cattributes = atts;
+           cparent = extends; (* parents classes info *)
+           cattributes = atts;  
            cinits = inits;
            cconsts = consts;
            cmethods = meths;
