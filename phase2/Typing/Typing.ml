@@ -1,13 +1,45 @@
-open AST
+exception Invalid_Inheritance of string
 
-let rec get_classes (type_list: AST.asttype list): AST.astclass list = 
-    match type_list with
-    | [] -> []
+let rec inlist e l =
+  match l with
+  | [] -> false
+  | hd::tl -> if hd = e then true else inlist e tl
+
+let rec searchClass id (classesScope: AST.asttype list) = 
+  match classesScope with
+  | [] -> raise (Invalid_Inheritance("Class "^id^" not found."))
+  | hd::tl -> (
+    if hd.id = id then hd
+    else searchClass id tl
+  )
+ 
+let checkModifiers (modifiers: AST.modifier list) = 
+  print_endline("To check modifiers")
+
+let rec checkClassesDependencies (c: AST.asttype) (classesScope: AST.asttype list) id_list = 
+  if inlist c.id id_list then print_endline("to check recursive_inherit")
+  else 
+    match c.info with 
+    | Class cl -> ( 
+        if cl.cparent.tid = "Object" then () 
+        else checkClassesDependencies (searchClass cl.cparent.tid classesScope) classesScope (c.id::id_list)
+      )
+    | Inter -> ()
+
+let rec checkClasses classes classesScope =
+  match classes with
+  | [] -> ()
+  | hd::tl -> checkClassesDependencies hd classesScope []; checkClasses tl classesScope 
+
+let rec get_classes (classes: AST.asttype list) = 
+    match classes with
+    | [] -> ([], [])
     | hd::tl -> (
-        let c = get_classes tl in 
+        checkModifiers hd.modifiers;
+        let c, i = get_classes tl in 
         match hd.info with
-        | Class cl ->  cl.cname <- hd.id; cl.cmodifiers <- hd.modifiers; cl::c
-        | Inter ->  c
+        | Class cl -> (hd::c, i)
+        | Inter -> (c, hd::i)
       )
 
   (* package_name is a list of strings *)
@@ -57,6 +89,9 @@ let get_program_info (package_name: AST.qualified_name option) (list_classes: AS
 
 
 let type_program (program: AST.t) = 
-  let classes = get_program_info (program.package) (get_classes program.type_list) in
+  (* let classes = get_program_info (program.package) (get_classes program.type_list) in
   List.iter (fun t -> AST.print_type "===" t) program.type_list;
-  program
+  program *)
+  let classes, interfaces = get_classes program.type_list in
+  List.iter (fun c -> AST.print_type "*--*" c) classes;
+  checkClasses classes classes

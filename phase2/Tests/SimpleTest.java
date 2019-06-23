@@ -1,8 +1,10 @@
 package Tests;
 
-class A {
+class A extends B {
 
-	
+	A () {
+
+	}
 	int a(String l[]) {
 		if(true){
 			int a = 1;
@@ -14,3 +16,4 @@ class A {
 
 }
 
+class B {}
