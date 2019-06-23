@@ -6,40 +6,36 @@ let rec inlist e l =
   | [] -> false
   | hd::tl -> if hd = e then true else inlist e tl
 
-let rec searchClass id (classesScope: AST.asttype list) = 
+let rec search_class id (classesScope: AST.astclass list) = 
   match classesScope with
   | [] -> raise (Invalid_Inheritance("Class "^id^" not found."))
   | hd::tl -> (
-    if hd.id = id then hd
-    else searchClass id tl
+    if hd.cid = id then hd
+    else search_class id tl
   )
  
-let checkModifiers (modifiers: AST.modifier list) = 
+let check_modifiers (modifiers: AST.modifier list) = 
   print_endline("To check modifiers")
 
-let rec checkClassesDependencies (c: AST.asttype) (classesScope: AST.asttype list) id_list = 
-  if inlist c.id id_list then raise(Recursive_Inheritance("Class "^c.id^" inherits recursively."))
+let rec check_classes_dependencies (c: AST.astclass) (classesScope: AST.astclass list) (id_list: string list) = 
+  if inlist c.cid id_list then raise(Recursive_Inheritance("Class "^c.cid^" inherits recursively."))
   else 
-    match c.info with 
-    | Class cl -> ( 
-        if cl.cparent.tid = "Object" then () 
-        else checkClassesDependencies (searchClass cl.cparent.tid classesScope) classesScope (c.id::id_list)
-      )
-    | Inter -> ()
+    if c.cparent.tid = "Object" then () 
+    else check_classes_dependencies (search_class c.cparent.tid classesScope) classesScope (c.cid::id_list)
 
-let rec checkClasses classes classesScope =
+let rec check_classes func classes classesScope =
   match classes with
   | [] -> ()
-  | hd::tl -> checkClassesDependencies hd classesScope []; checkClasses tl classesScope 
+  | hd::tl -> func hd classesScope []; check_classes func tl classesScope 
 
 let rec get_classes (classes: AST.asttype list) = 
     match classes with
     | [] -> ([], [])
     | hd::tl -> (
-        checkModifiers hd.modifiers;
+        check_modifiers hd.modifiers;
         let c, i = get_classes tl in 
         match hd.info with
-        | Class cl -> (hd::c, i)
+        | Class cl -> cl.cid <- hd.id; (cl::c, i)
         | Inter -> (c, hd::i)
       )
 
@@ -94,4 +90,4 @@ let type_program (program: AST.t) =
   program *)
   let classes, interfaces = get_classes program.type_list in
   (* List.iter (fun c -> AST.print_type "*--*" c) classes; *)
-  checkClasses classes classes
+  check_classes check_classes_dependencies classes classes
