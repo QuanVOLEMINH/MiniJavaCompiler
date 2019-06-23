@@ -2,13 +2,13 @@ package tutu.titi.toto;
 
 class I {}
 
-// public class A {
-//     Int a1 = 1;
-//     int[] a = { 3,4,5 };
-//     Bool a2 = false;
-//     String a6 = "jsdjkndjk\njdsdjkf";
-// }
-abstract class B extends C {
+public class A extends B {
+    Int a1 = 1;
+    int[] a = { 3,4,5 };
+    Bool a2 = false;
+    String a6 = "jsdjkndjk\njdsdjkf";
+}
+abstract class B extends A {
     B() { super(); }
     private A mthis () throws tuty.A, tre.tr.b {
 	int a, b;
@@ -51,5 +51,4 @@ abstract class B extends C {
 
     Int matt4() { this.ab; }
 }
-static private class C extends A {}
 

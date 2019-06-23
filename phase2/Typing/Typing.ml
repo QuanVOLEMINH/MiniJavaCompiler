@@ -1,4 +1,5 @@
 exception Invalid_Inheritance of string
+exception Recursive_Inheritance of string
 
 let rec inlist e l =
   match l with
@@ -17,7 +18,7 @@ let checkModifiers (modifiers: AST.modifier list) =
   print_endline("To check modifiers")
 
 let rec checkClassesDependencies (c: AST.asttype) (classesScope: AST.asttype list) id_list = 
-  if inlist c.id id_list then print_endline("to check recursive_inherit")
+  if inlist c.id id_list then raise(Recursive_Inheritance("Class "^c.id^" inherits recursively."))
   else 
     match c.info with 
     | Class cl -> ( 
@@ -42,7 +43,6 @@ let rec get_classes (classes: AST.asttype list) =
         | Inter -> (c, hd::i)
       )
 
-  (* package_name is a list of strings *)
 let rec add_package (package_name: AST.qualified_name) (list_classes: AST.astclass list) (id: string) = 
   match package_name with
   | [] -> []
@@ -93,5 +93,5 @@ let type_program (program: AST.t) =
   List.iter (fun t -> AST.print_type "===" t) program.type_list;
   program *)
   let classes, interfaces = get_classes program.type_list in
-  List.iter (fun c -> AST.print_type "*--*" c) classes;
+  (* List.iter (fun c -> AST.print_type "*--*" c) classes; *)
   checkClasses classes classes
