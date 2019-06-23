@@ -1,6 +1,6 @@
 open AST
 
-let rec get_classes (type_list : AST.asttype list): AST.astclass list = 
+let rec get_classes (type_list: AST.asttype list): AST.astclass list = 
     match type_list with
     | [] -> []
     | hd::tl -> (
@@ -44,18 +44,19 @@ let rec add_package (package_name: AST.qualified_name) (list_classes: AST.astcla
         AST.cloc = Location.none;
       }]
 
-let get_package (package_name : AST.qualified_name option) (list_classes: AST.astclass list) : AST.astclass list =
+let get_package (package_name: AST.qualified_name option) (list_classes: AST.astclass list): AST.astclass list =
   match package_name with
   | None -> list_classes
   | Some pn -> (add_package pn list_classes "")@list_classes
 
 
-let get_program_info (package_name : AST.qualified_name option) (list_classes : AST.astclass list) : AST.astclass list =
+let get_program_info (package_name: AST.qualified_name option) (list_classes: AST.astclass list): AST.astclass list =
   let classes = get_package package_name list_classes in
   List.iter (fun c -> AST.print_class "*--*" c) classes;
   classes
 
 
-let type_program (program : AST.t) = 
+let type_program (program: AST.t) = 
   let classes = get_program_info (program.package) (get_classes program.type_list) in
+  List.iter (fun t -> AST.print_type "===" t) program.type_list;
   program

@@ -84,7 +84,7 @@ type expression_desc =
 and expression = 
     {
       edesc : expression_desc;
-      (* eloc : Location.t; *)
+      eloc : Location.t;
       mutable etype : Type.t option;
     }
 
@@ -110,7 +110,7 @@ type astattribute = {
       aname : string;
       atype : Type.t;
       adefault : expression option;
-      (*      aloc : Location.t;*)
+      aloc : Location.t;
     }
       
 
@@ -137,7 +137,7 @@ type astmethod = {
     margstype : argument list;
     mthrows : Type.ref_type list;
     mbody : statement list;
-    (*      mloc : Location.t;*)
+    mloc : Location.t;
   }
 type astconst = {
     mutable cmodifiers : modifier list;
@@ -145,7 +145,7 @@ type astconst = {
     cargstype : argument list;
     cthrows : Type.ref_type list;
     cbody : statement list;
-    (*      mloc : Location.t;*)
+    mloc : Location.t;
   }
 
 and astclass = {

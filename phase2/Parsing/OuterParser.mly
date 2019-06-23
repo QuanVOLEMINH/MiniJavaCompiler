@@ -1,7 +1,8 @@
 %{
     open AST
     open Type
-
+    open Location
+    
     let rec separate = function
       | [] -> [], [], [], [], []
       | `Initializer(i) :: t -> let atts, inits, meths, consts, types = separate t in atts, i::inits, meths, consts, types
@@ -102,7 +103,7 @@ classOrInterfaceDeclaration:
           cconsts = consts;
           cmethods = meths;
           ctypes = types;
-          cloc = Location.none;
+          cloc = Location.symbol_loc $startpos $endpos;
          }
     }
   | INTERFACE id = IDENTIFIER ext = option(preceded(EXTENDS,separated_list(COMMA,classOrInterfaceType))) cl=body(interfaceContent* ) {
@@ -145,22 +146,22 @@ interfaceContent:
     
 memberDecl:
   | t=aType vars=separated_nonempty_list(COMMA,variableDeclarator) SEMI {
-        `AttList (List.map (fun (id,init) -> { amodifiers = [] ; atype = t ; aname = id ; adefault = init }) vars)
+        `AttList (List.map (fun (id,init,pos) -> { amodifiers = [] ; atype = t ; aname = id ; adefault = init ; aloc=pos }) vars)
     }
   | VOID id=IDENTIFIER pl=paren_comma(formalParameter) el=loption(throws) mb=block {
-        `Meth { mmodifiers = [] ; mreturntype = Type.Void ; mname = id ; margstype=pl ; mthrows =el ; mbody=mb }
+        `Meth { mmodifiers = [] ; mreturntype = Type.Void ; mname = id ; margstype=pl ; mthrows =el ; mbody=mb ; mloc=Location.symbol_loc $startpos $endpos }
     }
   | r=aType id=IDENTIFIER pl=paren_comma(formalParameter) el=loption(throws) mb=block {
-        `Meth { mmodifiers = [] ; mreturntype = r ; mname = id ; margstype=pl ; mthrows =el ; mbody=mb }
+        `Meth { mmodifiers = [] ; mreturntype = r ; mname = id ; margstype=pl ; mthrows =el ; mbody=mb ; mloc=Location.symbol_loc $startpos $endpos }
     }
   | VOID id=IDENTIFIER pl=paren_comma(formalParameter) el=loption(throws) SEMI {
-        `Meth { mmodifiers = [] ; mreturntype = Type.Void ; mname = id ; margstype=pl ; mthrows =el ; mbody=[] }
+        `Meth { mmodifiers = [] ; mreturntype = Type.Void ; mname = id ; margstype=pl ; mthrows =el ; mbody=[] ; mloc=Location.symbol_loc $startpos $endpos }
     }
   | r=aType id=IDENTIFIER pl=paren_comma(formalParameter) el=loption(throws) SEMI {
-        `Meth { mmodifiers = [] ; mreturntype = r ; mname = id ; margstype=pl ; mthrows =el ; mbody=[] }
+        `Meth { mmodifiers = [] ; mreturntype = r ; mname = id ; margstype=pl ; mthrows =el ; mbody=[]; mloc=Location.symbol_loc $startpos $endpos }
     }
   | id=IDENTIFIER pl=paren_comma(formalParameter) el=loption(throws) mb=block {
-        `Const { cmodifiers = [] ; cname = id ; cargstype=pl ; cthrows =el ; cbody=mb }
+        `Const { cmodifiers = [] ; cname = id ; cargstype=pl ; cthrows =el ; cbody=mb ; mloc=Location.symbol_loc $startpos $endpos }
     }
   | c = classDeclaration {
        let id, info = c in

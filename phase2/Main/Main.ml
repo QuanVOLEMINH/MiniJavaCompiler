@@ -24,7 +24,7 @@ let compile str =
 (*
     print_endline "opening file";
  *)
-    Compile.execute lexbuf !verbose;
+    let compiled_ast = Compile.execute lexbuf !verbose in
     close_in (input_file)
   with Sys_error s ->
     print_endline ("Can't find file '" ^ file ^ "'")
