@@ -1,27 +1,11 @@
+open TypingHelper
+
 exception Invalid_Inheritance of string
 exception Recursive_Inheritance of string
 
-let rec inlist e l =
-  match l with
-  | [] -> false
-  | hd::tl -> if hd = e then true else inlist e tl
-
-let rec search_class id (classesScope: AST.astclass list) = 
-  match classesScope with
-  | [] -> raise (Invalid_Inheritance("Class "^id^" not found."))
-  | hd::tl -> (
-    if hd.cid = id then hd
-    else search_class id tl
-  )
  
 let check_modifiers (modifiers: AST.modifier list) = 
   print_endline("To check modifiers")
-
-let rec check_classes_dependencies (c: AST.astclass) (classesScope: AST.astclass list) (id_list: string list) = 
-  if inlist c.cid id_list then raise(Recursive_Inheritance("Class "^c.cid^" inherits recursively."))
-  else 
-    if c.cparent.tid = "Object" then () 
-    else check_classes_dependencies (search_class c.cparent.tid classesScope) classesScope (c.cid::id_list)
 
 let rec check_classes func classes classesScope =
   match classes with
@@ -33,12 +17,39 @@ let rec get_classes (classes: AST.asttype list) =
     | [] -> ([], [])
     | hd::tl -> (
         check_modifiers hd.modifiers;
-        let c, i = get_classes tl in 
+        let classes, interfaces = get_classes tl in 
         match hd.info with
-        | Class cl -> cl.cid <- hd.id; (cl::c, i)
-        | Inter -> (c, hd::i)
+        | Class cl -> cl.cid <- hd.id; (cl::classes, interfaces)
+        | Inter -> (classes, hd::interfaces)
       )
 
+let rec search_class (c: Type.ref_type) (classesScope: AST.astclass list): AST.astclass = 
+  match classesScope with
+  | [] -> raise (Invalid_Inheritance("Class "^(join_list c.tpath ".")^"."^c.tid^" not found."))
+  | hd::tl -> (
+    match c.tpath with
+    | [] -> (
+      if hd.cid=c.tid then hd
+      else search_class c tl
+    )
+    | elem::rest -> (
+      if hd.cid=elem then (
+        let classes, interfaces = get_classes hd.ctypes in
+        search_class { tpath=rest; tid=c.tid } classes
+      )
+      else search_class c tl
+    )
+  )
+
+let rec check_classes_dependencies (c: AST.astclass) (classesScope: AST.astclass list) (id_list: string list) = 
+  if inlist c.cid id_list then raise(Recursive_Inheritance("Class "^c.cid^" inherits recursively."))
+  else 
+    if c.cparent.tid = "Object" then () 
+    else check_classes_dependencies (search_class c.cparent classesScope) classesScope (c.cid::id_list)
+
+let rec check_inner_classes (c: AST.astclass) (classesScope: AST.astclass list) (id_list: string list) = 
+  []
+  
 let rec add_package (package_name: AST.qualified_name) (list_classes: AST.astclass list) (id: string) = 
   match package_name with
   | [] -> []
@@ -90,4 +101,5 @@ let type_program (program: AST.t) =
   program *)
   let classes, interfaces = get_classes program.type_list in
   (* List.iter (fun c -> AST.print_type "*--*" c) classes; *)
-  check_classes check_classes_dependencies classes classes
+  check_classes check_classes_dependencies classes classes;
+  check_classes check_inner_classes classes classes
