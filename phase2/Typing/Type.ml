@@ -20,7 +20,8 @@ type t =
   | Ref of ref_type
 
 let object_type = { tpath = [] ; tid = "Object" }
-	     
+let class_type = { tpath = [] ; tid = "Class" }
+
 let rec array_param = function
   | 0 -> ""
   | n -> "[]"^(array_param (n-1))

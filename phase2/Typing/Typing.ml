@@ -105,15 +105,39 @@ let get_package_info (ast : AST.t): string =
     | Some packageNameList -> join_list packageNameList "."
 
 let get_program_info (packageName: AST.qualified_name option) (classes: AST.astclass list): AST.astclass list =
-  let classes = get_package packageName classes in
-  classes
+  let classesList = get_package packageName classes in
+
+	let objectClass = {		
+		  AST.cid="Object";	
+      AST.cname="Object";	
+      AST.cscope = [];
+      AST.cmodifiers = [AST.Public];
+      AST.cparent = { tpath=[]; tid="Object" } ;
+      AST.cattributes = [
+            {
+                amodifiers = [AST.Static];
+                aname = "class";
+                atype = Type.Ref Type.class_type;
+                adefault = None;
+                aloc = Location.none;
+            }
+        ];
+      AST.cinits = [];
+      AST.cconsts = [];
+      AST.cmethods = [];
+      AST.ctypes = [];	
+      AST.cloc = Location.none;
+    } in 
+  objectClass.cscope<-[objectClass];
+  objectClass::classesList
+
 
 
 
 (* starting point *)
 let type_program (program: AST.t) = 
   let classes =  get_program_info (program.package) (get_classes program.type_list) in
-
+  List.iter (fun c -> AST.print_class "*--*" c) classes;
   check_classes classes;
   program
 
