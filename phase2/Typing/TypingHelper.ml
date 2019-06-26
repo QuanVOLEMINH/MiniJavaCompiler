@@ -9,3 +9,7 @@ let rec join_list (l: string list) (sign: string) : string =
   | [] -> ""
   | hd::[] -> hd
   | hd::tl -> hd^sign^(join_list tl sign)
+
+
+let print_class_name (c: AST.astclass) = 
+	print_endline (c.cname)

@@ -20,7 +20,7 @@ let rec get_classes (classes: AST.asttype list) =
       )
 
 let rec search_class (c: Type.ref_type) (classesScope: AST.astclass list): AST.astclass =
-  print_string ((join_list c.tpath ".")^"."^c.tid^" -> ");
+  (* print_endline ((join_list c.tpath ".")^"."^c.tid^" -> "); *)
   match classesScope with
   | [] -> raise (Invalid_Inheritance("Class "^(join_list c.tpath ".")^"."^c.tid^" not found."))
   | hd::tl -> (
@@ -39,6 +39,27 @@ let rec search_class (c: Type.ref_type) (classesScope: AST.astclass list): AST.a
       else search_class c tl
     )
   )
+
+let rec get_scopes (cid: string) (classes: AST.astclass list) (classesScope:AST.astclass list)  = 
+  let fill_scope = add_scope cid classesScope in
+  List.map fill_scope classes
+
+and add_scope (cid: string) (classesScope: AST.astclass list) (cl: AST.astclass) =
+  print_endline ("add scope: "^cl.cid^"--"^cl.cname);
+  if(cl.cid="") then (
+    let cls = get_classes cl.ctypes in
+    print_endline("--- Inner class of class "^cl.cname);
+    List.map print_class_name cls;
+    print_endline("---");
+    print_endline("--- Types of class "^cl.cname);
+    List.map (AST.print_type ("   ")) cl.ctypes;
+    print_endline("---");
+    cl.cid<-cid^"."^cl.cname;
+    cl.cscope<-(cls@classesScope);
+    get_scopes cl.cid cls (cls@classesScope);
+    cl
+  )
+  else cl
 
 let rec check_classes_dependencies (c: AST.astclass) (id_list: string list) = 
   if inlist c.cid id_list then raise(Recursive_Inheritance("Class "^c.cid^" inherits recursively."))
@@ -137,7 +158,8 @@ let get_program_info (packageName: AST.qualified_name option) (classes: AST.astc
 (* starting point *)
 let type_program (program: AST.t) = 
   let classes =  get_program_info (program.package) (get_classes program.type_list) in
-  List.iter (fun c -> AST.print_class "*--*" c) classes;
+  (* List.iter (fun c -> print_class_name c) classes; *)
+  get_scopes (get_package_info program) classes classes;
   check_classes classes;
   program
 
