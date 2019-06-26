@@ -127,30 +127,7 @@ let get_package_info (ast : AST.t): string =
 
 let get_program_info (packageName: AST.qualified_name option) (classes: AST.astclass list): AST.astclass list =
   let classesList = get_package packageName classes in
-
-	let objectClass = {		
-		  AST.cid="Object";	
-      AST.cname="Object";	
-      AST.cscope = [];
-      AST.cmodifiers = [AST.Public];
-      AST.cparent = { tpath=[]; tid="Object" } ;
-      AST.cattributes = [
-            {
-                amodifiers = [AST.Static];
-                aname = "class";
-                atype = Type.Ref Type.class_type;
-                adefault = None;
-                aloc = Location.none;
-            }
-        ];
-      AST.cinits = [];
-      AST.cconsts = [];
-      AST.cmethods = [];
-      AST.ctypes = [];	
-      AST.cloc = Location.none;
-    } in 
-  objectClass.cscope<-[objectClass];
-  objectClass::classesList
+  Object.objectClass::classesList
 
 
 
