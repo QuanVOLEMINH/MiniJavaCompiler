@@ -12,7 +12,7 @@ let rec get_classes (innerClasses: AST.asttype list) =
     | hd::tl -> (
         let cls = get_classes tl in 
         match hd.info with
-        | Class cl -> cl.cname <- hd.id; cl::cls
+        | Class cl -> cl.cname <- hd.id; cl.cmodifiers <- hd.modifiers; cl::cls
         | Inter -> cls
       )
 
@@ -112,17 +112,17 @@ let rec check_dup_modifiers (modifiers: AST.modifier list) =
   match modifiers with
   | [] -> ()
   | hd::tl -> (
-    if inlist hd tl then raise (DuplicateModifier("Duplicate modifier: "));
+    if inlist hd tl then raise (DuplicateModifier("Duplicate modifier: "^(AST.stringOf_modifier hd)));
     check_dup_modifiers tl
   )
 
 let rec check_multi_modifiers (modifiers: AST.modifier list) =
   let ms = [AST.Private; AST.Public; AST.Protected] in
-  let res = List.filter (fun x -> (x=AST.Public || x=AST.Protected || x=AST.Private);) modifiers in
-  if List.length res > 1 then raise (MultiModifiers ("Invalid multiple modifiers"))
+  let res = List.filter (fun x -> (inlist x ms)) modifiers in
+  if List.length res > 1 then raise (MultiModifiers ("Invalid multiple modifiers: "^(join_list (List.map AST.stringOf_modifier res) " & ")))
   
 let check_modifiers (modifiers: AST.modifier list) = 
-  List.map (fun m -> (print_endline (AST.stringOf_modifier m))) modifiers;
+  (* List.map (fun m -> (print_endline (AST.stringOf_modifier m))) modifiers; *)
   check_dup_modifiers modifiers;
   check_multi_modifiers modifiers
 
@@ -164,12 +164,12 @@ let rec check_class_initializations (cl: AST.astclass) =
 
 let rec check_classes (prog: AST.t) (classes: AST.astclass list) =
   check_dup_class prog.type_list;
-  List.map check_class_modifiers classes
-  (* List.map check_class_dependencies classes;
+  List.map check_class_modifiers classes;
+  List.map check_class_dependencies classes;
   List.map check_class_attributes classes;
   List.map check_class_methods classes;
   List.map check_class_constructors classes;
-  List.map check_class_initializations classes *)
+  List.map check_class_initializations classes
 
     
 let rec check_inner_classes (c: AST.astclass) (classesScope: AST.astclass list) (id_list: string list) = 
