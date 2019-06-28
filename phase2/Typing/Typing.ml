@@ -19,7 +19,7 @@ let rec get_classes (innerClasses: AST.asttype list) =
 let rec search_class (c: Type.ref_type) (classesScope: AST.astclass list): AST.astclass =
   (* print_endline ((join_list c.tpath ".")^"."^c.tid^" -> "); *)
   match classesScope with
-  | [] -> raise (Invalid_Inheritance("Class "^(join_list c.tpath ".")^"."^c.tid^" not found."))
+  | [] -> raise (InvalidInheritance("Class "^(join_list c.tpath ".")^"."^c.tid^" not found."))
   | hd::tl -> (
     match c.tpath with
     | [] -> (
@@ -59,7 +59,7 @@ and add_scope (cid: string) (classesScope: AST.astclass list) (cl: AST.astclass)
 
 (* class dependencies: inheritance *)
 let rec check_cls_dependencies (c: AST.astclass) (id_list: string list) = 
-  if inlist c.cid id_list then raise(Recursive_Inheritance("Class "^c.cid^" inherits recursively."))
+  if inlist c.cid id_list then raise(RecursiveInheritance("Class "^c.cid^" inherits recursively."))
   else (
     if (List.length c.cparent.tpath == 0 && c.cparent.tid = "Object") then () 
     else (
