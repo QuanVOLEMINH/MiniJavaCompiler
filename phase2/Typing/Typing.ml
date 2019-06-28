@@ -1,9 +1,6 @@
 open TypingHelper
+open ExceptionsDef
 
-exception Invalid_Inheritance of string
-exception Recursive_Inheritance of string
-
- 
 let check_modifiers (modifiers: AST.modifier list) = 
   print_endline("To check modifiers")
 
@@ -78,7 +75,7 @@ let rec check_class_dependencies (c: AST.astclass)=
 (**)
 
 (* class methods *)
-let check_duplicate_methods (methods: AST.astmethod list) =
+let check_dup_methods (methods: AST.astmethod list) =
   print_endline("Duplicate methods def")
 
 let check_method_modifiers (modifiers: AST.modifier list) = 
@@ -98,27 +95,58 @@ let check_class_method (cl: AST.astclass) (mt: AST.astmethod) =
 
 
 let rec check_class_methods (cl: AST.astclass) = 
-  check_duplicate_methods cl.cmethods;
+  check_dup_methods cl.cmethods;
   List.map (check_class_method cl) cl.cmethods;
   List.map check_class_methods (get_classes cl.ctypes);
   ()
 (**)
 
 (* duplicate class *)
-let rec check_duplicate_class (ctypes: AST.asttype list) =
+let rec check_dup_class (ctypes: AST.asttype list) =
   print_endline("Duplicate class def");
   ()
 (**)
 
 (* class modifier *)
+let rec check_dup_modifiers (modifiers: AST.modifier list) = 
+  match modifiers with
+  | [] -> ()
+  | hd::tl -> (
+    if inlist hd tl then raise (DuplicateModifier("Duplicate modifier: "));
+    check_dup_modifiers tl
+  )
+
+let rec check_multi_modifiers (modifiers: AST.modifier list) =
+  let ms = [AST.Private; AST.Public; AST.Protected] in
+  let res = List.filter (fun x -> (x=AST.Public || x=AST.Protected || x=AST.Private);) modifiers in
+  if List.length res > 1 then raise (MultiModifiers ("Invalid multiple modifiers"))
+  
+let check_modifiers (modifiers: AST.modifier list) = 
+  List.map (fun m -> (print_endline (AST.stringOf_modifier m))) modifiers;
+  check_dup_modifiers modifiers;
+  check_multi_modifiers modifiers
+
 let rec check_class_modifiers (cl: AST.astclass) = 
-  print_endline("Modifiers def");
+  check_modifiers cl.cmodifiers;
   ()
 (**)
 
 (* class attributes *)
+let check_class_dup_attrs (attrs: AST.astattribute list) = 
+	print_endline "class dup attrs"
+
+let check_class_attr_modifiers (attr: AST.astattribute) = 
+  print_endline "class attr mod"
+
+let check_class_attr_coherence (attr: AST.astattribute) = 
+  print_endline "attr coherence"
+
 let rec check_class_attributes (cl: AST.astclass) = 
   print_endline("attr def");
+  check_class_dup_attrs cl.cattributes;
+  List.map check_class_attr_modifiers cl.cattributes;
+  List.map check_class_attr_coherence cl.cattributes;
+  List.map check_class_attributes (get_classes cl.ctypes);
   ()
 (**)
 
@@ -135,13 +163,13 @@ let rec check_class_initializations (cl: AST.astclass) =
 (**)
 
 let rec check_classes (prog: AST.t) (classes: AST.astclass list) =
-  check_duplicate_class prog.type_list;
-  List.map check_class_modifiers classes;
-  List.map check_class_dependencies classes;
+  check_dup_class prog.type_list;
+  List.map check_class_modifiers classes
+  (* List.map check_class_dependencies classes;
   List.map check_class_attributes classes;
   List.map check_class_methods classes;
   List.map check_class_constructors classes;
-  List.map check_class_initializations classes
+  List.map check_class_initializations classes *)
 
     
 let rec check_inner_classes (c: AST.astclass) (classesScope: AST.astclass list) (id_list: string list) = 

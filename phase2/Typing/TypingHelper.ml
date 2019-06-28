@@ -3,7 +3,6 @@ let rec inlist e l =
   | [] -> false
   | hd::tl -> if hd = e then true else inlist e tl
 
-
 let rec join_list (l: string list) (sign: string) : string =
   match l with
   | [] -> ""
