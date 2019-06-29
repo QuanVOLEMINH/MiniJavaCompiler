@@ -7,4 +7,6 @@ exception MultiAccessModifiers of string
 exception InvalidModifier of string
 exception IllegalModifierCombination of string
 
+exception DuplicateArgument of string
+
 exception DuplicateClass of string

@@ -120,9 +120,18 @@ let check_method_modifiers (modifiers: AST.modifier list) (cl: AST.astclass) (mt
   if (sub_list imcPA modifiers) then raise (IllegalModifierCombination ("Illegal modifier combinations: "^(join_list (List.map AST.stringOf_modifier imcPA) " & ")));
   if (sub_list imcSA modifiers) then raise (IllegalModifierCombination ("Illegal modifier combinations: "^(join_list (List.map AST.stringOf_modifier imcSA) " & ")))
 
+let rec check_dup_args (argNames: string list) = 
+	match argNames with
+	| [] -> ()
+	| hd::tl -> (
+    if (inlist hd tl) then raise (DuplicateArgument("Dup Argument: "^hd));
+    check_dup_args tl;
+    ()
+  )
 
 let check_method_dup_args (args: AST.argument list) = 
-  print_endline "method dup args"
+  let argNames = List.map (fun (a: AST.argument) -> a.pident;) args in 
+  check_dup_args argNames
 
 let check_method_body (cl: AST.astclass) (mt: AST.astmethod) = 
   print_endline "method body"
