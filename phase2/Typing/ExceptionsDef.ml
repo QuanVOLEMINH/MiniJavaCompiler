@@ -8,5 +8,7 @@ exception InvalidModifier of string
 exception IllegalModifierCombination of string
 
 exception DuplicateArgument of string
+exception DuplicateAttribute of string
+
 
 exception DuplicateClass of string

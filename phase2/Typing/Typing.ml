@@ -171,11 +171,24 @@ let rec check_dup_class (classes: AST.asttype list) =
 (**)
 
 (* class attributes *)
+let rec check_dup_attrs (attrNames: string list) = 
+  match attrNames with
+	| [] -> ()
+	| hd::tl -> (
+    if (inlist hd tl) then raise (DuplicateAttribute("Dup Argument: "^hd));
+    check_dup_attrs tl;
+    ()
+  )
+
 let check_class_dup_attrs (attrs: AST.astattribute list) = 
-	print_endline "class dup attrs"
+  let attrNames = List.map (fun (attr: AST.astattribute) -> attr.aname;) attrs in
+  check_dup_attrs attrNames
 
 let check_class_attr_modifiers (attr: AST.astattribute) = 
-  print_endline "class attr mod"
+  check_modifiers attr.amodifiers;
+  let cmms = Modifiers.classMemberModifiers in
+  if not (List.for_all (fun m -> inlist m cmms;) attr.amodifiers) then raise (InvalidModifier ("Invalid modifier for a class member."))
+  
 
 let check_class_attr_coherence (attr: AST.astattribute) = 
   print_endline "attr coherence"

@@ -7,6 +7,12 @@ let (classNonAccessModifiers: AST.modifier list) =
 let (classModifiers: AST.modifier list) = 
   accessModifiers@classNonAccessModifiers
 
+let (classMemberNonAccessModifiers: AST.modifier list) = 
+  [AST.Static; AST.Final; AST.Transient; AST.Volatile]
+
+let (classMemberModifiers: AST.modifier list) = 
+    accessModifiers@classMemberNonAccessModifiers
+
 let (methodNonAccessModifiers: AST.modifier list) = 
   [AST.Static; AST.Final; AST.Abstract; AST.Synchronized; AST.Native; AST.Strictfp]
 
