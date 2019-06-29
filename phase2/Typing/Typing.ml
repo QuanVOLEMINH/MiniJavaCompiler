@@ -1,10 +1,6 @@
 open TypingHelper
 open ExceptionsDef
 
-let check_modifiers (modifiers: AST.modifier list) = 
-  print_endline("To check modifiers")
-
-
 
 let rec get_classes (innerClasses: AST.asttype list) = 
     match innerClasses with
@@ -74,25 +70,68 @@ let rec check_class_dependencies (c: AST.astclass)=
   ()
 (**)
 
+(* class modifier *)
+let rec check_dup_modifiers (modifiers: AST.modifier list) = 
+  match modifiers with
+  | [] -> ()
+  | hd::tl -> (
+    if inlist hd tl then raise (DuplicateModifier("Duplicate modifier: "^(AST.stringOf_modifier hd)));
+    check_dup_modifiers tl;
+    ()
+  )
+
+let rec check_multi_access_modifiers (modifiers: AST.modifier list) =
+  let res = List.filter (fun x -> (inlist x Modifiers.accessModifiers)) modifiers in
+  if List.length res > 1 then raise (MultiAccessModifiers ("Invalid multiple modifiers: "^(join_list (List.map AST.stringOf_modifier res) " & ")))
+  
+let check_modifiers (modifiers: AST.modifier list) = 
+  (* List.map (fun m -> (print_endline (AST.stringOf_modifier m))) modifiers; *)
+  check_dup_modifiers modifiers;
+  check_multi_access_modifiers modifiers
+
+let rec check_class_modifiers (cl: AST.astclass) = 
+  check_modifiers cl.cmodifiers;
+  
+  if not (List.for_all (fun m -> inlist m Modifiers.classModifiers;) cl.cmodifiers) then raise (InvalidModifier ("Invalid modifier at class: "^cl.cname));
+  
+  let imcFA = Modifiers.illegalModifierCombiFA in
+  if (sub_list imcFA cl.cmodifiers) then raise (IllegalModifierCombination ("Illegal modifier combinations: "^(join_list (List.map AST.stringOf_modifier imcFA) " & ")));
+  
+  List.map check_class_modifiers (get_classes cl.ctypes);
+  ()
+(**)
+
 (* class methods *)
 let check_dup_methods (methods: AST.astmethod list) =
   print_endline("Duplicate methods def")
 
-let check_method_modifiers (modifiers: AST.modifier list) = 
-  print_endline "method modifiers"
+let check_method_modifiers (modifiers: AST.modifier list) (cl: AST.astclass) (mt: AST.astmethod) = 
+  check_modifiers modifiers;
+  
+  if not (List.for_all (fun m -> inlist m Modifiers.methodModifiers;) modifiers) then raise (InvalidModifier ("Invalid modifier at class: "^cl.cname^", method: "^mt.mname));
+
+  let imcFA = Modifiers.illegalModifierCombiFA in
+  let imcNS = Modifiers.illegalModifierCombiNS in
+  let imcPA = Modifiers.illegalModifierCombiPA in
+  let imcSA = Modifiers.illegalModifierCombiSA in
+
+  if (sub_list imcFA modifiers) then raise (IllegalModifierCombination ("Illegal modifier combinations: "^(join_list (List.map AST.stringOf_modifier imcFA) " & ")));
+  if (sub_list imcNS modifiers) then raise (IllegalModifierCombination ("Illegal modifier combinations: "^(join_list (List.map AST.stringOf_modifier imcNS) " & ")));
+  if (sub_list imcPA modifiers) then raise (IllegalModifierCombination ("Illegal modifier combinations: "^(join_list (List.map AST.stringOf_modifier imcPA) " & ")));
+  if (sub_list imcSA modifiers) then raise (IllegalModifierCombination ("Illegal modifier combinations: "^(join_list (List.map AST.stringOf_modifier imcSA) " & ")))
+
 
 let check_method_dup_args (args: AST.argument list) = 
   print_endline "method dup args"
 
-let check_method_body (cl: AST.astclass) (mBody: AST.statement list) = 
+let check_method_body (cl: AST.astclass) (mt: AST.astmethod) = 
   print_endline "method body"
 
 let check_class_method (cl: AST.astclass) (mt: AST.astmethod) = 
   print_endline("class method");
-  check_method_modifiers mt.mmodifiers;
+  check_method_modifiers mt.mmodifiers cl mt;
   check_method_dup_args mt.margstype;
-  check_method_body cl mt.mbody
-
+  check_method_body cl mt
 
 let rec check_class_methods (cl: AST.astclass) = 
   check_dup_methods cl.cmethods;
@@ -120,36 +159,6 @@ let rec check_dup_class (classes: AST.asttype list) =
 				 | Inter -> ()
 			) classes;
 	()
-(**)
-
-(* class modifier *)
-let rec check_dup_modifiers (modifiers: AST.modifier list) = 
-  match modifiers with
-  | [] -> ()
-  | hd::tl -> (
-    if inlist hd tl then raise (DuplicateModifier("Duplicate modifier: "^(AST.stringOf_modifier hd)));
-    check_dup_modifiers tl
-  )
-
-let rec check_multi_access_modifiers (modifiers: AST.modifier list) =
-  let res = List.filter (fun x -> (inlist x Modifiers.accessModifiers)) modifiers in
-  if List.length res > 1 then raise (MultiAccessModifiers ("Invalid multiple modifiers: "^(join_list (List.map AST.stringOf_modifier res) " & ")))
-  
-let check_modifiers (modifiers: AST.modifier list) = 
-  (* List.map (fun m -> (print_endline (AST.stringOf_modifier m))) modifiers; *)
-  check_dup_modifiers modifiers;
-  check_multi_access_modifiers modifiers
-
-let rec check_class_modifiers (cl: AST.astclass) = 
-  check_modifiers cl.cmodifiers;
-  
-  if not (List.for_all (fun m -> inlist m Modifiers.allModifiers;) cl.cmodifiers) then raise (InvalidModifier ("Invalid modifier at class: "^cl.cname));
-  
-  let ims = Modifiers.illegalPresentModifiers in
-  if (sub_list ims cl.cmodifiers) then raise (IllegalModifierCombination ("Illegal modifier combinations: "^(join_list (List.map AST.stringOf_modifier ims) " & ")));
-  
-  List.map check_class_modifiers (get_classes cl.ctypes);
-  ()
 (**)
 
 (* class attributes *)
