@@ -3,6 +3,10 @@ let rec inlist e l =
   | [] -> false
   | hd::tl -> if hd = e then true else inlist e tl
 
+let sub_list l1 l = 
+  let r = List.for_all (fun e -> inlist e l) l1 in
+  r
+
 let rec join_list (l: string list) (sign: string) : string =
   match l with
   | [] -> ""

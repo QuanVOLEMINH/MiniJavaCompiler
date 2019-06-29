@@ -102,9 +102,24 @@ let rec check_class_methods (cl: AST.astclass) =
 (**)
 
 (* duplicate class *)
-let rec check_dup_class (ctypes: AST.asttype list) =
-  print_endline("Duplicate class def");
-  ()
+let rec check_dup_class_name (classNameList: string list) =
+  match classNameList with
+  | [] -> ()
+  | hd::tl -> (
+    if (inlist hd tl) then raise(DuplicateClass("Duplicate class definition: "^hd));
+    check_dup_class_name tl;
+    ()
+  )
+
+let rec check_dup_class (classes: AST.asttype list) =
+  let classeNameList = List.map (fun (x: AST.asttype) -> x.id;) classes in 
+  check_dup_class_name classeNameList;
+	List.map (fun (c: AST.asttype) -> 
+				match c.info with
+				 | Class cl -> check_dup_class (cl.ctypes)
+				 | Inter -> ()
+			) classes;
+	()
 (**)
 
 (* class modifier *)
@@ -116,18 +131,24 @@ let rec check_dup_modifiers (modifiers: AST.modifier list) =
     check_dup_modifiers tl
   )
 
-let rec check_multi_modifiers (modifiers: AST.modifier list) =
-  let ms = [AST.Private; AST.Public; AST.Protected] in
-  let res = List.filter (fun x -> (inlist x ms)) modifiers in
-  if List.length res > 1 then raise (MultiModifiers ("Invalid multiple modifiers: "^(join_list (List.map AST.stringOf_modifier res) " & ")))
+let rec check_multi_access_modifiers (modifiers: AST.modifier list) =
+  let res = List.filter (fun x -> (inlist x Modifiers.accessModifiers)) modifiers in
+  if List.length res > 1 then raise (MultiAccessModifiers ("Invalid multiple modifiers: "^(join_list (List.map AST.stringOf_modifier res) " & ")))
   
 let check_modifiers (modifiers: AST.modifier list) = 
   (* List.map (fun m -> (print_endline (AST.stringOf_modifier m))) modifiers; *)
   check_dup_modifiers modifiers;
-  check_multi_modifiers modifiers
+  check_multi_access_modifiers modifiers
 
 let rec check_class_modifiers (cl: AST.astclass) = 
   check_modifiers cl.cmodifiers;
+  
+  if not (List.for_all (fun m -> inlist m Modifiers.allModifiers;) cl.cmodifiers) then raise (InvalidModifier ("Invalid modifier at class: "^cl.cname));
+  
+  let ims = Modifiers.illegalPresentModifiers in
+  if (sub_list ims cl.cmodifiers) then raise (IllegalModifierCombination ("Illegal modifier combinations: "^(join_list (List.map AST.stringOf_modifier ims) " & ")));
+  
+  List.map check_class_modifiers (get_classes cl.ctypes);
   ()
 (**)
 
