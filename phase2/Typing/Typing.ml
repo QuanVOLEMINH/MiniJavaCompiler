@@ -110,6 +110,8 @@ let check_method_modifiers (modifiers: AST.modifier list) (cl: AST.astclass) (mt
   
   if not (List.for_all (fun m -> inlist m Modifiers.methodModifiers;) modifiers) then raise (InvalidModifier ("Invalid modifier at class: "^cl.cname^", method: "^mt.mname));
 
+  if ((inlist AST.Abstract mt.mmodifiers) && not(inlist AST.Abstract cl.cmodifiers)) then raise (InvalidModifier ("Can't define an abstract method in a non-abstract class, method: "^mt.mname^" of class: "^cl.cname));
+
   let imcFA = Modifiers.illegalModifierCombiFA in
   let imcNS = Modifiers.illegalModifierCombiNS in
   let imcPA = Modifiers.illegalModifierCombiPA in
@@ -119,6 +121,7 @@ let check_method_modifiers (modifiers: AST.modifier list) (cl: AST.astclass) (mt
   if (sub_list imcNS modifiers) then raise (IllegalModifierCombination ("Illegal modifier combinations: "^(join_list (List.map AST.stringOf_modifier imcNS) " & ")));
   if (sub_list imcPA modifiers) then raise (IllegalModifierCombination ("Illegal modifier combinations: "^(join_list (List.map AST.stringOf_modifier imcPA) " & ")));
   if (sub_list imcSA modifiers) then raise (IllegalModifierCombination ("Illegal modifier combinations: "^(join_list (List.map AST.stringOf_modifier imcSA) " & ")))
+
 
 let rec check_dup_args (argNames: string list) = 
 	match argNames with
@@ -133,11 +136,22 @@ let check_method_dup_args (args: AST.argument list) =
   let argNames = List.map (fun (a: AST.argument) -> a.pident;) args in 
   check_dup_args argNames
 
+let check_method_body_missing (cl: AST.astclass) (mt: AST.astmethod) = 
+  let mebms = Modifiers.methodEmptyBodyModifiers in
+  
+  (* not abstract and native without body *)
+  if ((mt.msemi) && (not(intersect_list mebms mt.mmodifiers))) then raise (MissingMethodBody("Missing method body, method: "^mt.mname^" of class: "^cl.cname))
+
+let check_method_body_illegal_def (cl: AST.astclass) (mt: AST.astmethod) = 
+  let mebms = Modifiers.methodEmptyBodyModifiers in
+  (* abstract and native with body *)
+  if ((not mt.msemi) && (intersect_list mebms mt.mmodifiers)) then raise (InvalidMethodBody((join_list (List.map AST.stringOf_modifier mebms) " or "^" methods can't have body")))
+
 let check_method_body (cl: AST.astclass) (mt: AST.astmethod) = 
-  print_endline "method body"
+  check_method_body_missing cl mt;
+  check_method_body_illegal_def cl mt
 
 let check_class_method (cl: AST.astclass) (mt: AST.astmethod) = 
-  print_endline("class method");
   check_method_modifiers mt.mmodifiers cl mt;
   check_method_dup_args mt.margstype;
   check_method_body cl mt
@@ -189,15 +203,14 @@ let check_class_attr_modifiers (attr: AST.astattribute) =
   let cmms = Modifiers.classMemberModifiers in
   if not (List.for_all (fun m -> inlist m cmms;) attr.amodifiers) then raise (InvalidModifier ("Invalid modifier for a class member."))
   
-
-let check_class_attr_coherence (attr: AST.astattribute) = 
-  print_endline "attr coherence"
-
+let check_class_attr_coherence (cl: AST.astclass) (attr: AST.astattribute) = 
+  print_endline("attr coherence")
+	
 let rec check_class_attributes (cl: AST.astclass) = 
   print_endline("attr def");
   check_class_dup_attrs cl.cattributes;
   List.map check_class_attr_modifiers cl.cattributes;
-  List.map check_class_attr_coherence cl.cattributes;
+  List.map (check_class_attr_coherence cl) cl.cattributes;
   List.map check_class_attributes (get_classes cl.ctypes);
   ()
 (**)

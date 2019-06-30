@@ -6,11 +6,7 @@ private private class A extends B {
 
 	}
 	private int a(String l[]) {
-		if(true){
-			int a = 1;
-		}else {
-			return 3;
-		}
+		return 3;
 	}
 	
 

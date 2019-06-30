@@ -17,7 +17,10 @@ let (methodNonAccessModifiers: AST.modifier list) =
   [AST.Static; AST.Final; AST.Abstract; AST.Synchronized; AST.Native; AST.Strictfp]
 
 let (methodModifiers: AST.modifier list) = 
-  accessModifiers@methodNonAccessModifiers 
+  accessModifiers@methodNonAccessModifiers
+
+let (methodEmptyBodyModifiers: AST.modifier list) = 
+  [AST.Abstract; AST.Native]
 
 let (illegalModifierCombiFA: AST.modifier list) = 
   [AST.Final; AST.Abstract]

@@ -3,9 +3,11 @@ let rec inlist e l =
   | [] -> false
   | hd::tl -> if hd = e then true else inlist e tl
 
-let sub_list l1 l = 
-  let r = List.for_all (fun e -> inlist e l) l1 in
-  r
+let sub_list l1 l2 = 
+  List.for_all (fun e -> inlist e l2) l1
+
+let intersect_list l1 l2 =
+  List.exists (fun e -> inlist e l2) l1
 
 let rec join_list (l: string list) (sign: string) : string =
   match l with
@@ -13,6 +15,8 @@ let rec join_list (l: string list) (sign: string) : string =
   | hd::[] -> hd
   | hd::tl -> hd^sign^(join_list tl sign)
 
+type valtype  =
+  | ValType of Type.t
 
 let print_class_name (c: AST.astclass) = 
 	print_endline (c.cname)

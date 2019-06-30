@@ -149,16 +149,16 @@ memberDecl:
         `AttList (List.map (fun (id,init,pos) -> { amodifiers = [] ; atype = t ; aname = id ; adefault = init ; aloc=pos }) vars)
     }
   | VOID id=IDENTIFIER pl=paren_comma(formalParameter) el=loption(throws) mb=block {
-        `Meth { mmodifiers = [] ; mreturntype = Type.Void ; mname = id ; margstype=pl ; mthrows =el ; mbody=mb ; mloc=Location.symbol_loc $startpos $endpos }
+        `Meth { mmodifiers = [] ; mreturntype = Type.Void ; mname = id ; margstype=pl ; mthrows =el ; mbody=mb ; mloc=Location.symbol_loc $startpos $endpos; msemi=false }
     }
   | r=aType id=IDENTIFIER pl=paren_comma(formalParameter) el=loption(throws) mb=block {
-        `Meth { mmodifiers = [] ; mreturntype = r ; mname = id ; margstype=pl ; mthrows =el ; mbody=mb ; mloc=Location.symbol_loc $startpos $endpos }
+        `Meth { mmodifiers = [] ; mreturntype = r ; mname = id ; margstype=pl ; mthrows =el ; mbody=mb ; mloc=Location.symbol_loc $startpos $endpos; msemi=false }
     }
   | VOID id=IDENTIFIER pl=paren_comma(formalParameter) el=loption(throws) SEMI {
-        `Meth { mmodifiers = [] ; mreturntype = Type.Void ; mname = id ; margstype=pl ; mthrows =el ; mbody=[] ; mloc=Location.symbol_loc $startpos $endpos }
+        `Meth { mmodifiers = [] ; mreturntype = Type.Void ; mname = id ; margstype=pl ; mthrows =el ; mbody=[] ; mloc=Location.symbol_loc $startpos $endpos; msemi=true }
     }
   | r=aType id=IDENTIFIER pl=paren_comma(formalParameter) el=loption(throws) SEMI {
-        `Meth { mmodifiers = [] ; mreturntype = r ; mname = id ; margstype=pl ; mthrows =el ; mbody=[]; mloc=Location.symbol_loc $startpos $endpos }
+        `Meth { mmodifiers = [] ; mreturntype = r ; mname = id ; margstype=pl ; mthrows =el ; mbody=[]; mloc=Location.symbol_loc $startpos $endpos; msemi=true }
     }
   | id=IDENTIFIER pl=paren_comma(formalParameter) el=loption(throws) mb=block {
         `Const { cmodifiers = [] ; cname = id ; cargstype=pl ; cthrows =el ; cbody=mb ; mloc=Location.symbol_loc $startpos $endpos }

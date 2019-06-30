@@ -138,6 +138,7 @@ type astmethod = {
     mthrows : Type.ref_type list;
     mbody : statement list;
     mloc : Location.t;
+    msemi: bool
   }
 type astconst = {
     mutable cmodifiers : modifier list;

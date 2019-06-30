@@ -7,6 +7,7 @@ let (methods: AST.astmethod list) =
     AST.mthrows = [{ Type.tpath=[]; Type.tid="CloneNotSupportedException" }];
     AST.mbody = [];
     AST.mloc = Location.none;
+    AST.msemi = false;
   } in
 
   let (mEquals: AST.astmethod) = {
@@ -24,6 +25,7 @@ let (methods: AST.astmethod list) =
     AST.mthrows = [];
     AST.mbody = [];
     AST.mloc = Location.none;
+    AST.msemi = false;
   } in
 
   let (mFinalize: AST.astmethod) = {
@@ -34,6 +36,7 @@ let (methods: AST.astmethod list) =
     AST.mthrows = [{Type.tpath=[];Type.tid="Throwable"}];
     AST.mbody = [];
     AST.mloc = Location.none;
+    AST.msemi = false;
   } in
   
   let (mHashCode: AST.astmethod) = {
@@ -44,6 +47,7 @@ let (methods: AST.astmethod list) =
     AST.mthrows = [];
     AST.mbody = [];
     AST.mloc = Location.none;
+    AST.msemi = false;
   } in
 
   let (mNotify: AST.astmethod) = {
@@ -54,6 +58,7 @@ let (methods: AST.astmethod list) =
     AST.mthrows = [];
     AST.mbody = [];
     AST.mloc = Location.none;
+    AST.msemi = false;
   } in
 
   let (mNotifyAll: AST.astmethod) = {
@@ -64,6 +69,7 @@ let (methods: AST.astmethod list) =
       AST.mthrows = [];
       AST.mbody = [];
       AST.mloc = Location.none;
+      AST.msemi = false;
   } in
 
   let (mToString: AST.astmethod) = {
@@ -74,6 +80,7 @@ let (methods: AST.astmethod list) =
     AST.mthrows = [];
     AST.mbody = [];
     AST.mloc = Location.none;
+    AST.msemi = false;
   } in
 
   let (mWait1: AST.astmethod) =  {
@@ -84,6 +91,7 @@ let (methods: AST.astmethod list) =
     AST.mthrows = [{ Type.tpath=[]; Type.tid="InterruptedException" }];
     AST.mbody = [];
     AST.mloc = Location.none;
+    AST.msemi = false;
   } in
 
   let (mWait2: AST.astmethod) =  {
@@ -101,6 +109,7 @@ let (methods: AST.astmethod list) =
     AST.mthrows = [{ Type.tpath=[]; Type.tid="InterruptedException" }];
     AST.mbody = [];
     AST.mloc = Location.none;
+    AST.msemi = false;
   } in
 
   let (mWait3: AST.astmethod) = {
@@ -124,6 +133,7 @@ let (methods: AST.astmethod list) =
     AST.mthrows = [{ Type.tpath=[]; Type.tid="InterruptedException" }];
     AST.mbody = [];
     AST.mloc = Location.none;
+    AST.msemi = false;
   } in
 
   let (obMethods: AST.astmethod list) = [
