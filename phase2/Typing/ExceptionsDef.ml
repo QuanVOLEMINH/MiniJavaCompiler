@@ -15,6 +15,7 @@ exception DuplicateAttribute of string
 
 exception DuplicateMethod of string
 exception DuplicateConstructor of string
+exception InvalidConstructorDefinition of string
 
 exception IllegalOverridingMethod of string
 

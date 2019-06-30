@@ -367,7 +367,9 @@ let check_class_constructor_body (cl: AST.astclass) (const: AST.astconst) =
   ()
 
 let check_class_constructor_modifiers (modifiers: AST.modifier list) = 
-  ()
+  check_modifiers modifiers;
+  let accessModifiers = Modifiers.accessModifiers in
+  if not(List.for_all (fun m -> (inlist m accessModifiers);) modifiers) then raise (InvalidModifier ("Constructor invalid modifier."))
 
 let check_dup_constructors (c: AST.astconst) (consts: AST.astconst list) =
   List.iter (
@@ -388,8 +390,14 @@ let rec check_class_dup_constructors (consts: AST.astconst list) =
 	| [] -> ()
 	| hd::tl -> check_dup_constructors hd tl; check_class_dup_constructors tl; ()
 
+let check_class_constructor_name (cl: AST.astclass) =
+  List.map (
+    fun (c: AST.astconst) -> if c.cname <> cl.cname then raise (InvalidConstructorDefinition("Constructor name: "^c.cname^" and class name: "^cl.cname^" must be the same."));
+  ) cl.cconsts
+ 
+  
 let rec check_class_constructors (cl: AST.astclass) = 
-  print_endline("constructors def");
+  check_class_constructor_name cl;
   check_class_dup_constructors cl.cconsts;
   List.map (fun (c: AST.astconst) -> check_class_constructor_modifiers c.cmodifiers) cl.cconsts;
   (* Check dup args like methods *)
