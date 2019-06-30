@@ -65,6 +65,92 @@ let rec is_child_class (cScope: AST.astclass list) (child: Type.t) (parent: Type
     )
     | _ -> false
   
+let rec type_expression (cl: AST.astclass) (stmts: AST.statement list) (e: AST.expression): Type.t = 
+  match e.etype with
+  | Some x -> x
+  | None -> (
+    let res = (
+    match e.edesc with 
+      | AST.New (sOption, sList, eList) -> 
+        (
+          let (hd, tl) = TypingHelper.get_last sList in
+          check_constructor cl {Type.tpath = hd; Type.tid = tl} (List.map (type_expression cl stmts) eList);
+          Type.Ref {tpath = hd; tid = tl}
+        )	
+      | AST.NewArray (t, eOptionList, eOption) -> 
+        (
+          let (dims, dimsDeclared) = check_array_dims cl stmts eOptionList in
+          ( 
+            match eOption with
+            | None -> ()
+            | Some e1 -> ( 
+              match e1.edesc with
+              | AST.ArrayInit (l) -> 
+                if (dimsDeclared > 0) then 
+                  raise (InvalidExpression("Cannot define array dimension expression when initializer is provided."))
+                else
+                  let res = type_expression cl stmts e1 in 
+                  match res with
+                  | Type.Array (at, d) -> ( 
+                    if (d <> dims) then raise (InvalidExpression("Array size definition does not match the initialization."));
+                    if not (is_child_class cl.cscope at t) then raise (InvalidExpression("Array type definition does not match the initialization"));
+                  )  
+                  | _ -> raise (InvalidExpression("Invalid new array."))
+              )
+          );
+          Type.Array (t, dims)
+        )
+      | AST.Call (eOption, s, eList) -> print_endline "Call"; Type.Void
+      | AST.Attr (e, s) -> print_endline "Attr"; Type.Void
+      | AST.If (e1, e2, e3) -> print_endline "If"; Type.Void
+      | AST.Val v -> (
+        match v with
+          | String s -> Type.Ref {tpath = []; tid = "String"}
+          | Int i -> Type.Primitive Int
+          | Float f -> Type.Primitive Float
+          | Char c -> Type.Primitive Char
+          | Null -> Type.Ref { tpath = []; tid = "Null" }
+          | Boolean b -> Type.Primitive Boolean
+      )
+      | AST.Name n -> print_endline "name"; Type.Void
+      | AST.ArrayInit eList -> (
+        print_endline "ArrayInit";
+        Type.Void
+      )
+      | AST.Array (e, eOptionList) -> print_endline "Array"; Type.Void
+      | AST.AssignExp (e1, assign_op, e2) -> print_endline "AssignExp"; Type.Void
+      | AST.Post (e, postfix_op)  -> print_endline "Post"; Type.Void
+      | AST.Pre (prefix_op, e) -> print_endline "Pre"; Type.Void
+      | AST.Op (e1, infix_op, e2) -> print_endline "Op"; Type.Void
+      | AST.CondOp (e1, e2, e3) -> print_endline "CondOp"; Type.Void
+      | AST.Cast (t, e) -> print_endline "Cast"; Type.Void
+      | AST.Type t -> print_endline "Type"; Type.Void
+      | AST.ClassOf t -> print_endline "ClassOf"; Type.Void
+      | AST.Instanceof (e, t) -> print_endline "Instanceof"; Type.Void
+      | AST.VoidClass -> print_endline "VoidClass"; Type.Void
+      ) in 
+      res
+  )
+
+and check_constructor (cl: AST.astclass) (t: Type.ref_type) (types: Type.t list) =
+  print_endline "check constr"
+
+and check_array_dims (cl: AST.astclass) (stmts: AST.statement list) (eOptionList: (AST.expression option) list): int*int =
+  (0, 0)
+
+let rec type_statement (cl: AST.astclass) (treatedStmts: AST.statement list) (nonTreatedStmts: AST.statement list) (stmts: AST.statement) =
+  match stmts with 
+  | AST.VarDecl t_s_eOption_List ->  print_endline "VarDecl"
+  | AST.Block stmt_List -> print_endline "Block"
+  | AST.Nop -> print_endline "Nop"
+  | AST.While (e, stmt) -> print_endline "While"
+  | AST.For (tOption_s_eOption_List, eOption, eList, stmt) -> print_endline "For"
+  | AST.If (e, stmt, stmtOption) -> print_endline "If"
+  | AST.Return eOption -> print_endline "Return"
+  | AST.Throw e -> print_endline "Throw"
+  | AST.Try (stmtList1, arg_stmtList_List, stmtList2) -> print_endline "Try"
+  | AST.Expr e -> (type_expression cl treatedStmts e; ())
+
 let rec get_scopes (cid: string) (classes: AST.astclass list) (classesScope:AST.astclass list)  = 
   let fill_scope = add_scope cid classesScope in
   List.map fill_scope classes
@@ -299,7 +385,7 @@ let check_class_attr_modifiers (attr: AST.astattribute) =
   if not (List.for_all (fun m -> inlist m cmms;) attr.amodifiers) then raise (InvalidModifier ("Invalid modifier for a class member."))
   
 let check_class_attr_coherence (cl: AST.astclass) (attr: AST.astattribute) = 
-  print_endline("attr coherence")
+  ()
 	
 let rec check_class_attributes (cl: AST.astclass) = 
   print_endline("attr def");

@@ -9,6 +9,15 @@ let sub_list l1 l2 =
 let intersect_list l1 l2 =
   List.exists (fun e -> inlist e l2) l1
 
+let rec get_last (l: string list) : (string list) * string=
+  match l with
+  | [] -> ([], "")
+  | hd::[] -> ([], hd)
+  | hd::tl -> (
+    let (h, t) = get_last tl in 
+    (hd::h, t)
+  )
+
 let rec join_list (l: string list) (sign: string) : string =
   match l with
   | [] -> ""
