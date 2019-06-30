@@ -33,6 +33,38 @@ let rec search_class (c: Type.ref_type) (classesScope: AST.astclass list): AST.a
     )
   )
 
+let rec is_child_class (cScope: AST.astclass list) (child: Type.t) (parent: Type.t) =
+  if (ValType(child)=ValType(parent)) then true
+  else
+    match child with 
+    | Ref r -> (
+      if (r = Type.object_type) then false
+      else (
+        let cl = search_class r cScope in
+        is_child_class cl.cscope (Ref cl.cparent) parent
+      )
+    )
+    | Array (ct, ci) -> (
+        match parent with
+        | Array(pt, pi) -> (
+          if ((pi=ci) && (is_child_class cScope ct pt)) then true
+          else 
+          (
+            match ct with 
+            | Ref cr -> (
+              match pt with 
+              | Ref pr -> (
+                if((List.length pr.tpath)=0 && (List.length cr.tpath)=0 && (cr.tid=pr.tid)) then true else false
+              )
+              | _ -> false
+            )
+            |_ ->	false
+          )
+        )
+        | _ -> false     
+    )
+    | _ -> false
+  
 let rec get_scopes (cid: string) (classes: AST.astclass list) (classesScope:AST.astclass list)  = 
   let fill_scope = add_scope cid classesScope in
   List.map fill_scope classes
@@ -259,6 +291,57 @@ let rec check_class_attributes (cl: AST.astclass) =
   ()
 (**)
 
+(* overring methods *)
+let is_overriding (cScope: AST.astclass list) (cMethods: AST.astmethod list) (pMethod: AST.astmethod) = 
+  let res = List.filter (
+		fun (cMethod: AST.astmethod) -> 
+			if cMethod.mname=pMethod.mname then (
+				if (List.length pMethod.margstype)=(List.length cMethod.margstype) then (
+					let sameTypeCheckList = List.map2 (fun (a1: AST.argument) (a2: AST.argument) -> is_types_equal a1.ptype a2.ptype;) pMethod.margstype cMethod.margstype in
+					if (List.for_all (fun x -> x) sameTypeCheckList) then
+					(
+						let pPublic = inlist AST.Public pMethod.mmodifiers in
+            let pProtected = inlist AST.Protected pMethod.mmodifiers in
+            let pStatic = inlist AST.Static pMethod.mmodifiers in
+                        
+						let cProtected = inlist AST.Protected cMethod.mmodifiers in
+						let cPrivate = inlist AST.Private cMethod.mmodifiers in
+						let cStatic = inlist AST.Static cMethod.mmodifiers in
+            
+            (* Check reduce visibility *)
+						if ((pPublic && cProtected)||(pPublic && cProtected)||(pProtected && cPrivate)) 
+              then raise(IllegalOverridingMethod("Method: "^cMethod.mname^", cant override method with reduced visibility."));
+
+            (* Check same mod Static *)
+            if ((pStatic && (not cStatic))||((not pStatic) && cStatic)) 
+              then raise (IllegalOverridingMethod ("Overriding method: "^cMethod.mname^" must have the same staticity."));
+
+            (* Check same return type *)
+            if (not(is_child_class cScope cMethod.mreturntype pMethod.mreturntype)) 
+              then raise (IllegalOverridingMethod ("Overriding method: "^pMethod.mname^" must have same return type."))
+            else true
+
+					) else false
+				) else false
+			) else false
+	) cMethods in
+	(List.length res) > 0
+
+let rec check_overriding_methods (cl: AST.astclass): AST.astmethod list = 
+  if cl.cid="Object" then cl.cmethods
+  else (
+    let res = check_overriding_methods (search_class cl.cparent cl.cscope) in
+    let notOverridingMethods = List.filter (fun x -> (not(is_overriding cl.cscope cl.cmethods x));) res in
+    notOverridingMethods@cl.cmethods
+  )
+
+let rec check_class_overriding_methods (cl: AST.astclass) = 
+  check_overriding_methods cl;
+	List.map check_class_overriding_methods (get_classes cl.ctypes);
+	()
+ 
+(**)
+
 (* class constructors *)
 let rec check_class_constructors (cl: AST.astclass) = 
   print_endline("constructors def");
@@ -278,6 +361,7 @@ let rec check_classes (prog: AST.t) (classes: AST.astclass list) =
   List.map check_class_attributes classes;
   List.map check_class_abstract_inheritance classes;
   List.map check_class_methods classes;
+  List.map check_class_overriding_methods classes;
   List.map check_class_constructors classes;
   List.map check_class_initializations classes
 

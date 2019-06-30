@@ -14,6 +14,7 @@ exception DuplicateArgument of string
 exception DuplicateAttribute of string
 
 exception DuplicateMethod of string
+exception IllegalOverridingMethod of string
 
 exception DuplicateClassDefinition of string
 exception InvalidClassDefinition of string
