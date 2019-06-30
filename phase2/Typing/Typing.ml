@@ -363,8 +363,39 @@ let rec check_class_overriding_methods (cl: AST.astclass) =
 (**)
 
 (* class constructors *)
+let check_class_constructor_body (cl: AST.astclass) (const: AST.astconst) =
+  ()
+
+let check_class_constructor_modifiers (modifiers: AST.modifier list) = 
+  ()
+
+let check_dup_constructors (c: AST.astconst) (consts: AST.astconst list) =
+  List.iter (
+    fun (ctr: AST.astconst) -> if ctr.cname=c.cname then
+    (
+      (* same argument *)
+      if (List.length c.cargstype)=(List.length ctr.cargstype) then
+      (
+        (* same argument type *)
+        let equalTypesList = List.map2 (fun (a1: AST.argument) (a2: AST.argument) -> TypingHelper.is_types_equal a1.ptype a2.ptype;) c.cargstype ctr.cargstype in
+        if (List.for_all (fun x -> x) equalTypesList) then raise (DuplicateConstructor ("Constructor:  "^ctr.cname))
+      )
+    );
+  ) consts  
+
+let rec check_class_dup_constructors (consts: AST.astconst list) = 
+  match consts with
+	| [] -> ()
+	| hd::tl -> check_dup_constructors hd tl; check_class_dup_constructors tl; ()
+
 let rec check_class_constructors (cl: AST.astclass) = 
   print_endline("constructors def");
+  check_class_dup_constructors cl.cconsts;
+  List.map (fun (c: AST.astconst) -> check_class_constructor_modifiers c.cmodifiers) cl.cconsts;
+  (* Check dup args like methods *)
+	List.map (fun (c: AST.astconst) -> check_method_dup_args c.cargstype) cl.cconsts;
+	List.map (check_class_constructor_body cl) cl.cconsts;
+	List.map check_class_constructors (get_classes cl.ctypes);
   ()
 (**)
 
