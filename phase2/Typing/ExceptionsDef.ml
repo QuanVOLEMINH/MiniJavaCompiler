@@ -13,5 +13,7 @@ exception MissingMethodBody of string
 exception DuplicateArgument of string
 exception DuplicateAttribute of string
 
+exception DuplicateMethod of string
 
-exception DuplicateClass of string
+exception DuplicateClassDefinition of string
+exception InvalidClassDefinition of string

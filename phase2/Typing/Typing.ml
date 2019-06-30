@@ -102,8 +102,27 @@ let rec check_class_modifiers (cl: AST.astclass) =
 (**)
 
 (* class methods *)
-let check_dup_methods (methods: AST.astmethod list) =
-  print_endline("Duplicate methods def")
+let check_method_in_list (methods: AST.astmethod list) (mt: AST.astmethod) =
+  List.iter (
+		fun (m: AST.astmethod) -> if m.mname=mt.mname then
+		(
+			if (List.length mt.margstype)=(List.length m.margstype) then
+			(
+				let equalTypes = List.map2 (fun (a1: AST.argument) (a2: AST.argument) -> TypingHelper.is_types_equal a1.ptype a2.ptype;) mt.margstype m.margstype in
+        
+        if (List.for_all (fun x -> x) equalTypes) then raise (DuplicateMethod ("Duplicate Method Definition: "^m.mname))
+			)
+		);
+  ) methods
+
+let rec check_dup_methods (methods: AST.astmethod list) =
+  match methods with
+	| [] -> ()
+	| hd::tl -> (
+    check_method_in_list tl hd; 
+    check_dup_methods tl;
+    ()
+  )
 
 let check_method_modifiers (modifiers: AST.modifier list) (cl: AST.astclass) (mt: AST.astmethod) = 
   check_modifiers modifiers;
@@ -168,7 +187,7 @@ let rec check_dup_class_name (classNameList: string list) =
   match classNameList with
   | [] -> ()
   | hd::tl -> (
-    if (inlist hd tl) then raise(DuplicateClass("Duplicate class definition: "^hd));
+    if (inlist hd tl) then raise(DuplicateClassDefinition("Duplicate class definition: "^hd));
     check_dup_class_name tl;
     ()
   )
@@ -183,6 +202,31 @@ let rec check_dup_class (classes: AST.asttype list) =
 			) classes;
 	()
 (**)
+
+(* abstract inheritance *)
+let is_implemented (methods: AST.astmethod list) (mt:AST.astmethod) = 
+  try
+    check_method_in_list methods mt;
+    true
+  with
+  | DuplicateMethod e -> false
+
+let add_unimpl_methods (pMethods: AST.astmethod list) (cMethods: AST.astmethod list) =
+  List.append pMethods (List.filter (fun (m: AST.astmethod) -> inlist AST.Abstract m.mmodifiers;) cMethods)
+  
+let rec unimplemented_methods (cl: AST.astclass) =
+	if cl.cid="Object" then [] 
+	else (
+		let res = unimplemented_methods (search_class cl.cparent cl.cscope) in
+		let unimplMethods = List.filter (is_implemented cl.cmethods) res in
+		add_unimpl_methods unimplMethods cl.cmethods
+  )
+  
+let rec check_class_abstract_inheritance (cl: AST.astclass) = 
+  if not (inlist AST.Abstract cl.cmodifiers) then
+    if List.length (unimplemented_methods cl) > 0 then raise (InvalidClassDefinition ("Class: "^cl.cname^" must be abstract or implement inherited abstract methods."));
+	List.map check_class_abstract_inheritance (get_classes cl.ctypes);
+	()
 
 (* class attributes *)
 let rec check_dup_attrs (attrNames: string list) = 
@@ -232,6 +276,7 @@ let rec check_classes (prog: AST.t) (classes: AST.astclass list) =
   List.map check_class_modifiers classes;
   List.map check_class_dependencies classes;
   List.map check_class_attributes classes;
+  List.map check_class_abstract_inheritance classes;
   List.map check_class_methods classes;
   List.map check_class_constructors classes;
   List.map check_class_initializations classes
@@ -247,7 +292,7 @@ let rec add_package (packageName: AST.qualified_name) (classes: AST.astclass lis
       [{
         AST.cid = id^hd;
         AST.cname = hd;
-        AST.cscope = classes;
+        AST.cscope = Object.objectClass::classes;
         AST.cmodifiers = [];
         AST.cparent = {tpath=[]; tid="Object"};
         AST.cattributes = [];
@@ -262,7 +307,7 @@ let rec add_package (packageName: AST.qualified_name) (classes: AST.astclass lis
       [{
         AST.cid=id^hd;
         AST.cname=hd;
-        AST.cscope=next;
+        AST.cscope=Object.objectClass::next;
         AST.cmodifiers=[];
         AST.cparent = {tpath=[] ; tid="Object"};
         AST.cattributes = [];

@@ -18,5 +18,8 @@ let rec join_list (l: string list) (sign: string) : string =
 type valtype  =
   | ValType of Type.t
 
+let is_types_equal (t1: Type.t) (t2: Type.t) =
+  ValType(t1)=ValType(t2)
+
 let print_class_name (c: AST.astclass) = 
 	print_endline (c.cname)
