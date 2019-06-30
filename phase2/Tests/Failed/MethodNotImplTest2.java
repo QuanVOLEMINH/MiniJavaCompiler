@@ -14,7 +14,7 @@ abstract class A {
 abstract class B extends A{
 }
 
-private class C extends B{
+final class C extends B{
     // void a(int d){
 
     // }

@@ -5,11 +5,9 @@ final abstract class A extends B {
 	A () {
 
 	}
-	private int a(String l[]) {
-		return 3;
-	}
+	private int a(String l[]);
 	
 
 }
 
-private class B {}
+public class B {}

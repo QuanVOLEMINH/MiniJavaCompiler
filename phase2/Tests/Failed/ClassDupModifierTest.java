@@ -1,6 +1,6 @@
 package Tests;
 
-private private class A extends B {
+public public class A extends B {
 
 	A () {
 
@@ -12,4 +12,4 @@ private private class A extends B {
 
 }
 
-private class B {}
+abstract class B {}

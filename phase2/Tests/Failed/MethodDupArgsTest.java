@@ -16,4 +16,4 @@ public class A extends B {
 
 }
 
-private class B {}
+class B {}

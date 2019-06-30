@@ -5,11 +5,10 @@ public class A extends B {
 	A () {
 
 	}
-	private final final int  a(String l[]) {
+	private final final int a(String l[]) {
 		return 1;
 	}
 	
-
 }
 
-private class B {}
+class B {}

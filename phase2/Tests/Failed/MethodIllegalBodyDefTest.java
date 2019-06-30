@@ -10,5 +10,5 @@ public class A extends B {
 }
 
 abstract class B {
-    abstract void testM(){}
+    abstract void testM();
 }

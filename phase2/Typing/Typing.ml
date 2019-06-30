@@ -117,7 +117,6 @@ let rec check_multi_access_modifiers (modifiers: AST.modifier list) =
   if List.length res > 1 then raise (MultiAccessModifiers ("Invalid multiple modifiers: "^(join_list (List.map AST.stringOf_modifier res) " & ")))
   
 let check_modifiers (modifiers: AST.modifier list) = 
-  (* List.map (fun m -> (print_endline (AST.stringOf_modifier m))) modifiers; *)
   check_dup_modifiers modifiers;
   check_multi_access_modifiers modifiers
 
@@ -131,6 +130,26 @@ let rec check_class_modifiers (cl: AST.astclass) =
   
   List.map check_class_modifiers (get_classes cl.ctypes);
   ()
+(**)
+
+(* Class member modifier *)
+let rec check_class_inner_member_modifiers (allowStatic: bool) (cl: AST.astclass) =
+	if (not allowStatic) && (inlist AST.Static cl.cmodifiers) then raise (InvalidModifier("Static members can only be declared in static class or top level members."));
+  
+  List.map (check_class_inner_member_modifiers (inlist AST.Static cl.cmodifiers)) (get_classes cl.ctypes);
+	()
+
+let check_class_member_modifiers (cl: AST.astclass) = 
+  if (inlist AST.Private cl.cmodifiers) then raise (InvalidModifier("Private modifier is not allowed for top level class declarations."));
+  if (inlist AST.Protected cl.cmodifiers) then raise (InvalidModifier("Protected modifier is not allowed for top level class declarations."));
+  if (inlist AST.Static cl.cmodifiers) then raise (InvalidModifier("Static modifiers is not allowed for top level class declarations. Every top level class is static"));
+
+	List.map (fun (t: AST.asttype) -> 
+				match t.info with
+				 | Class cl -> check_class_inner_member_modifiers true cl
+				 | _ -> ()
+			) cl.ctypes;
+	()
 (**)
 
 (* class methods *)
@@ -309,7 +328,7 @@ let is_overriding (cScope: AST.astclass list) (cMethods: AST.astmethod list) (pM
 						let cStatic = inlist AST.Static cMethod.mmodifiers in
             
             (* Check reduce visibility *)
-						if ((pPublic && cProtected)||(pPublic && cProtected)||(pProtected && cPrivate)) 
+						if ((pPublic && cProtected)||(pPublic && cPrivate)||(pProtected && cPrivate)) 
               then raise(IllegalOverridingMethod("Method: "^cMethod.mname^", cant override method with reduced visibility."));
 
             (* Check same mod Static *)
@@ -331,8 +350,9 @@ let rec check_overriding_methods (cl: AST.astclass): AST.astmethod list =
   if cl.cid="Object" then cl.cmethods
   else (
     let res = check_overriding_methods (search_class cl.cparent cl.cscope) in
-    let notOverridingMethods = List.filter (fun x -> (not(is_overriding cl.cscope cl.cmethods x));) res in
-    notOverridingMethods@cl.cmethods
+    let notOverridingMethods = List.filter (fun m -> not(is_overriding cl.cscope cl.cmethods m);) res in
+    let notPrivateMethods = (List.filter (fun (m: AST.astmethod) -> not(inlist AST.Private m.mmodifiers)) cl.cmethods) in
+    notOverridingMethods@notPrivateMethods
   )
 
 let rec check_class_overriding_methods (cl: AST.astclass) = 
@@ -357,6 +377,7 @@ let rec check_class_initializations (cl: AST.astclass) =
 let rec check_classes (prog: AST.t) (classes: AST.astclass list) =
   check_dup_class prog.type_list;
   List.map check_class_modifiers classes;
+  List.map check_class_member_modifiers (get_classes prog.type_list);
   List.map check_class_dependencies classes;
   List.map check_class_attributes classes;
   List.map check_class_abstract_inheritance classes;
