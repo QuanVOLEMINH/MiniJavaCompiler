@@ -1,24 +1,27 @@
-package Tests;
-
 public class A {
     int m;
-    public A (int m) {
+
+    public A(int m) {
+        this.m = m;
     }
-    A(){}
-    
+
+    A() {
+    }
+
     int a() {
-		return 3;
-	}
-	
+        return 3;
+    }
 
 }
 
 class B {
-    B(){
+    B() {
         int m = 123;
         A x = new A(m);
-        x.a();
-        int y = true;
+
+        if (true) {
+            x.a();
+        }
     }
 
     public static void main(String[] args) {

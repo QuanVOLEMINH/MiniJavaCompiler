@@ -3,7 +3,6 @@ package Tests;
 public class A {
     int m;
     public A (int m) {
-        this.m = m;
     }
     A(){}
     

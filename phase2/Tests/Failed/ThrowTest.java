@@ -1,23 +1,34 @@
 public class A {
     int m;
-    public A (int m) {
+
+    public A(int m) {
     }
-    A(){}
+
+    A(double a) {
+    }
+
+    A(){
+
+    }
     
     int a() {
         return 3;
     }
-    
 
 }
 
 class B {
-    B(){
+    B() {
         int m = 123;
         A x = new A(m);
-        x.a();
-        int[] data = new int[] {10,20,30,40,50,60,71,80,90,91};
-        int[][][] arrs = new int[][]{{1,2},{1,2}};
+
+        while (true) {
+            x.a();
+        }
+
+        if (true)
+        	throw new A();
+
     }
 
     public static void main(String[] args) {

@@ -1,5 +1,3 @@
-package Tests;
-
 public class A {
     int m;
     public A (int m) {
@@ -18,7 +16,7 @@ class B {
         int m = 123;
         A x = new A(m);
         x.a();
-        int y = true;
+        A y = new A(false);
     }
 
     public static void main(String[] args) {

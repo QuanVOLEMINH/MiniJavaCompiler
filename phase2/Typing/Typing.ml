@@ -40,6 +40,13 @@ let rec get_parents (cl: AST.astclass) : Type.ref_type list =
     ({Type.tpath=(TypingHelper.get_path cl.cid) ; Type.tid=cl.cname})::(get_parents par)
   )
 
+let rec get_parent_classes (cl: AST.astclass): AST.astclass list=
+  if cl.cid="Object" then [cl]
+  else (
+    let par = search_class cl.cparent cl.cscope in
+    cl::(get_parent_classes par)
+  )
+
 (* get first dup type then return with rest list *)
 let rec get_first_rtype_rep (rt: Type.ref_type) (l: Type.ref_type list) : bool*Type.ref_type*(Type.ref_type list) =
   match l with
@@ -90,6 +97,86 @@ let rec is_child_class (cScope: AST.astclass list) (child: Type.t) (parent: Type
     )
     | _ -> false
 
+let rec type_variable_stmt (id: string) (stmts: AST.statement list): Type.t option =
+  match stmts with
+  | [] -> None
+  | hd::tl -> (
+    match hd with
+    | VarDecl t_s_eOption -> type_variable_decl id tl t_s_eOption
+    | _ -> type_variable_stmt id tl
+  )
+
+and type_variable_decl (id: string) (stmts: AST.statement list) t_s_eOption: Type.t option =
+  match t_s_eOption with
+  | [] -> type_variable_stmt id stmts
+  | (t, s, eOption)::tl -> if s=id then Some t else type_variable_decl id stmts tl
+
+let rec type_variable_args (id:string) (args: AST.argument list): Type.t option =
+  match args with
+  | [] -> None
+  | hd::tl -> if hd.pident=id then Some hd.ptype else type_variable_args id tl
+
+let type_variable_attr (attr: AST.astattribute) (id: string) (base: bool): Type.t option =
+  if base then (if attr.aname=id then Some attr.atype else None)
+  else (
+    if (not (inlist AST.Private attr.amodifiers)) || (inlist AST.Protected attr.amodifiers) then (
+      if attr.aname=id then Some attr.atype else None
+    )
+    else None
+  )
+  
+let rec type_variable_attrs (attrs: AST.astattribute list) (id: string) (base: bool): Type.t option =
+  match attrs with
+  | [] -> None
+  | hd::tl -> (
+    let res = type_variable_attr hd id base in 
+    match res with
+    | None -> type_variable_attrs tl id base
+    | Some x -> Some x
+  )
+
+let rec type_variable_parents (classes: AST.astclass list) (id: string) (base: bool): Type.t option =
+  match classes with
+  | [] -> None
+  | hd::tl -> (
+    let res = type_variable_attrs hd.cattributes id base in 
+    match res with 
+    | None -> type_variable_parents tl id base
+    | Some x -> Some x
+  )
+
+let type_variable_class (id: string) (cl: AST.astclass): Type.t option =
+  let found = type_variable_attrs cl.cattributes id true in
+  match found with
+  | Some t -> Some t
+  | None -> type_variable_parents (get_parent_classes cl) id false
+
+let type_variable (id: string) (cl: AST.astclass) (args: AST.argument list) (stmts: AST.statement list): Type.t =
+  if (id="this") then Type.Ref {Type.tpath=TypingHelper.get_path(cl.cid); Type.tid=cl.cname}
+  else (
+    if (id="super") then Type.Ref cl.cparent
+    else (
+      let stmtVars = type_variable_stmt id stmts in
+      match stmtVars with
+      | Some t -> t
+      | None -> (
+        match (type_variable_args id args) with
+          | Some t -> t
+          | None -> (
+            match type_variable_class id cl with
+              | Some t -> t
+              | None ->( 
+                try
+                  let res = search_class {Type.tpath=[];Type.tid=id} cl.cscope in
+                  Type.Ref {Type.tpath=TypingHelper.get_path(res.cid);Type.tid=id}
+                with
+                | _ -> raise (IdentifierNotFound ("Var: "^id^" not found."))
+                )
+          )
+      )
+    )
+  )
+    
 let rec check_type_inference (classes: AST.astclass list) (types: Type.t list) : Type.t*(Type.ref_type list) =
   (* Type.Void *)
   match types with 
@@ -137,23 +224,23 @@ let rec check_type_inference (classes: AST.astclass list) (types: Type.t list) :
     )
   )
       
-let rec check_expression (cl: AST.astclass) (args:AST.argument list) (stmts: AST.statement list) (e: AST.expression): Type.t = 
-  print_endline "expr";
-  match e.etype with
+let rec check_expression (cl: AST.astclass) (args: AST.argument list) (stmts: AST.statement list) (expr: AST.expression): Type.t = 
+  (* print_endline "expr"; *)
+  match expr.etype with
   | Some x -> x
   | None -> (
     let res = (
-    match e.edesc with 
+    match expr.edesc with 
       | AST.New (sOption, sList, eList) -> 
         (
           let (hd, tl) = TypingHelper.get_last sList in
-          check_expr_new cl args {Type.tpath = hd; Type.tid = tl} (List.map (check_expression cl args stmts) eList);
+          check_expr_new cl {Type.tpath = hd; Type.tid = tl} (List.map (check_expression cl args stmts) eList);
           Type.Ref {Type.tpath = hd; Type.tid = tl}
         )	
       | AST.NewArray (t, eOptionList, eOption) -> 
         (
           let (dims, dimsDecl) = check_array_dims cl args stmts eOptionList in
-          print_endline ("-"^(string_of_int dims)^" - "^(string_of_int dimsDecl));
+          (* print_endline ("-"^(string_of_int dims)^" - "^(string_of_int dimsDecl)); *)
           ( 
             match eOption with
             | None -> ()
@@ -178,7 +265,16 @@ let rec check_expression (cl: AST.astclass) (args:AST.argument list) (stmts: AST
         )
       | AST.Call (eOption, s, eList) -> print_endline "Call"; Type.Void
       | AST.Attr (e, s) -> print_endline "Attr"; Type.Void
-      | AST.If (e1, e2, e3) -> print_endline "If"; Type.Void
+      | AST.If (e1, e2, e3) -> (
+        let t1 = check_expression cl args stmts e1 in 
+        let t2 = check_expression cl args stmts e2 in 
+        let t3 = check_expression cl args stmts e3 in 
+        (* If expression must be boolean *)
+				if(not(is_types_equal t1 (Type.Primitive Type.Boolean))) then 
+					raise (InvalidExpression("Missing boolean expr in If."))
+				else 
+					let (t, p) = check_type_inference cl.cscope (t2::t3::[]) in t
+      )
       | AST.Val v -> (
         match v with
           | String s -> Type.Ref {tpath = []; tid = "String"}
@@ -188,52 +284,89 @@ let rec check_expression (cl: AST.astclass) (args:AST.argument list) (stmts: AST
           | Null -> Type.Ref { tpath = []; tid = "Null" }
           | Boolean b -> Type.Primitive Boolean
       )
-      | AST.Name n -> print_endline "name"; Type.Void
+      | AST.Name n -> (
+        print_endline "name";
+        (type_variable n cl args stmts)
+      )
       | AST.ArrayInit eList -> (
         let (t, parents) = check_type_inference cl.cscope (List.map (check_expression cl args stmts) eList) in 
       
         match t with 
         | Type.Array (at, dims) -> Type.Array (at, dims + 1) 
         | _ -> Type.Array (t, 1) 
-		
       )
       | AST.Array (e, eOptionList) -> print_endline "Array"; Type.Void
-      | AST.AssignExp (e1, assign_op, e2) -> print_endline "AssignExp"; Type.Void
+      | AST.AssignExp (e1, assign_op, e2) -> (
+        print_endline "AssignExp";
+        let t1=check_expression cl args stmts e1 in
+        let t2=check_expression cl args stmts e2 in
+        
+        if (is_types_equal t1 t2) then t1
+        else (
+          match assign_op with
+          | Ass_add -> 
+            if is_child_class cl.cscope t1 (Type.Ref {Type.tpath=[]; Type.tid="String"}) then
+              match t2 with
+              | Type.Primitive p -> t1
+              | Type.Ref f -> (
+                if is_child_class cl.cscope t2 (Type.Ref {tpath=[]; tid="String"}) then t1 
+                else
+                  raise (InvalidExpression("Assignment type mismatch "^(Type.stringOf t1)^" != "^(Type.stringOf t2)))
+              )
+              | _ -> raise (InvalidExpression("Assignment type mismatch "^(Type.stringOf t1)^" != "^(Type.stringOf t2)))
+            else
+              raise (InvalidExpression("Assignment type mismatch "^(Type.stringOf t1)^" != "^(Type.stringOf t2)))
+          | _ -> raise (InvalidExpression("Assignment type mismatch "^(Type.stringOf t1)^" != "^(Type.stringOf t2)))
+        )
+      )
       | AST.Post (e, postfix_op)  -> print_endline "Post"; Type.Void
       | AST.Pre (prefix_op, e) -> print_endline "Pre"; Type.Void
       | AST.Op (e1, infix_op, e2) -> print_endline "Op"; Type.Void
-      | AST.CondOp (e1, e2, e3) -> print_endline "CondOp"; Type.Void
+      | AST.CondOp (e1, e2, e3) -> (
+        print_endline "CondOp";
+        let t1=check_expression cl args stmts e1 in 
+				let t2=check_expression cl args stmts e2 in 
+				let t3=check_expression cl args stmts e3 in 
+        if(not(is_types_equal t1 (Type.Primitive Type.Boolean))) then 
+          raise (InvalidExpression("Condop"))
+				else 
+					let (t,p) = check_type_inference cl.cscope (t2::t3::[]) in t
+      )
       | AST.Cast (t, e) -> print_endline "Cast"; Type.Void
-      | AST.Type t -> print_endline "Type"; Type.Void
+      | AST.Type t -> print_endline "Type"; t
       | AST.ClassOf t -> print_endline "ClassOf"; Type.Void
       | AST.Instanceof (e, t) -> print_endline "Instanceof"; Type.Void
       | AST.VoidClass -> print_endline "VoidClass"; Type.Void
       ) in 
-      res
+      (
+        expr.etype <- Some res; res
+      )
   )
 
-and check_expr_new (cl: AST.astclass) (args: AST.argument list) (t: Type.ref_type) (types: Type.t list) =
+and check_expr_new (cl: AST.astclass) (t: Type.ref_type) (types: Type.t list) =
   let checkClass = search_class t cl.cscope in
-  let checkConsts = List.map (
-    fun (c: AST.astconst) -> if (List.length c.cargstype)=(List.length types) then
-      (
-        let equalTypesList = List.map2 (fun (a1: AST.argument) (a2: Type.t) -> is_child_class checkClass.cscope a1.ptype a2;) c.cargstype types in
-        
-        if (List.for_all (fun x -> x) equalTypesList) then None
-        else Some c				
-      ) else None;
-  ) checkClass.cconsts in
+  if (List.length types = 0) && (List.length checkClass.cconsts = 0) then () 
+  else (
+    let checkConsts = List.map (
+      fun (c: AST.astconst) -> if (List.length c.cargstype)=(List.length types) then
+        (
+          let equalTypesList = List.map2 (fun (a: AST.argument) (tp: Type.t) -> is_child_class checkClass.cscope a.ptype tp;) c.cargstype types in
+          
+          if (List.for_all (fun x -> x) equalTypesList) then Some c else None		
+        ) else None;
+    ) checkClass.cconsts in
+    
+    if List.for_all (
+      fun (c: AST.astconst option) -> match c with
+            | None -> true
+            | Some c -> (
+              if (inlist AST.Private c.cmodifiers) && c.cname <> cl.cname then true else false;
+              if (inlist AST.Protected c.cmodifiers) && not 
+              (is_child_class cl.cscope (Type.Ref {Type.tpath=(TypingHelper.get_path cl.cid); Type.tid=cl.cname}) (Type.Ref{Type.tpath=(TypingHelper.get_path checkClass.cid); Type.tid=checkClass.cname})) then true else false		      
+            )
+      ) checkConsts then raise (InvalidConstructorDefinition ("Cant find constructor signature of class: "^checkClass.cname^" with these arguments."))
+  )
   
-  if List.for_all (
-    fun (c: AST.astconst option) -> match c with
-          | None -> true
-          | Some c -> (
-            if (inlist AST.Private c.cmodifiers) && c.cname <> cl.cname then true else false;
-            if (inlist AST.Protected c.cmodifiers) && not 
-            (is_child_class cl.cscope (Type.Ref {tpath=(TypingHelper.get_path cl.cid); tid=cl.cname}) (Type.Ref{tpath=(TypingHelper.get_path checkClass.cid); tid=checkClass.cname})) then true else false		      
-          )
-    ) checkConsts then raise (InvalidConstructorDefinition ("Cant find constructor of class: "^checkClass.cname^" with those arguments."))
-
 and check_array_dims (cl: AST.astclass) (args: AST.argument list) (stmts: AST.statement list) (eOptionList: (AST.expression option) list): int*int =
   let res = List.map (
     fun (eOption: AST.expression option) -> 
@@ -272,12 +405,38 @@ let rec check_statements (cl: AST.astclass) (args: AST.argument list) (checkedSt
       | AST.VarDecl t_s_eOption_List -> check_var_declaration cl args checkedStmts t_s_eOption_List; ()
       | AST.Block stmt_List -> print_endline "block"; check_statements cl args checkedStmts stmt_List; ()
       | AST.Nop -> print_endline "Nop"
-      | AST.While (e, stmt) -> print_endline "While"
-      | AST.For (tOption_s_eOption_List, eOption, eList, stmt) -> print_endline "For"
-      | AST.If (e, stmt, stmtOption) -> print_endline "If"
+      | AST.While (e, stmt) -> (
+        print_endline "While";
+        if not (is_types_equal (check_expression cl args checkedStmts e) (Type.Primitive Type.Boolean)) then
+          raise (InvalidExpression("Missing boolean expr in While."))
+				else check_statements cl args checkedStmts [stmt]; ()
+      )
+      | AST.For (tOption_s_eOption_List, eOption, eList, stmt) -> print_endline "For: not implemented"
+      | AST.If (e, stmt, stmtOption) -> (
+        print_endline "If";
+        if not (is_types_equal (check_expression cl args checkedStmts e) (Type.Primitive Type.Boolean)) then 
+          raise (InvalidExpression("Missing boolean expr in If."))
+				else 
+					(
+						check_statements cl args checkedStmts [stmt];
+						match stmtOption with
+						| None -> ()
+						| Some st -> check_statements cl args checkedStmts [st]; ()
+					)
+      )
       | AST.Return eOption -> print_endline "Return"
-      | AST.Throw e -> print_endline "Throw"
-      | AST.Try (stmtList1, arg_stmtList_List, stmtList2) -> print_endline "Try"
+      | AST.Throw e -> (
+        print_endline "Throw";
+        check_expression cl args checkedStmts e; 
+        () 
+      )
+      | AST.Try (stmtList1, arg_stmtList_List, stmtList2) -> (
+        print_endline "Try";
+        check_statements cl args checkedStmts stmtList1;
+				List.iter (fun (arg, st) -> check_statements cl args checkedStmts st ) arg_stmtList_List;
+        check_statements cl args checkedStmts stmtList2;
+        ()
+      )
       | AST.Expr e -> (check_expression cl args checkedStmts e; ())  
     );
     check_statements cl args (checkedStmts@[hd]) tl
