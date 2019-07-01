@@ -396,20 +396,20 @@ and get_decl_dims (res: bool list) (size: int) (v: bool) : int=
       if hd then raise (InvalidExpression("Cannot specify an array dimension after an empty dimension."))
       else get_decl_dims tl size false
 
-let rec check_statements (cl: AST.astclass) (args: AST.argument list) (checkedStmts: AST.statement list) (uncheckedStmts: AST.statement list) =
+let rec check_statements (cl: AST.astclass) (args: AST.argument list) (rt: Type.t)(checkedStmts: AST.statement list) (uncheckedStmts: AST.statement list) =
   match uncheckedStmts with 
   | [] -> ()
   | hd::tl -> (
     (
       match hd with
       | AST.VarDecl t_s_eOption_List -> check_var_declaration cl args checkedStmts t_s_eOption_List; ()
-      | AST.Block stmt_List -> print_endline "block"; check_statements cl args checkedStmts stmt_List; ()
+      | AST.Block stmt_List -> print_endline "block"; check_statements cl args rt checkedStmts stmt_List; ()
       | AST.Nop -> print_endline "Nop"
       | AST.While (e, stmt) -> (
         print_endline "While";
         if not (is_types_equal (check_expression cl args checkedStmts e) (Type.Primitive Type.Boolean)) then
           raise (InvalidExpression("Missing boolean expr in While."))
-				else check_statements cl args checkedStmts [stmt]; ()
+				else check_statements cl args rt checkedStmts [stmt]; ()
       )
       | AST.For (tOption_s_eOption_List, eOption, eList, stmt) -> print_endline "For: not implemented"
       | AST.If (e, stmt, stmtOption) -> (
@@ -418,10 +418,10 @@ let rec check_statements (cl: AST.astclass) (args: AST.argument list) (checkedSt
           raise (InvalidExpression("Missing boolean expr in If."))
 				else 
 					(
-						check_statements cl args checkedStmts [stmt];
+						check_statements cl args rt checkedStmts [stmt];
 						match stmtOption with
 						| None -> ()
-						| Some st -> check_statements cl args checkedStmts [st]; ()
+						| Some st -> check_statements cl args rt checkedStmts [st]; ()
 					)
       )
       | AST.Return eOption -> print_endline "Return"
@@ -432,14 +432,14 @@ let rec check_statements (cl: AST.astclass) (args: AST.argument list) (checkedSt
       )
       | AST.Try (stmtList1, arg_stmtList_List, stmtList2) -> (
         print_endline "Try";
-        check_statements cl args checkedStmts stmtList1;
-				List.iter (fun (arg, st) -> check_statements cl args checkedStmts st ) arg_stmtList_List;
-        check_statements cl args checkedStmts stmtList2;
+        check_statements cl args rt checkedStmts stmtList1;
+				List.iter (fun (arg, st) -> check_statements cl args rt checkedStmts st ) arg_stmtList_List;
+        check_statements cl args rt checkedStmts stmtList2;
         ()
       )
       | AST.Expr e -> (check_expression cl args checkedStmts e; ())  
     );
-    check_statements cl args (checkedStmts@[hd]) tl
+    check_statements cl args rt (checkedStmts@[hd]) tl
   )
  
 and check_var_declaration (cl: AST.astclass) (args: AST.argument list) (stmts: AST.statement list) (varDecls: (Type.t * string * AST.expression option) list) =
@@ -610,7 +610,9 @@ let check_method_body_illegal_def (cl: AST.astclass) (mt: AST.astmethod) =
 
 let check_method_body (cl: AST.astclass) (mt: AST.astmethod) = 
   check_method_body_missing cl mt;
-  check_method_body_illegal_def cl mt
+  check_method_body_illegal_def cl mt;
+  check_statements cl mt.margstype mt.mreturntype [] mt.mbody
+
 
 let check_class_method (cl: AST.astclass) (mt: AST.astmethod) = 
   check_method_modifiers mt.mmodifiers cl mt;
@@ -756,7 +758,7 @@ let rec check_class_overriding_methods (cl: AST.astclass) =
 (* class constructors *)
 let check_class_constructor_body (cl: AST.astclass) (const: AST.astconst) =
   print_endline "constructor body";
-  check_statements cl const.cargstype [] const.cbody
+  check_statements cl const.cargstype Type.Void [] const.cbody
 
 let check_class_constructor_modifiers (modifiers: AST.modifier list) = 
   check_modifiers modifiers;
@@ -801,7 +803,9 @@ let rec check_class_constructors (cl: AST.astclass) =
 
 (* class initialization *)
 let rec check_class_initializations (cl: AST.astclass) = 
-  print_endline("initialization def");
+  print_endline("initialization def - "^cl.cname);
+  List.map (fun (ini: AST.initial)-> check_statements cl [] Type.Void [] ini.block) cl.cinits;
+	List.map check_class_initializations (get_classes cl.ctypes);
   ()
 (**)
 

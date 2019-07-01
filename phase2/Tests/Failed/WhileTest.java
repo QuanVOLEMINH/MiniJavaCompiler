@@ -12,12 +12,12 @@ public class A {
 
 }
 
-class B{
-    B(){
+class B {
+    B() {
         A x = new A();
 
-        while (true){
-            int m = false;
+        while (x.a()) {
+            int m = 123;
         }
     }
 }
