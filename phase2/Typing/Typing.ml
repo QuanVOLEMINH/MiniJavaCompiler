@@ -692,7 +692,12 @@ let check_class_attr_modifiers (attr: AST.astattribute) =
   if not (List.for_all (fun m -> inlist m cmms;) attr.amodifiers) then raise (InvalidModifier ("Invalid modifier for a class member."))
   
 let check_class_attr_coherence (cl: AST.astclass) (attr: AST.astattribute) = 
-  ()
+  match attr.adefault with
+	| None -> ()
+	| Some at -> 
+		if is_child_class cl.cscope (check_expression cl [] [] at ) attr.atype then ()
+		else raise (InvalidStatement("Invalid attribute type initalization: "^(Type.stringOf attr.atype)^" != "^(Type.stringOf (check_expression cl [] [] at ))))
+
 	
 let rec check_class_attributes (cl: AST.astclass) = 
   print_endline("attr def");
