@@ -24,6 +24,25 @@ let rec join_list (l: string list) (sign: string) : string =
   | hd::[] -> hd
   | hd::tl -> hd^sign^(join_list tl sign)
 
+let rec split (str: string) (c: char) (strSize:int) (currentPos:int) (current:string) : string list=
+  if currentPos = strSize then
+    if current="" then
+      []
+    else
+      current::[]
+  else
+    if str.[currentPos] = c then
+      current::(split str c strSize (currentPos+1) "")
+    else 
+      split str c strSize (currentPos+1) (current^(String.make 1 str.[currentPos]))
+
+let string_split (str: string) (c: char) : string list =
+  split str c (String.length str) 0 ""
+
+let get_path (path: string): string list =
+  let (first, last) = get_last (string_split path '.' ) in 
+  first
+  
 type valtype  =
   | ValType of Type.t
 

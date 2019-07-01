@@ -2,7 +2,7 @@ open TypingHelper
 open ExceptionsDef
 
 
-let rec get_classes (innerClasses: AST.asttype list) = 
+let rec get_classes (innerClasses: AST.asttype list): AST.astclass list = 
     match innerClasses with
     | [] -> []
     | hd::tl -> (
@@ -11,7 +11,7 @@ let rec get_classes (innerClasses: AST.asttype list) =
         | Class cl -> cl.cname <- hd.id; cl.cmodifiers <- hd.modifiers; cl::cls
         | Inter -> cls
       )
-
+    
 let rec search_class (c: Type.ref_type) (classesScope: AST.astclass list): AST.astclass =
   (* print_endline ((join_list c.tpath ".")^"."^c.tid^" -> "); *)
   match classesScope with
@@ -32,7 +32,32 @@ let rec search_class (c: Type.ref_type) (classesScope: AST.astclass list): AST.a
       else search_class c tl
     )
   )
+  
+let rec get_parents (cl: AST.astclass) : Type.ref_type list =
+  if cl.cid="Object" then [Type.object_type]
+  else (
+    let par = search_class cl.cparent cl.cscope in
+    ({Type.tpath=(TypingHelper.get_path cl.cid) ; Type.tid=cl.cname})::(get_parents par)
+  )
 
+(* get first dup type then return with rest list *)
+let rec get_first_rtype_rep (rt: Type.ref_type) (l: Type.ref_type list) : bool*Type.ref_type*(Type.ref_type list) =
+  match l with
+  | [] -> (false, rt, l)
+  | hd::tl -> 
+    if TypingHelper.is_types_equal (Type.Ref rt) (Type.Ref hd) then (true, rt, tl)
+    else get_first_rtype_rep rt tl
+
+(* get first common type then return with rest list *)
+
+let rec get_first_rtype_common (l1: Type.ref_type list) (l2: Type.ref_type list) : Type.ref_type*(Type.ref_type list) =
+  match l1 with
+  | [] -> raise (InvalidExpression("Not inherit"))
+  | hd::tl ->
+    let (found, elem, rest) = get_first_rtype_rep hd l2 in
+    if (found) then (elem, rest)
+    else get_first_rtype_common tl l2
+  
 let rec is_child_class (cScope: AST.astclass list) (child: Type.t) (parent: Type.t) =
   if (ValType(child)=ValType(parent)) then true
   else
@@ -64,8 +89,35 @@ let rec is_child_class (cScope: AST.astclass list) (child: Type.t) (parent: Type
         | _ -> false     
     )
     | _ -> false
-  
-let rec type_expression (cl: AST.astclass) (stmts: AST.statement list) (e: AST.expression): Type.t = 
+
+let rec type_inference (classes: AST.astclass list) (types:Type.t list) : Type.t*(Type.ref_type list) =
+  (* Type.Void *)
+  match types with 
+  | [] -> raise (NonImplemented "Arrayinit")
+  | hd::[] -> ( 
+    match hd with 
+    | Ref f -> (hd, (get_parents (search_class f classes)))
+    | _ -> (hd, [])
+  )
+  | hd::tl -> (
+    let (t, parents) = type_inference classes tl in
+    if TypingHelper.is_types_equal hd t then (t, parents)
+    else (
+      match t with
+      | Ref rt -> (
+        match hd with
+        | Ref rhd -> (
+          let pars = get_parents (search_class rhd classes) in
+          let (elem, rest) = get_first_rtype_common pars parents in
+          (Type.Ref elem, rest)
+        )
+        | _ ->  raise (InvalidExpression("Array initialization type mismatched"))
+      )
+      | _ ->  raise (InvalidExpression("Array initialization type mismatched"))
+    )
+  )
+      
+let rec check_expression (cl: AST.astclass) (stmts: AST.statement list) (e: AST.expression): Type.t = 
   match e.etype with
   | Some x -> x
   | None -> (
@@ -74,26 +126,27 @@ let rec type_expression (cl: AST.astclass) (stmts: AST.statement list) (e: AST.e
       | AST.New (sOption, sList, eList) -> 
         (
           let (hd, tl) = TypingHelper.get_last sList in
-          check_constructor cl {Type.tpath = hd; Type.tid = tl} (List.map (type_expression cl stmts) eList);
+          check_expr_new cl {Type.tpath = hd; Type.tid = tl} (List.map (check_expression cl stmts) eList);
           Type.Ref {tpath = hd; tid = tl}
         )	
       | AST.NewArray (t, eOptionList, eOption) -> 
         (
-          let (dims, dimsDeclared) = check_array_dims cl stmts eOptionList in
+          let (dims, dimsDecl) = check_array_dims cl stmts eOptionList in
           ( 
             match eOption with
             | None -> ()
             | Some e1 -> ( 
               match e1.edesc with
               | AST.ArrayInit (l) -> 
-                if (dimsDeclared > 0) then 
-                  raise (InvalidExpression("Cannot define array dimension expression when initializer is provided."))
+                if (dimsDecl > 0) then 
+                  raise (InvalidExpression("Redefined dim"))
                 else
-                  let res = type_expression cl stmts e1 in 
+                  let res = check_expression cl stmts e1 in 
                   match res with
                   | Type.Array (at, d) -> ( 
-                    if (d <> dims) then raise (InvalidExpression("Array size definition does not match the initialization."));
-                    if not (is_child_class cl.cscope at t) then raise (InvalidExpression("Array type definition does not match the initialization"));
+                    if (d <> dims) then raise (InvalidExpression("Array size mismatched"^(string_of_int d)^
+                    " != "^(string_of_int dims)));
+                    if not (is_child_class cl.cscope at t) then raise (InvalidExpression("Array type mismatched"));
                   )  
                   | _ -> raise (InvalidExpression("Invalid new array."))
               )
@@ -114,8 +167,12 @@ let rec type_expression (cl: AST.astclass) (stmts: AST.statement list) (e: AST.e
       )
       | AST.Name n -> print_endline "name"; Type.Void
       | AST.ArrayInit eList -> (
-        print_endline "ArrayInit";
-        Type.Void
+        let (t, parents) = type_inference cl.cscope (List.map (check_expression cl stmts) eList) in 
+      
+        match t with 
+        | Type.Array (at, dims) -> Type.Array (at, dims + 1); 
+        | _ -> Type.Array (t, 1) 
+		
       )
       | AST.Array (e, eOptionList) -> print_endline "Array"; Type.Void
       | AST.AssignExp (e1, assign_op, e2) -> print_endline "AssignExp"; Type.Void
@@ -132,24 +189,90 @@ let rec type_expression (cl: AST.astclass) (stmts: AST.statement list) (e: AST.e
       res
   )
 
-and check_constructor (cl: AST.astclass) (t: Type.ref_type) (types: Type.t list) =
-  print_endline "check constr"
+and check_expr_new (cl: AST.astclass) (t: Type.ref_type) (types: Type.t list) =
+  let checkClass = search_class t cl.cscope in
+  let checkConsts = List.map (
+    fun (c: AST.astconst) -> if (List.length c.cargstype)=(List.length types) then
+      (
+        let equalTypesList = List.map2 (fun (a1: AST.argument) (a2: Type.t) -> is_child_class checkClass.cscope a1.ptype a2;) c.cargstype types in
+        
+        if (List.for_all (fun x -> x) equalTypesList) then None
+        else Some c				
+      ) else None;
+  ) checkClass.cconsts in
+  
+  if List.for_all (
+    fun (c: AST.astconst option) -> match c with
+          | None -> true
+          | Some c -> (
+            if (inlist AST.Private c.cmodifiers) && c.cname <> cl.cname then true else false;
+            if (inlist AST.Protected c.cmodifiers) && not 
+            (is_child_class cl.cscope (Type.Ref {tpath=(TypingHelper.get_path cl.cid); tid=cl.cname}) (Type.Ref{tpath=(TypingHelper.get_path checkClass.cid); tid=checkClass.cname})) then true else false		      
+          )
+    ) checkConsts then raise (InvalidConstructorDefinition ("Cant find constructor of class: "^checkClass.cname^" with those arguments."))
 
 and check_array_dims (cl: AST.astclass) (stmts: AST.statement list) (eOptionList: (AST.expression option) list): int*int =
-  (0, 0)
+  let res = List.map (
+    fun (eOption: AST.expression option) -> 
+      match eOption with 
+        | None -> false
+        | Some eOpt -> 
+          let t = check_expression cl stmts eOpt in
+          match t with 
+          | Primitive p -> (
+            match p with
+            | Int -> true
+            | _ ->  raise (InvalidExpression("Array dimensions must be ints."))
+          )
+          | _ -> raise (InvalidExpression("Array dimensions must be ints."))
+    ) eOptionList in
+  
+  ((List.length res), (get_decl_dims res 0 true))
 
-let rec type_statement (cl: AST.astclass) (treatedStmts: AST.statement list) (nonTreatedStmts: AST.statement list) (stmts: AST.statement) =
-  match stmts with 
-  | AST.VarDecl t_s_eOption_List ->  print_endline "VarDecl"
-  | AST.Block stmt_List -> print_endline "Block"
-  | AST.Nop -> print_endline "Nop"
-  | AST.While (e, stmt) -> print_endline "While"
-  | AST.For (tOption_s_eOption_List, eOption, eList, stmt) -> print_endline "For"
-  | AST.If (e, stmt, stmtOption) -> print_endline "If"
-  | AST.Return eOption -> print_endline "Return"
-  | AST.Throw e -> print_endline "Throw"
-  | AST.Try (stmtList1, arg_stmtList_List, stmtList2) -> print_endline "Try"
-  | AST.Expr e -> (type_expression cl treatedStmts e; ())
+and get_decl_dims (res: bool list) (size: int) (v: bool) : int=
+  match res with
+  | [] -> (size)
+  | hd::tl -> 
+    if v then
+      if hd then get_decl_dims tl (size + 1) true
+      else get_decl_dims tl size false
+    else 
+      if hd then raise (InvalidExpression("Array dimensions ============???"))
+      else get_decl_dims tl size false
+
+let rec check_statements (cl: AST.astclass) (checkedStmts: AST.statement list) (uncheckedStmts: AST.statement list) =
+  match uncheckedStmts with 
+  | [] -> ()
+  | hd::tl -> (
+    (
+      match hd with
+      | AST.VarDecl t_s_eOption_List -> check_var_declaration cl checkedStmts t_s_eOption_List; ()
+      | AST.Block stmt_List -> print_endline "Block"
+      | AST.Nop -> print_endline "Nop"
+      | AST.While (e, stmt) -> print_endline "While"
+      | AST.For (tOption_s_eOption_List, eOption, eList, stmt) -> print_endline "For"
+      | AST.If (e, stmt, stmtOption) -> print_endline "If"
+      | AST.Return eOption -> print_endline "Return"
+      | AST.Throw e -> print_endline "Throw"
+      | AST.Try (stmtList1, arg_stmtList_List, stmtList2) -> print_endline "Try"
+      | AST.Expr e -> (check_expression cl checkedStmts e; ())  
+    );
+    check_statements cl (checkedStmts@[hd]) tl
+  )
+ 
+and check_var_declaration (cl: AST.astclass) (stmts: AST.statement list) (varDecls: (Type.t * string * AST.expression option) list) =
+  match varDecls with 
+  | [] -> ()
+  | (t, varId, eOption)::tl -> (
+    match eOption with
+    | None -> ()
+    | Some e -> 
+      let te = check_expression cl stmts e in
+      if (is_child_class cl.cscope te t) then check_var_declaration cl stmts tl
+      else raise (InvalidStatement("Variable: "^varId^", type mismatched "^(Type.stringOf t)^" != "^(Type.stringOf te)))
+  )
+
+
 
 let rec get_scopes (cid: string) (classes: AST.astclass list) (classesScope:AST.astclass list)  = 
   let fill_scope = add_scope cid classesScope in
@@ -450,7 +573,8 @@ let rec check_class_overriding_methods (cl: AST.astclass) =
 
 (* class constructors *)
 let check_class_constructor_body (cl: AST.astclass) (const: AST.astconst) =
-  ()
+  print_endline "constructor body";
+  check_statements cl [] const.cbody
 
 let check_class_constructor_modifiers (modifiers: AST.modifier list) = 
   check_modifiers modifiers;
