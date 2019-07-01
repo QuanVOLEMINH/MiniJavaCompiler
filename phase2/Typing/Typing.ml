@@ -90,7 +90,7 @@ let rec is_child_class (cScope: AST.astclass list) (child: Type.t) (parent: Type
     )
     | _ -> false
 
-let rec type_inference (classes: AST.astclass list) (types:Type.t list) : Type.t*(Type.ref_type list) =
+let rec check_type_inference (classes: AST.astclass list) (types: Type.t list) : Type.t*(Type.ref_type list) =
   (* Type.Void *)
   match types with 
   | [] -> raise (NonImplemented "Arrayinit")
@@ -100,10 +100,30 @@ let rec type_inference (classes: AST.astclass list) (types:Type.t list) : Type.t
     | _ -> (hd, [])
   )
   | hd::tl -> (
-    let (t, parents) = type_inference classes tl in
+    let (t, parents) = check_type_inference classes tl in
     if TypingHelper.is_types_equal hd t then (t, parents)
     else (
       match t with
+      | Array (tType, tDims) ->(
+					match hd with
+					| Array (hdType, hdDims) ->
+						if (tDims <> hdDims) then raise (InvalidExpression("Array dimensions mismatch"))
+						else (				
+							match tType with
+							| Ref rTType -> (
+								match hdType with
+								| Ref rHdType ->(
+									let p1 = get_parents (search_class rTType classes) in
+									let p2 = get_parents (search_class rHdType classes) in
+									let (res1, res2) = get_first_rtype_common p1 p2 in
+									(Type.Array(Type.Ref res1, hdDims), [])
+								)
+								| _ -> raise (InvalidExpression("Array type mismatch"))
+							)
+							| _ -> raise (InvalidExpression("Array type mismatch"))
+						)
+					| _ ->  raise (InvalidExpression("Array type mismatch"))
+			)
       | Ref rt -> (
         match hd with
         | Ref rhd -> (
@@ -111,13 +131,14 @@ let rec type_inference (classes: AST.astclass list) (types:Type.t list) : Type.t
           let (elem, rest) = get_first_rtype_common pars parents in
           (Type.Ref elem, rest)
         )
-        | _ ->  raise (InvalidExpression("Array initialization type mismatched"))
+        | _ ->  raise (InvalidExpression("Array type mismatch"))
       )
-      | _ ->  raise (InvalidExpression("Array initialization type mismatched"))
+      | _ ->  raise (InvalidExpression("Array type mismatch"))
     )
   )
       
 let rec check_expression (cl: AST.astclass) (stmts: AST.statement list) (e: AST.expression): Type.t = 
+  print_endline "expr";
   match e.etype with
   | Some x -> x
   | None -> (
@@ -132,23 +153,25 @@ let rec check_expression (cl: AST.astclass) (stmts: AST.statement list) (e: AST.
       | AST.NewArray (t, eOptionList, eOption) -> 
         (
           let (dims, dimsDecl) = check_array_dims cl stmts eOptionList in
+          print_endline ("-"^(string_of_int dims)^" - "^(string_of_int dimsDecl));
           ( 
             match eOption with
             | None -> ()
             | Some e1 -> ( 
               match e1.edesc with
               | AST.ArrayInit (l) -> 
-                if (dimsDecl > 0) then 
-                  raise (InvalidExpression("Redefined dim"))
-                else
+                if (dimsDecl > 0) then raise (InvalidExpression("Cannot define dimension expressions when an array initializer is provided."))
+                else(
                   let res = check_expression cl stmts e1 in 
                   match res with
                   | Type.Array (at, d) -> ( 
-                    if (d <> dims) then raise (InvalidExpression("Array size mismatched"^(string_of_int d)^
+                    print_endline ("--"^(string_of_int d));
+                    if (d <> dims) then raise (InvalidExpression("Array dimensions mismatch"^(string_of_int d)^
                     " != "^(string_of_int dims)));
-                    if not (is_child_class cl.cscope at t) then raise (InvalidExpression("Array type mismatched"));
+                    if not (is_child_class cl.cscope at t) then raise (InvalidExpression("Array type mismatch"));
                   )  
                   | _ -> raise (InvalidExpression("Invalid new array."))
+                )   
               )
           );
           Type.Array (t, dims)
@@ -167,7 +190,7 @@ let rec check_expression (cl: AST.astclass) (stmts: AST.statement list) (e: AST.
       )
       | AST.Name n -> print_endline "name"; Type.Void
       | AST.ArrayInit eList -> (
-        let (t, parents) = type_inference cl.cscope (List.map (check_expression cl stmts) eList) in 
+        let (t, parents) = check_type_inference cl.cscope (List.map (check_expression cl stmts) eList) in 
       
         match t with 
         | Type.Array (at, dims) -> Type.Array (at, dims + 1); 
@@ -237,7 +260,7 @@ and get_decl_dims (res: bool list) (size: int) (v: bool) : int=
       if hd then get_decl_dims tl (size + 1) true
       else get_decl_dims tl size false
     else 
-      if hd then raise (InvalidExpression("Array dimensions ============???"))
+      if hd then raise (InvalidExpression("Cannot specify an array dimension after an empty dimension."))
       else get_decl_dims tl size false
 
 let rec check_statements (cl: AST.astclass) (checkedStmts: AST.statement list) (uncheckedStmts: AST.statement list) =
@@ -269,7 +292,7 @@ and check_var_declaration (cl: AST.astclass) (stmts: AST.statement list) (varDec
     | Some e -> 
       let te = check_expression cl stmts e in
       if (is_child_class cl.cscope te t) then check_var_declaration cl stmts tl
-      else raise (InvalidStatement("Variable: "^varId^", type mismatched "^(Type.stringOf t)^" != "^(Type.stringOf te)))
+      else raise (InvalidStatement("Variable: "^varId^", type mismatch "^(Type.stringOf t)^" != "^(Type.stringOf te)))
   )
 
 

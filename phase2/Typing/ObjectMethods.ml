@@ -136,8 +136,6 @@ let (methods: AST.astmethod list) =
     AST.msemi = false;
   } in
 
-  let (obMethods: AST.astmethod list) = [
+  [
     mClone; mEquals; mFinalize; mHashCode; mNotify; mNotifyAll; mToString; mWait1; mWait2; mWait3;
-  ] in
-  
-  obMethods
+  ]
