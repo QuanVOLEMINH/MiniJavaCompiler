@@ -50,4 +50,7 @@ let is_types_equal (t1: Type.t) (t2: Type.t) =
   ValType(t1)=ValType(t2)
 
 let print_class_name (c: AST.astclass) = 
-	print_endline (c.cname)
+  print_endline (c.cname)
+
+let primitiveTypes: Type.t list = 
+  [Type.Primitive Char; Type.Primitive Byte; Type.Primitive Short;Type.Primitive Int; Type.Primitive Long; Type.Primitive Float; Type.Primitive Double]

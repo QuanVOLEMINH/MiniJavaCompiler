@@ -1,58 +1,18 @@
-// package Tests;
+package Tests;
 
-// class A extends B {
+class A{
+	private A(int i){
 
-// 	A() {
-
-// 	}
-
-// 	int a() {
-// 		if (true) {
-// 			int a = 1;
-// 		}
-// 		return 3;
-// 	}
-
-// }
-
-// class B {
-// }
-
-package tests;
-
- class A {
-
- 	public A(String s) {
 	}
 
- 	A(){}
+	A(){
 
- 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
- 	}
-
- }
-
- public strictfp abstract class C extends A {
-
- 	int m = new A();
-
- 	public C() {
-		// TODO Auto-generated constructor stub
 	}
+}
 
- 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
- 	}
-
- 	public void m(int x){
-
- 	}
-
- 	void x(int y){
+class B{
+	A x = new A();
+	B(){
+		A y = new A(123);
 	}
-
- 	abstract void m2();
 }

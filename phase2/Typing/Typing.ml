@@ -47,6 +47,16 @@ let rec get_parent_classes (cl: AST.astclass): AST.astclass list=
     cl::(get_parent_classes par)
   )
 
+let bigger_binary_size t1 t2 : Type.t =
+  if t1=Type.Primitive Boolean || t2=Type.Primitive Boolean then raise (InvalidExpression ("Incompatible types."))
+  else if t1=Type.Primitive Double || t2=Type.Primitive Double then Type.Primitive Double
+  else if t1=Type.Primitive Float || t2=Type.Primitive Float then Type.Primitive Float
+  else if t1=Type.Primitive Long || t2=Type.Primitive Long then Type.Primitive Long
+  else if t1=Type.Primitive Int || t2=Type.Primitive Int then Type.Primitive Int
+  else if t1=Type.Primitive Short || t2=Type.Primitive Short then Type.Primitive Short
+  else if t1=Type.Primitive Char || t2=Type.Primitive Char then Type.Primitive Char
+  else Type.Primitive Byte
+
 (* get first dup type then return with rest list *)
 let rec get_first_rtype_rep (rt: Type.ref_type) (l: Type.ref_type list) : bool*Type.ref_type*(Type.ref_type list) =
   match l with
@@ -321,7 +331,39 @@ let rec check_expression (cl: AST.astclass) (args: AST.argument list) (stmts: AS
       )
       | AST.Post (e, postfix_op)  -> print_endline "Post"; Type.Void
       | AST.Pre (prefix_op, e) -> print_endline "Pre"; Type.Void
-      | AST.Op (e1, infix_op, e2) -> print_endline "Op"; Type.Void
+      | AST.Op (e1, infix_op, e2) -> (
+        print_endline "Op";
+        let t1=check_expression cl args stmts e1 in
+        let t2=check_expression cl args stmts e2 in
+        let logicOperators = Operators.logicOperators in 
+				if (t1=(Type.Primitive Boolean) && t2=(Type.Primitive Boolean)) then (
+          (* logic op *)
+          if inlist infix_op logicOperators then t1
+          else raise (InvalidExpression ("Invalid operation "^(AST.string_of_infix_op infix_op)^" for type "^(Type.stringOf t1)^", "^(Type.stringOf t2)^"."))
+				) else (
+					let primTypes = TypingHelper.primitiveTypes in
+					if ((inlist t1 primTypes) && (inlist t2 primTypes)) then (
+            (* compare op *)
+            let compaOps = Operators.compareOperators in
+            if inlist infix_op compaOps then (Type.Primitive Type.Boolean)
+            else (
+              let calculOps = Operators.calculOperators in
+							if inlist infix_op calculOps then bigger_binary_size t1 t2
+							else raise (InvalidExpression ("Invalid operation "^(AST.string_of_infix_op infix_op)^" for type "^(Type.stringOf t1)^", "^(Type.stringOf t2)^"."))
+						)
+					) else (
+            let isT1String = is_child_class cl.cscope t1 (Type.Ref {tpath=[]; tid="String"}) in
+            let isT2String = is_child_class cl.cscope t2 (Type.Ref {tpath=[]; tid="String"}) in
+						if (isT1String) || (isT1String) then (
+              (* add 2 strings *)
+							if infix_op=Op_add then Type.Ref {tpath=[]; tid="String"}
+							else raise (InvalidExpression ("Invalid operation "^AST.string_of_infix_op infix_op^" for type "^Type.stringOf t1^", "^Type.stringOf t2^"."))
+						) else (
+							raise (InvalidExpression ("Invalid operation "^AST.string_of_infix_op infix_op^" for type "^Type.stringOf t1^", "^Type.stringOf t2^"."))
+						)
+					)
+				) 
+      )
       | AST.CondOp (e1, e2, e3) -> (
         print_endline "CondOp";
         let t1=check_expression cl args stmts e1 in 
@@ -424,7 +466,16 @@ let rec check_statements (cl: AST.astclass) (args: AST.argument list) (rt: Type.
 						| Some st -> check_statements cl args rt checkedStmts [st]; ()
 					)
       )
-      | AST.Return eOption -> print_endline "Return"
+      | AST.Return eOption -> (
+        print_endline "Return";
+        match eOption with
+				| None -> 
+					if is_types_equal rt Type.Void then () 
+					else raise (InvalidStatement("Return type must be empty."))
+				| Some eOpt -> 
+					if is_child_class cl.cscope (check_expression cl args checkedStmts eOpt) rt  then () 
+					else raise (InvalidStatement("Return type must be of: "^(Type.stringOf rt)))
+      )
       | AST.Throw e -> (
         print_endline "Throw";
         check_expression cl args checkedStmts e; 
@@ -762,7 +813,7 @@ let rec check_class_overriding_methods (cl: AST.astclass) =
 
 (* class constructors *)
 let check_class_constructor_body (cl: AST.astclass) (const: AST.astconst) =
-  print_endline "constructor body";
+  (* print_endline "constructor body"; *)
   check_statements cl const.cargstype Type.Void [] const.cbody
 
 let check_class_constructor_modifiers (modifiers: AST.modifier list) = 
@@ -808,7 +859,7 @@ let rec check_class_constructors (cl: AST.astclass) =
 
 (* class initialization *)
 let rec check_class_initializations (cl: AST.astclass) = 
-  print_endline("initialization def - "^cl.cname);
+  (* print_endline("initialization def - "^cl.cname); *)
   List.map (fun (ini: AST.initial)-> check_statements cl [] Type.Void [] ini.block) cl.cinits;
 	List.map check_class_initializations (get_classes cl.ctypes);
   ()
