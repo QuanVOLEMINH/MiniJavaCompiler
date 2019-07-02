@@ -1,22 +1,24 @@
-package Tests;
+package Tests.Failed;
 
-public class A {
+public class ConstructorVarDeclarationTest {
     int m;
-    public A (int m) {
+
+    public ConstructorVarDeclarationTest(int m) {
     }
-    A(){}
-    
+
+    ConstructorVarDeclarationTest() {
+    }
+
     int a() {
-		return 3;
-	}
-	
+        return 3;
+    }
 
 }
 
 class B {
-    B(){
+    B() {
         int m = 123;
-        A x = new A(m);
+        ConstructorVarDeclarationTest x = new ConstructorVarDeclarationTest(m);
         x.a();
         int y = true;
     }

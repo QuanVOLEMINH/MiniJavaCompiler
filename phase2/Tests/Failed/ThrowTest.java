@@ -7,10 +7,10 @@ public class A {
     A(double a) {
     }
 
-    A(){
+    A() {
 
     }
-    
+
     int a() {
         return 3;
     }
@@ -22,12 +22,10 @@ class B {
         int m = 123;
         A x = new A(m);
 
-        while (true) {
-            x.a();
-        }
-
         if (true)
-        	throw new A();
+            throw new A();
+
+        boolean b = x.a();
 
     }
 

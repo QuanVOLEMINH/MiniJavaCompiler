@@ -13,6 +13,6 @@ class A{
 class B{
 	A x = new A();
 	B(){
-		A y = new A(123);
+		A y = new A();
 	}
 }

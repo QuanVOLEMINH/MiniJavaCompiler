@@ -1,4 +1,5 @@
-package abc.xyz.ghj;
+package Tests.Failed;
+
 
 class OuterClass
 {

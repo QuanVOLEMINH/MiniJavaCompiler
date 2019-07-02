@@ -1,11 +1,12 @@
-package Tests;
+package Tests.Failed;
 
-public class A extends B {
 
-	A () {
+public class MethodMissingBodyTest extends B {
+
+	MethodMissingBodyTest() {
 
 	}
-	int sum(String l[]);
+	int sum(boolean b);
 
 }
 

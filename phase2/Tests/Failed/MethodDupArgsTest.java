@@ -1,16 +1,15 @@
-package Tests;
+package Tests.Failed;
 
-public class A extends B {
+public class MethodDupArgsTest extends B {
 
-	A () {
+	MethodDupArgsTest() {
 
 	}
-	private int a(String l[]) {
+	private int a(double d) {
 		return 0;
 	}
 
     static void test(int a, int b, String a){
-
     }
 	
 

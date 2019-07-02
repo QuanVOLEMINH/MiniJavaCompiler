@@ -1,4 +1,4 @@
-package Tests;
+package Tests.Failed;
 
 abstract class A {
 

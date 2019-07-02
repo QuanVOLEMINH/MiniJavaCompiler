@@ -1,11 +1,11 @@
-package Tests;
+package Tests.Failed;
 
-public class A extends B {
+public class MethodIllegalBodyDefTest extends B {
 
-	A () {
+	MethodIllegalBodyDefTest() {
 
 	}
-	int sum(String l[]){}
+	int sum(double d){}
 
 }
 

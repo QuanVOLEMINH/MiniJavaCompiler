@@ -1,4 +1,6 @@
-class A{
+package Tests.Failed;
+
+class A {
     A(){}
 }
 

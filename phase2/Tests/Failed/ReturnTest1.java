@@ -1,3 +1,5 @@
+package Tests.Failed;
+
 class A {
     A(double d) {
         if (true) {

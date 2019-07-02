@@ -1,22 +1,26 @@
-public class A {
+package Tests.Failed;
+
+public class ConstructorSignatureNotFoundTest {
     int m;
-    public A (int m) {
+
+    public ConstructorSignatureNotFoundTest(int m) {
     }
-    A(){}
-    
+
+    ConstructorSignatureNotFoundTest() {
+    }
+
     int a() {
-		return 3;
-	}
-	
+        return 3;
+    }
 
 }
 
 class B {
-    B(){
+    B() {
         int m = 123;
-        A x = new A(m);
+        ConstructorSignatureNotFoundTest x = new ConstructorSignatureNotFoundTest(m);
         x.a();
-        A y = new A(false);
+        ConstructorSignatureNotFoundTest y = new ConstructorSignatureNotFoundTest(false);
     }
 
     public static void main(String[] args) {

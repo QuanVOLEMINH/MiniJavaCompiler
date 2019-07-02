@@ -23,6 +23,6 @@ exception InvalidClassDefinition of string
 exception InvalidStatement of string
 exception InvalidExpression of string
 
-exception NonImplemented of string
+exception NotImplemented of string
 
 exception IdentifierNotFound of string

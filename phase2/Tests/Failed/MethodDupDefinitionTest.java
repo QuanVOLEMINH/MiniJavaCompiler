@@ -1,8 +1,8 @@
-package Tests;
+package Tests.Failed;
 
-public class A extends B {
+public class MethodDupDefinitionTest extends B {
 
-	A () {
+	MethodDupDefinitionTest() {
 
 	}
 	private int a(int b) {

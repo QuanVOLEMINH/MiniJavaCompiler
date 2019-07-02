@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - CallTest",
+            "request": "launch",
+            "mainClass": "Tests.Failed.CallTest",
+            "projectName": "phase2_59bfc98d"
+        }
+    ]
+}
