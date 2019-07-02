@@ -1,4 +1,4 @@
-package Tests.Failed;
+package Tests.Passed;
 
 class CastTest{
     CastTest(){

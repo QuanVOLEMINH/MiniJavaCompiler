@@ -590,7 +590,7 @@ let rec check_type_statements (cl: AST.astclass) (args: AST.argument list) (rt: 
           raise (InvalidExpression("Missing boolean expr in While."))
 				else check_type_statements cl args rt checkedStmts [stmt]; ()
       )
-      | AST.For (tOption_s_eOption_List, eOption, eList, stmt) -> print_endline "For: not implemented"
+      | AST.For (tOption_s_eOption_List, eOption, eList, stmt) -> raise (NotImplemented("For: not implemented"))
       | AST.If (e, stmt, stmtOption) -> (
         print_endline "If";
         if not (is_types_equal (check_type_expression cl args checkedStmts e) (Type.Primitive Type.Boolean)) then 
@@ -1063,7 +1063,7 @@ let get_package_info (ast : AST.t): string =
 
 let get_program_info (packageName: AST.qualified_name option) (classes: AST.astclass list): AST.astclass list =
   let classesList = get_package packageName classes in
-  Object.objectClass::classesList
+  Object.objectClass::BaseClass.stringClass::classesList
 
 
 
