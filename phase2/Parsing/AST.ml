@@ -239,6 +239,9 @@ let string_of_prefix_op = function
   | Op_bnot -> "~"
   | Op_plus -> "+"
 
+let string_of_postfix_op = function
+| Incr -> "++"
+| Decr -> "--"
 		  
 let rec string_of_expression_desc = function
   | New(None,n,al) -> 

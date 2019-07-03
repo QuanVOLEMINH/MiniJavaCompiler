@@ -1,10 +1,12 @@
-public class A {
+package Tests.Passed;
+
+public class IfTest1 {
     int m;
 
-    public A(int m) {
+    public IfTest1(int m) {
     }
 
-    A() {
+    IfTest1() {
     }
 
     int a() {
@@ -16,7 +18,7 @@ public class A {
 class B {
     B() {
         int m = 123;
-        A x = new A(m);
+        IfTest1 x = new IfTest1(m);
 
         if (true) {
             x.a();

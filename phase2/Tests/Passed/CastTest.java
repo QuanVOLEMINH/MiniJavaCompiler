@@ -9,8 +9,8 @@ class CastTest{
     }
 }
 
-class B {
-    B(){
+class B2 {
+    B2(){
         CastTest ct = new CastTest();
         double d = (double)ct.convertToDouble(2);
         d = d + 2;

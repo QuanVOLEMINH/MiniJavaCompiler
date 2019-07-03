@@ -1,9 +1,11 @@
-public class A {
+package Tests.Failed;
 
-    public A(int m) {
+public class WhileTest {
+
+    public WhileTest(int m) {
     }
 
-    A() {
+    WhileTest() {
     }
 
     int a() {
@@ -14,7 +16,7 @@ public class A {
 
 class B {
     B() {
-        A x = new A();
+        WhileTest x = new WhileTest();
 
         while (x.a()) {
             int m = 123;

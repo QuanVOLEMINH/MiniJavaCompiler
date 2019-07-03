@@ -1,13 +1,15 @@
-public class A {
+package Tests.Failed;
+
+public class ThrowTest {
     int m;
 
-    public A(int m) {
+    public ThrowTest(int m) {
     }
 
-    A(double a) {
+    ThrowTest(double a) {
     }
 
-    A() {
+    ThrowTest() {
 
     }
 
@@ -18,12 +20,12 @@ public class A {
 }
 
 class B {
-    B() {
+    B() throws Exception {
         int m = 123;
-        A x = new A(m);
+        ThrowTest x = new ThrowTest(m);
 
-        if (true)
-            throw new A();
+        if (m > 12)
+            throw new Exception("asdas");
 
         boolean b = x.a();
 

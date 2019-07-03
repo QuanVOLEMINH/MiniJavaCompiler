@@ -1,6 +1,7 @@
-package Tests;
+package Tests.Passed;
 
-public class A extends B {
+
+class A extends B {
 
 	A () {
 

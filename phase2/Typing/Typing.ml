@@ -145,67 +145,65 @@ let rec find_constructor (caller: AST.astclass) (consts: AST.astconst list) (id:
 		else find_constructor caller tl id args
 
 
-    let rec check_type_method (callerCl: AST.astclass) (calledCl: AST.astclass) (id: string) (types: Type.t list): Type.t =
-      if id ="super" then (
-        let par = search_class callerCl.cparent calledCl.cscope in
-        let par_t = Type.Ref {Type.tpath=(get_path par.cid);Type.tid=par.cname} in
-        if ((List.length par.cconsts)=0) && ((List.length types)=0) then par_t
-        else (
-          let res = find_constructor callerCl par.cconsts par.cname types in 
-          (
-            match res with 
-            | Some res -> (
-              if (inlist AST.Private res.cmodifiers) then 
-                raise (InvalidExpression("constructor is private"))
-              else par_t
-            )
-            | None -> raise (InvalidExpression("constructor not found "))
-          )
+let rec check_type_method (callerCl: AST.astclass) (calledCl: AST.astclass) (id: string) (types: Type.t list): Type.t =
+  if id ="super" then (
+    let par = search_class callerCl.cparent calledCl.cscope in
+    let par_t = Type.Ref {Type.tpath=(get_path par.cid);Type.tid=par.cname} in
+    if ((List.length par.cconsts)=0) && ((List.length types)=0) then par_t
+    else (
+      let res = find_constructor callerCl par.cconsts par.cname types in 
+      (
+        match res with 
+        | Some res -> (
+          if (inlist AST.Private res.cmodifiers) then raise (InvalidExpression("This constructor is private.")) else par_t
         )
+        | None -> raise (InvalidExpression("Constructor not found."))
+      )
+    )
+  )
+  else (
+    let caller_t = Type.Ref {Type.tpath=(get_path callerCl.cid);Type.tid=callerCl.cname} in
+    let called_t = Type.Ref {Type.tpath=(get_path calledCl.cid);Type.tid=calledCl.cname} in 	
+    let res = find_method_in_list callerCl calledCl.cmethods id types in 
+    
+    match res with
+    | Some res -> ( 
+      if (inlist AST.Private res.mmodifiers) then (
+        if TypingHelper.is_types_equal caller_t called_t then res.mreturntype
+        else raise (InvalidExpression("method "^id^" is private"))
       )
       else (
-        let caller_t = Type.Ref {Type.tpath=(get_path callerCl.cid);Type.tid=callerCl.cname} in
-        let called_t = Type.Ref {Type.tpath=(get_path calledCl.cid);Type.tid=calledCl.cname} in 	
-        let res = find_method_in_list callerCl calledCl.cmethods id types in 
-        
-        match res with
-        | Some res -> ( 
-          if (inlist AST.Private res.mmodifiers) then (
-            if TypingHelper.is_types_equal caller_t called_t then res.mreturntype
-            else raise (InvalidExpression("method "^id^" is private"))
-          )
-          else (
-            if (inlist AST.Protected res.mmodifiers) then (
-              if is_child_class callerCl.cscope caller_t called_t then
-              res.mreturntype
-            else 
-              raise (InvalidExpression("method "^id^" is protected"))
-            )
-            else res.mreturntype
-          )
+        if (inlist AST.Protected res.mmodifiers) then (
+          if is_child_class callerCl.cscope caller_t called_t then
+          res.mreturntype
+        else 
+          raise (InvalidExpression("method "^id^" is protected"))
         )
-        | None -> (
-          let res = find_constructor callerCl calledCl.cconsts id types in
-          match res with 
-          | Some res -> (
-            if (inlist AST.Private res.cmodifiers) then 
-              if TypingHelper.is_types_equal caller_t called_t then
-                called_t
-              else 
-                raise (InvalidExpression("constructor "^id^" is private"))
-            else 
-              if (inlist AST.Protected res.cmodifiers) then 
-                if is_child_class callerCl.cscope caller_t called_t then               called_t
-                else raise (InvalidExpression("constructor "^id^" is protected"))
-              else called_t
-          )
-        )
-        | None -> (
-          if calledCl.cid = "Object" then raise (InvalidExpression("method "^id^" not found"))
-          else 
-            check_type_method callerCl (search_class calledCl.cparent calledCl.cscope) id types
-        )
+        else res.mreturntype
       )
+    )
+    | None -> (
+      let res = find_constructor callerCl calledCl.cconsts id types in
+      match res with 
+      | Some res -> (
+        if (inlist AST.Private res.cmodifiers) then 
+          if TypingHelper.is_types_equal caller_t called_t then
+            called_t
+          else 
+            raise (InvalidExpression("constructor "^id^" is private"))
+        else 
+          if (inlist AST.Protected res.cmodifiers) then 
+            if is_child_class callerCl.cscope caller_t called_t then               called_t
+            else raise (InvalidExpression("constructor "^id^" is protected"))
+          else called_t
+      )
+      | None -> (
+        if calledCl.cid = "Object" then raise (InvalidExpression("method "^id^" not found"))
+        else 
+          check_type_method callerCl (search_class calledCl.cparent calledCl.cscope) id types
+      )
+    )
+  )
 
 let rec check_type_variable_stmt (id: string) (stmts: AST.statement list): Type.t option =
   match stmts with
@@ -245,13 +243,13 @@ let rec check_type_variable_attrs (attrs: AST.astattribute list) (id: string) (b
     | Some x -> Some x
   )
 
-let rec type_variable_parents (classes: AST.astclass list) (id: string) (base: bool): Type.t option =
+let rec check_type_variable_parents (classes: AST.astclass list) (id: string) (base: bool): Type.t option =
   match classes with
   | [] -> None
   | hd::tl -> (
     let res = check_type_variable_attrs hd.cattributes id base in 
     match res with 
-    | None -> type_variable_parents tl id base
+    | None -> check_type_variable_parents tl id base
     | Some x -> Some x
   )
 
@@ -259,7 +257,7 @@ let check_type_variable_class (id: string) (cl: AST.astclass): Type.t option =
   let found = check_type_variable_attrs cl.cattributes id true in
   match found with
   | Some t -> Some t
-  | None -> type_variable_parents (get_parent_classes cl) id false
+  | None -> check_type_variable_parents (get_parent_classes cl) id false
 
 let check_type_variable (id: string) (cl: AST.astclass) (args: AST.argument list) (stmts: AST.statement list): Type.t =
   if (id="this") then Type.Ref {Type.tpath=TypingHelper.get_path(cl.cid); Type.tid=cl.cname}
@@ -461,8 +459,46 @@ let rec check_type_expression (cl: AST.astclass) (args: AST.argument list) (stmt
           | _ -> raise (InvalidExpression("Assignment type mismatch "^(Type.stringOf t1)^" != "^(Type.stringOf t2)))
         )
       )
-      | AST.Post (e, postfix_op)  -> print_endline "Post"; Type.Void
-      | AST.Pre (prefix_op, e) -> print_endline "Pre"; Type.Void
+      | AST.Post (e, postfix_op) -> (
+        print_endline "Post"; 
+        let t1 = check_type_expression cl args stmts e in
+		  	match t1 with
+				| Type.Primitive typ -> (
+					match typ with
+					| Boolean -> raise (InvalidExpression("Invalid prefix "^(AST.string_of_postfix_op postfix_op)^" op for type: "^Type.stringOf t1^"."))
+					| _ -> t1
+				)
+				| _ -> raise (InvalidExpression("Invalid prefix "^(AST.string_of_postfix_op postfix_op)^" op for type: "^Type.stringOf t1^"."))
+      )
+      | AST.Pre (prefix_op, e) -> (
+        print_endline "Pre";
+        let t1 = check_type_expression cl args stmts e in
+				match prefix_op with
+				| Op_not -> (
+          if not(inlist t1 [Type.Primitive Boolean]) then raise(InvalidExpression("Invalid prefix "^(AST.string_of_prefix_op prefix_op)^" op for type: "^Type.stringOf t1^"."))
+          else t1
+				)
+			 	| Op_neg -> (
+          if (inlist t1 [Type.Primitive Boolean; Type.Primitive Char]) then raise(InvalidExpression("Invalid prefix "^(AST.string_of_prefix_op prefix_op)^" op for type: "^Type.stringOf t1^"."))
+          else t1
+			 	)
+			  	| Op_incr -> (
+			 		if (inlist t1 [Type.Primitive Boolean]) then raise(InvalidExpression("Invalid prefix "^(AST.string_of_prefix_op prefix_op)^" op for type: "^Type.stringOf t1^"."))
+          else t1
+			 	)
+			  	| Op_decr -> (
+          if (inlist t1 [Type.Primitive Boolean]) then raise(InvalidExpression("Invalid prefix "^(AST.string_of_prefix_op prefix_op)^" op for type: "^Type.stringOf t1^"."))
+          else t1
+			 	)
+			  	| Op_bnot -> (
+          if (inlist t1 [Type.Primitive Boolean]) then raise(InvalidExpression("Invalid prefix "^(AST.string_of_prefix_op prefix_op)^" op for type: "^Type.stringOf t1^"."))
+          else t1
+			 	)
+			  	| Op_plus -> (
+          if (inlist t1 [Type.Primitive Boolean; Type.Primitive Char]) then raise(InvalidExpression("Invalid prefix "^(AST.string_of_prefix_op prefix_op)^" op for type: "^Type.stringOf t1^"."))
+          else t1
+			 	)
+      )
       | AST.Op (e1, infix_op, e2) -> (
         print_endline "Op";
         let t1=check_type_expression cl args stmts e1 in
@@ -515,7 +551,7 @@ let rec check_type_expression (cl: AST.astclass) (args: AST.argument list) (stmt
       | AST.Instanceof (e, t) -> (
         let typ = check_type_expression cl args stmts e in (Type.Primitive Type.Boolean)
       )
-      | AST.VoidClass -> print_endline "VoidClass"; Type.Void
+      | AST.VoidClass -> raise(NotImplemented("VoidClass"))
       ) in 
       (
         expr.etype <- Some res; res
@@ -648,15 +684,15 @@ let rec get_scopes (cid: string) (classes: AST.astclass list) (classesScope:AST.
   let fill_scope = add_scope cid classesScope in
   List.map fill_scope classes
 and add_scope (cid: string) (classesScope: AST.astclass list) (cl: AST.astclass) =
-  print_endline ("add scope: "^cl.cid^"--"^cl.cname);
+  (* print_endline ("add scope: "^cl.cid^"--"^cl.cname); *)
   if(cl.cid="") then (
     let cls = get_classes cl.ctypes in
-    print_endline("--- Inner class of class "^cl.cname);
+    (* print_endline("--- Inner class of class "^cl.cname); *)
     List.map print_class_name cls;
-    print_endline("---");
+    (* print_endline("---");
     print_endline("--- Types of class "^cl.cname);
     List.map (AST.print_type ("   ")) cl.ctypes;
-    print_endline("---");
+    print_endline("---"); *)
     cl.cid<-cid^"."^cl.cname;
     cl.cscope<-(cls@classesScope);
     get_scopes cl.cid cls (cls@classesScope);
@@ -888,7 +924,7 @@ let check_class_attr_coherence (cl: AST.astclass) (attr: AST.astattribute) =
 
 	
 let rec check_class_attributes (cl: AST.astclass) = 
-  print_endline("attr def");
+  (* print_endline("attr def"); *)
   check_class_dup_attrs cl.cattributes;
   List.map check_class_attr_modifiers cl.cattributes;
   List.map (check_class_attr_coherence cl) cl.cattributes;
@@ -1025,7 +1061,7 @@ let rec add_package (packageName: AST.qualified_name) (classes: AST.astclass lis
       [{
         AST.cid = id^hd;
         AST.cname = hd;
-        AST.cscope = Object.objectClass::classes;
+        AST.cscope = Object.objectClass@classes;
         AST.cmodifiers = [];
         AST.cparent = {tpath=[]; tid="Object"};
         AST.cattributes = [];
@@ -1040,7 +1076,7 @@ let rec add_package (packageName: AST.qualified_name) (classes: AST.astclass lis
       [{
         AST.cid=id^hd;
         AST.cname=hd;
-        AST.cscope=Object.objectClass::next;
+        AST.cscope=Object.objectClass@next;
         AST.cmodifiers=[];
         AST.cparent = {tpath=[] ; tid="Object"};
         AST.cattributes = [];
@@ -1063,8 +1099,7 @@ let get_package_info (ast : AST.t): string =
 
 let get_program_info (packageName: AST.qualified_name option) (classes: AST.astclass list): AST.astclass list =
   let classesList = get_package packageName classes in
-  Object.objectClass::BaseClass.stringClass::classesList
-
+  Object.objectClass@BaseClass.baseClass@classesList
 
 
 

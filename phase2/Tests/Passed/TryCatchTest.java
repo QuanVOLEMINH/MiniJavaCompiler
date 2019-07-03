@@ -1,4 +1,4 @@
-package Tests.Failed;
+package Tests.Passed;
 
 public class TryCatchTest {
     int m;
@@ -18,11 +18,10 @@ public class TryCatchTest {
 class B {
     B() {
         int m = 123;
-        int c = 0;
         TryCatchTest x = new TryCatchTest(m);
+        int c = 0;
         try {
-            c = m + 100;
-            c = false;
+            c = m + 100 + x.a();
         } catch (Exception e) {
         } finally {
             c += x.a();

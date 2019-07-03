@@ -1,18 +1,19 @@
 package Tests;
 
-class A{
-	private A(int i){
+class A {
+	A(int i) {
 
 	}
 
-	A(){
+	A() {
 
 	}
 }
 
-class B{
+class B {
 	A x = new A();
-	B(){
+
+	B() {
 		A y = new A();
 	}
 }

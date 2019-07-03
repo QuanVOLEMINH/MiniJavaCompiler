@@ -1,11 +1,13 @@
-public class A {
+package Tests.Passed;
+
+public class BlockTest {
     int m;
 
-    public A(int m) {
+    public BlockTest(int m) {
         this.m = m;
     }
 
-    A() {
+    BlockTest() {
     }
 
     int a() {
@@ -14,12 +16,12 @@ public class A {
 
 }
 
-class B {
-    B() {
+class B1 {
+    B1() {
         int m = 123;
-        A x = new A(m);
+        BlockTest x = new BlockTest(m);
 
-        if (true) {
+        if (m < 125) {
             x.a();
         }
 
@@ -27,6 +29,7 @@ class B {
             int[] arr = new int[] {1,2,3};
             boolean c = false;
         }
+        {;}
     }
 
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-let (objectClass: AST.astclass) = 
+let (objectClass: AST.astclass list) = 
 
   let obCl = {		
     AST.cid="Object";	
@@ -21,5 +21,21 @@ let (objectClass: AST.astclass) =
     AST.ctypes = [];	
     AST.cloc = Location.none;
   } in 
-  obCl.cscope<-[obCl];
-  obCl
+
+  let cl = {
+    AST.cid="Class";
+    AST.cname="Class";
+    AST.cscope=[];
+    AST.cmodifiers=[Public];
+    AST.cparent = {tpath=[]; tid="Object"} ;
+    AST.cattributes = [];
+    AST.cinits = [];
+    AST.cconsts = [];
+    AST.cmethods = [];
+    AST.ctypes = [];
+    AST.cloc = Location.none;
+    } in
+   
+  obCl.cscope <-[obCl;cl]; cl.cscope <- [obCl; cl];
+
+  [obCl; cl]

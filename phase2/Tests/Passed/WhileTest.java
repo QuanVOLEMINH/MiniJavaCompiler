@@ -1,11 +1,13 @@
-public class A {
+package Tests.Passed;
+
+public class WhileTest {
     int m;
 
-    public A(int m) {
+    public WhileTest(int m) {
         this.m = m;
     }
 
-    A() {
+    WhileTest() {
     }
 
     int a() {
@@ -14,8 +16,8 @@ public class A {
 
 }
 
-class B {
-    B() {
+class B3 {
+    B3() {
         int m = 123;
 
         while (true) {

@@ -1,55 +1,62 @@
-package tutu.titi.toto;
+package Tests;
 
-class I {}
-
-public class A {
-    Int a1 = 1;
-    int[] a = { 3,4,5 };
-    Bool a2 = false;
-    String a6 = "jsdjkndjk\njdsdjkf";
+class I {
 }
+
+public class TestsUnitairesParsing {
+	int a1 = 1;
+	int[] a = { 3, 4, 5 };
+	boolean a2 = false;
+	String a6 = "jsdjkndjk\njdsdjkf";
+
+	TestsUnitairesParsing() {
+	}
+
+	static void m() {
+	}
+}
+
 abstract class B extends C {
-    B() { super(); }
-    private A mthis () throws tuty.A, tre.tr.b {
-	int a, b;
-	{
-	    int c = 18;
-	    { ; }
-	    new A();
-	    A.m();
-	    a[2].m();
-	    a[2][6].m();
-	    B.A.m();
-	    this.m();
-	    super();
-	    this();
-	    super.m();
-	    m();
-	    for (int c; c > 6 ; c++) { }
+	B() {
+		super();
 	}
-	tutu.tyty.a = 1;
-	final tutu.tyty.a op;
-	a(B.this);
-	tutu.a op;
-	a = b = 1;
-	return new A();
-	try {
-	} catch (E e) {
-	    toto;
-	} finally {
-	    tutu;
-	}
-	try {
-	} finally {
-	    tutu;
-	}
-	try {
-	} catch (E e) {
-	    toto;
-	}
-    }
 
-    Int matt4() { this.ab; }
+	TestsUnitairesParsing mthis() throws Exception {
+		int a, b;
+		{
+			int c = 18;
+			{
+				;
+			}
+			new TestsUnitairesParsing();
+			TestsUnitairesParsing.m();
+			super.m();
+			m();
+			// for (int x = 0; x > 6; x++) {
+			// }
+		}
+		a = b = 1;
+		try {
+		} catch (Exception e) {
+			;
+		} finally {
+			;
+		}
+		try {
+		} finally {
+			;
+		}
+		try {
+		} catch (Exception e) {
+			;
+		}
+		return new TestsUnitairesParsing();
+	}
+
+	int matt4() {
+		return 0;
+	}
 }
-final class C extends A {}
 
+class C extends TestsUnitairesParsing {
+}

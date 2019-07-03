@@ -1,17 +1,20 @@
-package Tests;
+package Tests.Passed;
 
-public class A extends B {
+
+public class ClassDupConstructorsTest extends B {
     String name;
-	
-    A (String name) {
-        this.name = name;
-	}
 
-    public A(int value){}
+    ClassDupConstructorsTest(String name) {
+        this.name = name;
+    }
+
+    public ClassDupConstructorsTest(int value) {
+    }
+
+    ClassDupConstructorsTest() {
+    }
     
-    A(){}
-    
-    private int a(String l[]) {
+    private int a(String l) {
 		return 3;
 	}
 	

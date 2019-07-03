@@ -1,4 +1,6 @@
-public class A {
+package Tests.Passed;
+
+class A {
     public final static int X = 100;
     int m;
 

@@ -1,3 +1,5 @@
+package Tests.Passed;
+
 class A{
     A(){}
 

@@ -1,4 +1,4 @@
-package Tests;
+package Tests.Passed;
 
 abstract class A {
 
@@ -12,11 +12,13 @@ abstract class A {
 }
 
 class B extends A{
-    void a(int c){
+    public void a(int c){
 
     }
 
-    public int b(String s){}
+    public int b(String s){
+        return 0;
+    }
 }
 
 final class C extends B{

@@ -1,4 +1,5 @@
-package Tests;
+package Tests.Passed;
+
 
 abstract class A {
 
@@ -11,7 +12,7 @@ abstract class A {
 
 }
 
-public class B extends A{
+class B extends A{
     void a(int c){}
 }
 

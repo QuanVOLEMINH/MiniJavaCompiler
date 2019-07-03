@@ -1,15 +1,17 @@
-package Tests;
+package Tests.Passed;
 
-abstract class A extends B {
 
-	A () {
+abstract class A extends ClassInnerMemberModifierTest {
 
-	}
-	abstract int a(String l[]);
+    A() {
+
+    }
+
+    abstract int a(String l[]);
 
 }
 
-public class B {
+public class ClassInnerMemberModifierTest {
     static int sum (int a, int b){
         return a + b;
     }

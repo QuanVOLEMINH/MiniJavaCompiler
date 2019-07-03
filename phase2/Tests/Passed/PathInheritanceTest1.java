@@ -1,4 +1,4 @@
-package abc.xyz.ghj;
+package Tests.Passed;
 
 class OuterClass
 {
